@@ -1,4 +1,4 @@
-@extends('layouts/layoutMaster')
+@extends('layouts.layoutMaster')
 @php
 $configData = Helper::appClasses();
 @endphp
