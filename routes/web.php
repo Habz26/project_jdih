@@ -158,7 +158,7 @@ use App\Http\Controllers\charts\ChartJs;
 use App\Http\Controllers\maps\Leaflet;
 
 // Main Page Route
-Route::get('/', [Analytics::class, 'index'])->name('dashboard-analytics-page');
+Route::get('/', [HelpCenter::class, 'index'])->name('help-center-landing');
 Route::get('/dashboard/analytics', [Analytics::class, 'index'])->name('dashboard-analytics-pages');
 Route::get('/dashboard/crm', [Crm::class, 'index'])->name('dashboard-crm');
 // locale
