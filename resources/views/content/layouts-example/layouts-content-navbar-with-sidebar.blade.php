@@ -3,7 +3,7 @@ $configData = Helper::appClasses();
 $isFlex = true;
 @endphp
 
-@extends('layouts/layoutMaster')
+@extends('layouts.layoutMaster')
 
 @section('title', 'Content navbar + Sidebar - Layouts')
 
