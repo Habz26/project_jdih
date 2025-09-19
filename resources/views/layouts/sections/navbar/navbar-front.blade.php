@@ -256,7 +256,7 @@ $activeClass = in_array($currentRouteName, $activeRoutes) ? 'active' : '';
 
         <!-- navbar button: Start -->
         <li>
-          <a href="{{ url('/auth/login-cover') }}" class="btn btn-primary px-2 px-sm-4 px-lg-2 px-xl-4" target="_blank"><span class="icon-base ri ri-user-line me-md-1"></span><span class="d-none d-md-block">Login/Register</span></a>
+          <a href="{{ url('/auth/login-basic') }}" class="btn btn-primary px-2 px-sm-4 px-lg-2 px-xl-4" target="_blank"><span class="icon-base ri ri-user-line me-md-1"></span><span class="d-none d-md-block">Login/Register</span></a>
         </li>
         <!-- navbar button: End -->
       </ul>
