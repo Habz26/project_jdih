@@ -90,6 +90,7 @@ use App\Http\Controllers\authentications\ForgotPasswordBasic;
 use App\Http\Controllers\authentications\ForgotPasswordCover;
 use App\Http\Controllers\authentications\TwoStepsBasic;
 use App\Http\Controllers\authentications\TwoStepsCover;
+use App\Http\Controllers\authentications\AuthController;
 use App\Http\Controllers\wizard_example\Checkout as WizardCheckout;
 use App\Http\Controllers\wizard_example\PropertyListing;
 use App\Http\Controllers\wizard_example\CreateDeal;
@@ -157,9 +158,9 @@ use App\Http\Controllers\charts\ApexCharts;
 use App\Http\Controllers\charts\ChartJs;
 use App\Http\Controllers\maps\Leaflet;
 
+
 // Main Page Route
 Route::get('/', [HelpCenter::class, 'index'])->name('help-center-landing');
-Route::get('/dashboard/analytics', [Analytics::class, 'index'])->name('dashboard-analytics-pages');
 Route::get('/dashboard/crm', [Crm::class, 'index'])->name('dashboard-crm');
 // locale
 Route::get('/lang/{locale}', [LanguageController::class, 'swap']);
@@ -249,7 +250,7 @@ Route::get('/pages/misc-server-error', [MiscServerError::class, 'index'])->name(
 Route::get('/auth/login-basic', [LoginBasic::class, 'index'])->name('auth-login-basic');
 Route::get('/auth/login-cover', [LoginCover::class, 'index'])->name('auth-login-cover');
 Route::get('/auth/register-basic', [RegisterBasic::class, 'index'])->name('auth-register-basic');
-Route::get('/auth/register-cover', [RegisterCover::class, 'index'])->name('auth-register-cover');
+
 Route::get('/auth/register-multisteps', [RegisterMultiSteps::class, 'index'])->name('auth-register-multisteps');
 Route::get('/auth/verify-email-basic', [VerifyEmailBasic::class, 'index'])->name('auth-verify-email-basic');
 Route::get('/auth/verify-email-cover', [VerifyEmailCover::class, 'index'])->name('auth-verify-email-cover');
@@ -259,6 +260,37 @@ Route::get('/auth/forgot-password-basic', [ForgotPasswordBasic::class, 'index'])
 Route::get('/auth/forgot-password-cover', [ForgotPasswordCover::class, 'index'])->name('auth-forgot-password-cover');
 Route::get('/auth/two-steps-basic', [TwoStepsBasic::class, 'index'])->name('auth-two-steps-basic');
 Route::get('/auth/two-steps-cover', [TwoStepsCover::class, 'index'])->name('auth-two-steps-cover');
+// === AUTH ===
+// Register
+Route::get('/auth/register-basic', [AuthController::class, 'index'])->name('auth-register-basic');
+Route::post('/auth/register', [AuthController::class, 'register'])->name('auth.register');
+
+// Login
+Route::get('/auth/login-basic', [AuthController::class, 'showLoginForm'])->name('auth-login-basic');
+Route::post('/auth/login', [AuthController::class, 'login'])->name('auth.login');
+// Logout
+Route::post('/auth/logout', [AuthController::class, 'logout'])->name('auth.logout')->middleware('auth');
+
+// === DASHBOARD ===
+Route::get('/dashboard/analytics', [Analytics::class, 'index'])
+    ->middleware('auth')
+    ->name('dashboard-analytics-pages');
+//middleware role
+Route::middleware(['auth', 'role:operator'])->group(function () {
+    Route::get('/upload', [UploadController::class, 'index']);
+    Route::post('/upload', [UploadController::class, 'store']);
+});
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/verifikasi', [VerifikasiController::class, 'index']);
+    Route::post('/publish/{id}', [VerifikasiController::class, 'publish']);
+});
+// search
+Route::get('/search', function (Illuminate\Http\Request $request) {
+    $q = $request->input('q');
+    // contoh hasil dummy
+    return view('content.search.result', compact('q'));
+})->name('search');
+
 
 // wizard example
 Route::get('/wizard/ex-checkout', [WizardCheckout::class, 'index'])->name('wizard-ex-checkout');
