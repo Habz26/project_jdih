@@ -5,7 +5,7 @@
 
 @extends('layouts/layoutMaster')
 
-@section('title', 'Two Steps Verifications Basic - Pages')
+@section('title', 'Verifikasi Dua Langkah Dasar - Halaman')
 
 @section('vendor-style')
   @vite(['resources/assets/vendor/libs/@form-validation/form-validation.scss'])
@@ -38,12 +38,12 @@
           </div>
           <!-- /Logo -->
           <div class="card-body mt-1">
-            <h4 class="mb-1">Two Step Verification 💬</h4>
+            <h4 class="mb-1">Verifikasi Dua Langkah 💬</h4>
             <p class="text-start mb-5">
-              We sent a verification code to your mobile. Enter the code from the mobile in the field below.
+              Kami telah mengirimkan kode verifikasi ke ponsel Anda. Masukkan kode dari ponsel pada kolom di bawah ini.
               <span class="d-block mt-1 h6">*****1234</span>
             </p>
-            <p class="mb-0">Type your 6 digit security code</p>
+            <p class="mb-0">Ketik kode keamanan 6 digit Anda</p>
             <form id="twoStepsForm" action="{{ url('/') }}" method="GET">
               <div class="mb-5 form-control-validation">
                 <div class="auth-input-wrapper d-flex align-items-center justify-content-between numeral-mask-wrapper">
@@ -63,10 +63,10 @@
                 <!-- Create a hidden field which is combined by 3 fields above -->
                 <input type="hidden" name="otp" />
               </div>
-              <button class="btn btn-primary d-grid w-100 mb-5">Verify my account</button>
+              <button class="btn btn-primary d-grid w-100 mb-5">Verifikasi Akun Saya</button>
               <div class="text-center">
-                Didn't get the code?
-                <a href="javascript:void(0);"> Resend </a>
+                Tidak menerima kode?
+                <a href="javascript:void(0);"> Kirim Ulang </a>
               </div>
             </form>
           </div>

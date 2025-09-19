@@ -4,7 +4,7 @@ $customizerHidden = 'customizer-hide';
 @endphp
 @extends('layouts/layoutMaster')
 
-@section('title', 'Forgot Password Basic - Pages')
+@section('title', 'Lupa Kata Sandi Dasar - Halaman')
 
 @section('vendor-style')
 @vite([
@@ -38,7 +38,7 @@ $customizerHidden = 'customizer-hide';
     <div class="authentication-inner py-6">
       <!-- Logo -->
       <div class="card p-md-7 p-1">
-        <!-- Forgot Password -->
+        <!-- Lupa Kata Sandi -->
         <div class="app-brand justify-content-center mt-5">
           <a href="{{url('/')}}" class="app-brand-link gap-2">
             <span class="app-brand-logo demo">@include('_partials.macros')</span>
@@ -47,25 +47,25 @@ $customizerHidden = 'customizer-hide';
         </div>
         <!-- /Logo -->
         <div class="card-body mt-1">
-          <h4 class="mb-1">Forgot Password? 🔒</h4>
-          <p class="mb-5">Enter your email and we'll send you instructions to reset your password</p>
+          <h4 class="mb-1">Lupa Kata Sandi? 🔒</h4>
+          <p class="mb-5">Masukkan email Anda dan kami akan mengirimkan instruksi untuk mengatur ulang kata sandi</p>
           <form id="formAuthentication" class="mb-5" action="{{url('auth/reset-password-basic')}}" method="GET">
             <div class="form-floating form-floating-outline mb-5 form-control-validation">
-              <input type="text" class="form-control" id="email" name="email" placeholder="Enter your email"
+              <input type="text" class="form-control" id="email" name="email" placeholder="Masukkan email Anda"
                 autofocus />
               <label>Email</label>
             </div>
-            <button class="btn btn-primary d-grid w-100 mb-5">Send Reset Link</button>
+            <button class="btn btn-primary d-grid w-100 mb-5">Kirim Tautan Reset</button>
           </form>
           <div class="text-center">
             <a href="{{url('auth/login-basic')}}" class="d-flex align-items-center justify-content-center">
               <i class="icon-base ri ri-arrow-left-s-line scaleX-n1-rtl icon-20px me-1_5"></i>
-              Back to login
+              Kembali ke login
             </a>
           </div>
         </div>
       </div>
-      <!-- /Forgot Password -->
+      <!-- /Lupa Kata Sandi -->
       <img alt="mask"
         src="{{asset('assets/img/illustrations/auth-basic-forgot-password-mask-'.$configData['theme'].'.png') }}"
         class="authentication-image d-none d-lg-block"

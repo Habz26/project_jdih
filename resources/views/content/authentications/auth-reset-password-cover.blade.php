@@ -6,7 +6,7 @@ $configData = Helper::appClasses();
 
 @extends('layouts/layoutMaster')
 
-@section('title', 'Reset Password Cover - Pages')
+@section('title', 'Atur Ulang Kata Sandi Cover - Halaman')
 
 @section('vendor-style')
 @vite([
@@ -61,8 +61,8 @@ $configData = Helper::appClasses();
       <div
         class="d-flex col-12 col-lg-5 col-xl-4 align-items-center authentication-bg position-relative py-sm-12 px-12 py-6">
         <div class="w-px-400 mx-auto pt-5 pt-lg-0">
-          <h4 class="mb-1">Reset Password 🔒</h4>
-          <p class="mb-5">Your new password must be different from previously used passwords</p>
+          <h4 class="mb-1">Atur Ulang Kata Sandi 🔒</h4>
+          <p class="mb-5">Kata sandi baru Anda harus berbeda dari kata sandi yang pernah digunakan sebelumnya</p>
           <form id="formAuthentication" class="mb-5" action="{{url('auth/login-cover')}}" method="GET">
             <div class="mb-5 form-password-toggle form-control-validation">
               <div class="input-group input-group-merge">
@@ -70,7 +70,7 @@ $configData = Helper::appClasses();
                   <input type="password" id="password" class="form-control" name="password"
                     placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                     aria-describedby="password" />
-                  <label for="password">New Password</label>
+                  <label for="password">Kata Sandi Baru</label>
                 </div>
                 <span class="input-group-text cursor-pointer"><i
                     class="icon-base ri ri-eye-off-line icon-20px"></i></span>
@@ -82,17 +82,17 @@ $configData = Helper::appClasses();
                   <input type="password" id="confirm-password" class="form-control" name="confirm-password"
                     placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                     aria-describedby="password" />
-                  <label for="confirm-password">Confirm Password</label>
+                  <label for="confirm-password">Konfirmasi Kata Sandi</label>
                 </div>
                 <span class="input-group-text cursor-pointer"><i
                     class="icon-base ri ri-eye-off-line icon-20px"></i></span>
               </div>
             </div>
-            <button class="btn btn-primary d-grid w-100 mb-5">Set new password</button>
+            <button class="btn btn-primary d-grid w-100 mb-5">Simpan Kata Sandi Baru</button>
             <div class="text-center">
               <a href="{{url('auth/login-cover')}}" class="d-flex align-items-center justify-content-center">
                 <i class="icon-base ri ri-arrow-left-s-line scaleX-n1-rtl icon-20px me-1_5"></i>
-                Back to login
+                Kembali ke Login
               </a>
             </div>
           </form>

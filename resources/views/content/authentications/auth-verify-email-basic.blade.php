@@ -5,7 +5,7 @@ $customizerHidden = 'customizer-hide';
 
 @extends('layouts/layoutMaster')
 
-@section('title', 'Verify Email Basic - Pages')
+@section('title', 'Verifikasi Email Basic - Halaman')
 
 @section('page-style')
 <!-- Page -->
@@ -26,15 +26,18 @@ $customizerHidden = 'customizer-hide';
         </div>
         <!-- /Logo -->
 
-        <!-- Verify Email -->
+        <!-- Verifikasi Email -->
         <div class="card-body mt-1">
-          <h4 class="mb-1">Verify your email ✉️</h4>
-          <p class="text-start mb-0">Account activation link sent to your email address: <span
-              class="h6">hello@example.com</span> Please follow the link inside to continue.</p>
-          <a class="btn btn-primary w-100 my-5" href="{{url('/')}}"> Skip for now </a>
+          <h4 class="mb-1">Verifikasi email Anda ✉️</h4>
+          <p class="text-start mb-0">
+            Tautan aktivasi akun telah dikirim ke alamat email Anda:
+            <span class="h6">hello@example.com</span>.
+            Silakan ikuti tautan di dalam email untuk melanjutkan.
+          </p>
+          <a class="btn btn-primary w-100 my-5" href="{{url('/')}}"> Lewati untuk sekarang </a>
           <p class="text-center mb-0">
-            Didn't get the mail?
-            <a href="javascript:void(0);"> Resend </a>
+            Tidak menerima email?
+            <a href="javascript:void(0);"> Kirim ulang </a>
           </p>
         </div>
       </div>
@@ -42,7 +45,7 @@ $customizerHidden = 'customizer-hide';
         class="authentication-image d-none d-lg-block"
         data-app-light-img="illustrations/auth-basic-login-mask-light.png"
         data-app-dark-img="illustrations/auth-basic-login-mask-dark.png" />
-      <!-- /Verify Email -->
+      <!-- /Verifikasi Email -->
     </div>
   </div>
 </div>

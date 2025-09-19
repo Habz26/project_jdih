@@ -5,7 +5,7 @@ $customizerHidden = 'customizer-hide';
 
 @extends('layouts/layoutMaster')
 
-@section('title', 'Reset Password Basic - Pages')
+@section('title', 'Reset Password Dasar - Halaman')
 
 @section('vendor-style')
 @vite([
@@ -48,8 +48,8 @@ $customizerHidden = 'customizer-hide';
         <!-- /Logo -->
         <!-- Reset Password -->
         <div class="card-body">
-          <h4 class="mb-1">Reset Password 🔒</h4>
-          <p class="mb-5">Your new password must be different from previously used passwords</p>
+          <h4 class="mb-1">Atur Ulang Kata Sandi 🔒</h4>
+          <p class="mb-5">Kata sandi baru Anda harus berbeda dari kata sandi yang sudah pernah digunakan sebelumnya</p>
           <form id="formAuthentication" class="mb-5" action="{{url('auth/login-basic')}}" method="GET">
             <div class="mb-5 form-password-toggle form-control-validation">
               <div class="input-group input-group-merge">
@@ -57,7 +57,7 @@ $customizerHidden = 'customizer-hide';
                   <input type="password" id="password" class="form-control" name="password"
                     placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                     aria-describedby="password" />
-                  <label for="password">New Password</label>
+                  <label for="password">Kata Sandi Baru</label>
                 </div>
                 <span class="input-group-text cursor-pointer"><i
                     class="icon-base ri ri-eye-off-line icon-20px"></i></span>
@@ -69,17 +69,17 @@ $customizerHidden = 'customizer-hide';
                   <input type="password" id="confirm-password" class="form-control" name="confirm-password"
                     placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                     aria-describedby="password" />
-                  <label for="confirm-password">Confirm Password</label>
+                  <label for="confirm-password">Konfirmasi Kata Sandi</label>
                 </div>
                 <span class="input-group-text cursor-pointer"><i
                     class="icon-base ri ri-eye-off-line icon-20px"></i></span>
               </div>
             </div>
-            <button class="btn btn-primary d-grid w-100 mb-5">Set new password</button>
+            <button class="btn btn-primary d-grid w-100 mb-5">Simpan kata sandi baru</button>
             <div class="text-center">
               <a href="{{url('auth/login-basic')}}" class="d-flex align-items-center justify-content-center">
                 <i class="icon-base ri ri-arrow-left-s-line scaleX-n1-rtl icon-20px me-1_5"></i>
-                Back to login
+                Kembali ke Login
               </a>
             </div>
           </form>

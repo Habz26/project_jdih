@@ -6,7 +6,7 @@ $configData = Helper::appClasses();
 
 @extends('layouts/layoutMaster')
 
-@section('title', 'Verify Email Cover - Pages')
+@section('title', 'Verifikasi Email Cover - Halaman')
 
 @section('page-style')
 <!-- Page -->
@@ -35,21 +35,24 @@ $configData = Helper::appClasses();
     </div>
     <!-- /Left Section -->
 
-    <!--  Verify email -->
+    <!--  Verifikasi Email -->
     <div
       class="d-flex col-12 col-lg-5 col-xl-4 align-items-center authentication-bg position-relative py-sm-12 px-12 py-6">
       <div class="w-px-400 mx-auto pt-5 pt-lg-0">
-        <h4 class="mb-1">Verify your email ✉️</h4>
-        <p class="text-start mb-0">Account activation link sent to your email address: <span
-            class="h6">hello@example.com</span> Please follow the link inside to continue.</p>
-        <a class="btn btn-primary w-100 my-5" href="{{url('/')}}"> Skip for now </a>
+        <h4 class="mb-1">Verifikasi email Anda ✉️</h4>
+        <p class="text-start mb-0">
+          Tautan aktivasi akun telah dikirim ke alamat email Anda:
+          <span class="h6">hello@example.com</span>.
+          Silakan ikuti tautan di dalam email untuk melanjutkan.
+        </p>
+        <a class="btn btn-primary w-100 my-5" href="{{url('/')}}"> Lewati untuk sekarang </a>
         <p class="text-center">
-          Didn't get the mail?
-          <a href="javascript:void(0);"> Resend </a>
+          Tidak menerima email?
+          <a href="javascript:void(0);"> Kirim ulang </a>
         </p>
       </div>
     </div>
-    <!-- / Verify email -->
+    <!-- / Verifikasi Email -->
   </div>
 </div>
 @endsection

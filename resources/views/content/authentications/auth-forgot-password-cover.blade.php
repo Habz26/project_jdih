@@ -6,7 +6,7 @@ $configData = Helper::appClasses();
 
 @extends('layouts/layoutMaster')
 
-@section('title', 'Forgot Password Cover - Pages')
+@section('title', 'Lupa Kata Sandi Cover - Halaman')
 
 @section('vendor-style')
 @vite([
@@ -59,19 +59,19 @@ $configData = Helper::appClasses();
     <!-- Forgot Password -->
     <div class="d-flex col-12 col-lg-5 col-xl-4 align-items-center authentication-bg p-sm-12 p-6">
       <div class="w-px-400 mx-auto">
-        <h4 class="mb-1">Forgot Password? 🔒</h4>
-        <p class="mb-5">Enter your email and we'll send you instructions to reset your password</p>
+        <h4 class="mb-1">Lupa Kata Sandi? 🔒</h4>
+        <p class="mb-5">Masukkan email Anda dan kami akan mengirimkan instruksi untuk mengatur ulang kata sandi</p>
         <form id="formAuthentication" class="mb-5" action="{{url('auth/reset-password-cover')}}" method="GET">
           <div class="form-floating form-floating-outline mb-5 form-control-validation">
-            <input type="text" class="form-control" id="email" name="email" placeholder="Enter your email" autofocus />
+            <input type="text" class="form-control" id="email" name="email" placeholder="Masukkan email Anda" autofocus />
             <label for="email">Email</label>
           </div>
-          <button class="btn btn-primary d-grid w-100 mb-5">Send Reset Link</button>
+          <button class="btn btn-primary d-grid w-100 mb-5">Kirim Tautan Reset</button>
         </form>
         <div class="text-center">
           <a href="{{url('auth/login-cover')}}" class="d-flex align-items-center justify-content-center">
             <i class="icon-base ri ri-arrow-left-s-line scaleX-n1-rtl icon-20px me-1_5"></i>
-            Back to login
+            Kembali ke Login
           </a>
         </div>
       </div>

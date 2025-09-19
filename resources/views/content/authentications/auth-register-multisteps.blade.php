@@ -6,7 +6,7 @@ $configData = Helper::appClasses();
 
 @extends('layouts/layoutMaster')
 
-@section('title', 'Multi Steps Sign-up - Pages')
+@section('title', 'Pendaftaran Multi Langkah - Halaman')
 
 @section('vendor-style')
 @vite([
@@ -49,15 +49,15 @@ $configData = Helper::appClasses();
   </a>
   <!-- /Logo -->
   <div class="authentication-inner row m-0">
-    <!-- Left Text -->
+    <!-- Gambar Kiri -->
     <div class="d-none d-lg-flex col-lg-3 align-items-center justify-content-center p-12 mt-12 mt-xxl-0">
-      <img alt="register-multi-steps-illustration"
+      <img alt="ilustrasi-pendaftaran-multi-langkah"
         src="{{asset('assets/img/illustrations/auth-register-multi-steps-illustration.png')}}"
         class="h-auto mh-100 w-px-200" />
     </div>
-    <!-- /Left Text -->
+    <!-- /Gambar Kiri -->
 
-    <!--  Multi Steps Registration -->
+    <!--  Pendaftaran Multi Langkah -->
     <div class="d-flex col-lg-9 align-items-center justify-content-center authentication-bg p-5">
       <div class="w-px-700 mt-12 mt-lg-0 pt-lg-0 pt-4">
         <div id="multiStepsValidation" class="bs-stepper wizard-numbered shadow-none">
@@ -68,8 +68,8 @@ $configData = Helper::appClasses();
                 <span class="bs-stepper-label">
                   <span class="bs-stepper-number">01</span>
                   <span class="d-flex flex-column ms-2">
-                    <span class="bs-stepper-title">Account</span>
-                    <span class="bs-stepper-subtitle">Account Details</span>
+                    <span class="bs-stepper-title">Akun</span>
+                    <span class="bs-stepper-subtitle">Detail Akun</span>
                   </span>
                 </span>
               </button>
@@ -81,8 +81,8 @@ $configData = Helper::appClasses();
                 <span class="bs-stepper-label">
                   <span class="bs-stepper-number">02</span>
                   <span class="d-flex flex-column ms-2">
-                    <span class="bs-stepper-title">Personal</span>
-                    <span class="bs-stepper-subtitle">Enter Information</span>
+                    <span class="bs-stepper-title">Pribadi</span>
+                    <span class="bs-stepper-subtitle">Masukkan Informasi</span>
                   </span>
                 </span>
               </button>
@@ -94,8 +94,8 @@ $configData = Helper::appClasses();
                 <span class="bs-stepper-label">
                   <span class="bs-stepper-number">03</span>
                   <span class="d-flex flex-column ms-2">
-                    <span class="bs-stepper-title">Billing</span>
-                    <span class="bs-stepper-subtitle">Payment Details</span>
+                    <span class="bs-stepper-title">Tagihan</span>
+                    <span class="bs-stepper-subtitle">Detail Pembayaran</span>
                   </span>
                 </span>
               </button>
@@ -103,18 +103,18 @@ $configData = Helper::appClasses();
           </div>
           <div class="bs-stepper-content">
             <form id="multiStepsForm" onSubmit="return false">
-              <!-- Account Details -->
+              <!-- Detail Akun -->
               <div id="accountDetailsValidation" class="content">
                 <div class="content-header mb-5">
-                  <h4 class="mb-1">Account Information</h4>
-                  <span>Enter Your Account Details</span>
+                  <h4 class="mb-1">Informasi Akun</h4>
+                  <span>Masukkan Detail Akun Anda</span>
                 </div>
                 <div class="row gx-5">
                   <div class="col-sm-6 mb-5 form-control-validation">
                     <div class="form-floating form-floating-outline">
                       <input type="text" name="multiStepsUsername" id="multiStepsUsername" class="form-control"
                         placeholder="johndoe" />
-                      <label for="multiStepsUsername">Username</label>
+                      <label for="multiStepsUsername">Nama Pengguna</label>
                     </div>
                   </div>
                   <div class="col-sm-6 mb-5 form-control-validation">
@@ -128,9 +128,9 @@ $configData = Helper::appClasses();
                     <div class="input-group input-group-merge">
                       <div class="form-floating form-floating-outline">
                         <input type="password" id="multiStepsPass" name="multiStepsPass" class="form-control"
-                          placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                          placeholder="************"
                           aria-describedby="multiStepsPass2" />
-                        <label for="multiStepsPass">Password</label>
+                        <label for="multiStepsPass">Kata Sandi</label>
                       </div>
                       <span class="input-group-text cursor-pointer" id="multiStepsPass2"><i
                           class="icon-base ri ri-eye-off-line ri-20px"></i></span>
@@ -141,9 +141,9 @@ $configData = Helper::appClasses();
                       <div class="form-floating form-floating-outline">
                         <input type="password" id="multiStepsConfirmPass" name="multiStepsConfirmPass"
                           class="form-control"
-                          placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                          placeholder="************"
                           aria-describedby="multiStepsConfirmPass2" />
-                        <label for="multiStepsConfirmPass">Confirm Password</label>
+                        <label for="multiStepsConfirmPass">Konfirmasi Kata Sandi</label>
                       </div>
                       <span class="input-group-text cursor-pointer" id="multiStepsConfirmPass2"><i
                           class="icon-base ri ri-eye-off-line ri-20px"></i></span>
@@ -152,167 +152,123 @@ $configData = Helper::appClasses();
                   <div class="col-md-12 mb-5">
                     <div class="form-floating form-floating-outline">
                       <input type="text" name="multiStepsURL" id="multiStepsURL" class="form-control"
-                        placeholder="johndoe/profile" aria-label="johndoe" />
-                      <label for="multiStepsURL">Profile Link</label>
+                        placeholder="johndoe/profil" aria-label="johndoe" />
+                      <label for="multiStepsURL">Tautan Profil</label>
                     </div>
                   </div>
                   <div class="col-12 d-flex justify-content-between">
                     <button class="btn btn-outline-secondary btn-prev" disabled>
                       <i class="icon-base ri ri-arrow-left-line icon-16px me-sm-1_5 me-0"></i>
-                      <span class="align-middle d-sm-inline-block d-none">Previous</span>
+                      <span class="align-middle d-sm-inline-block d-none">Sebelumnya</span>
                     </button>
                     <button class="btn btn-primary btn-next"><span
-                        class="align-middle d-sm-inline-block d-none me-sm-1_5 me-0">Next</span> <i
+                        class="align-middle d-sm-inline-block d-none me-sm-1_5 me-0">Berikutnya</span> <i
                         class="icon-base ri ri-arrow-right-line icon-16px"></i></button>
                   </div>
                 </div>
               </div>
-              <!-- Personal Info -->
+              <!-- Informasi Pribadi -->
               <div id="personalInfoValidation" class="content">
                 <div class="content-header mb-5">
-                  <h4 class="mb-1">Personal Information</h4>
-                  <span>Enter Your Personal Information</span>
+                  <h4 class="mb-1">Informasi Pribadi</h4>
+                  <span>Masukkan Informasi Pribadi Anda</span>
                 </div>
                 <div class="row gx-5">
                   <div class="col-sm-6 mb-5 form-control-validation">
                     <div class="form-floating form-floating-outline">
                       <input type="text" id="multiStepsFirstName" name="multiStepsFirstName" class="form-control"
                         placeholder="John" />
-                      <label for="multiStepsFirstName">First Name</label>
+                      <label for="multiStepsFirstName">Nama Depan</label>
                     </div>
                   </div>
                   <div class="col-sm-6 mb-5">
                     <div class="form-floating form-floating-outline">
                       <input type="text" id="multiStepsLastName" name="multiStepsLastName" class="form-control"
                         placeholder="Doe" />
-                      <label for="multiStepsLastName">Last Name</label>
+                      <label for="multiStepsLastName">Nama Belakang</label>
                     </div>
                   </div>
                   <div class="col-sm-6 mb-5">
                     <div class="input-group input-group-merge">
-                      <span class="input-group-text">US (+1)</span>
+                      <span class="input-group-text">ID (+62)</span>
                       <div class="form-floating form-floating-outline">
                         <input type="text" id="multiStepsMobile" name="multiStepsMobile"
-                          class="form-control multi-steps-mobile" placeholder="202 555 0111" />
-                        <label for="multiStepsMobile">Mobile</label>
+                          class="form-control multi-steps-mobile" placeholder="08123456789" />
+                        <label for="multiStepsMobile">Nomor HP</label>
                       </div>
                     </div>
                   </div>
                   <div class="col-sm-6 mb-5">
                     <div class="form-floating form-floating-outline">
                       <input type="text" id="multiStepsPincode" name="multiStepsPincode"
-                        class="form-control multi-steps-pincode" placeholder="Postal Code" maxlength="6" />
-                      <label for="multiStepsPincode">Pincode</label>
+                        class="form-control multi-steps-pincode" placeholder="Kode Pos" maxlength="6" />
+                      <label for="multiStepsPincode">Kode Pos</label>
                     </div>
                   </div>
                   <div class="col-md-12 mb-5 form-control-validation">
                     <div class="form-floating form-floating-outline">
                       <input type="text" id="multiStepsAddress" name="multiStepsAddress" class="form-control"
-                        placeholder="Address" />
-                      <label for="multiStepsAddress">Address</label>
+                        placeholder="Alamat" />
+                      <label for="multiStepsAddress">Alamat</label>
                     </div>
                   </div>
                   <div class="col-md-12 mb-5">
                     <div class="form-floating form-floating-outline">
                       <input type="text" id="multiStepsArea" name="multiStepsArea" class="form-control"
-                        placeholder="Area/Landmark" />
-                      <label for="multiStepsArea">Landmark</label>
+                        placeholder="Area/Patokan" />
+                      <label for="multiStepsArea">Patokan</label>
                     </div>
                   </div>
                   <div class="col-sm-6 mb-5 form-control-validation">
                     <div class="form-floating form-floating-outline">
-                      <input type="text" id="multiStepsCity" class="form-control" placeholder="Jackson" />
-                      <label for="multiStepsCity">City</label>
+                      <input type="text" id="multiStepsCity" class="form-control" placeholder="Jakarta" />
+                      <label for="multiStepsCity">Kota</label>
                     </div>
                   </div>
                   <div class="col-sm-6 mb-5 form-control-validation">
                     <div class="form-floating form-floating-outline">
                       <select id="multiStepsState" class="select2 form-select" data-allow-clear="true">
-                        <option value="">Select</option>
-                        <option value="AL">Alabama</option>
-                        <option value="AK">Alaska</option>
-                        <option value="AZ">Arizona</option>
-                        <option value="AR">Arkansas</option>
-                        <option value="CA">California</option>
-                        <option value="CO">Colorado</option>
-                        <option value="CT">Connecticut</option>
-                        <option value="DE">Delaware</option>
-                        <option value="DC">District Of Columbia</option>
-                        <option value="FL">Florida</option>
-                        <option value="GA">Georgia</option>
-                        <option value="HI">Hawaii</option>
-                        <option value="ID">Idaho</option>
-                        <option value="IL">Illinois</option>
-                        <option value="IN">Indiana</option>
-                        <option value="IA">Iowa</option>
-                        <option value="KS">Kansas</option>
-                        <option value="KY">Kentucky</option>
-                        <option value="LA">Louisiana</option>
-                        <option value="ME">Maine</option>
-                        <option value="MD">Maryland</option>
-                        <option value="MA">Massachusetts</option>
-                        <option value="MI">Michigan</option>
-                        <option value="MN">Minnesota</option>
-                        <option value="MS">Mississippi</option>
-                        <option value="MO">Missouri</option>
-                        <option value="MT">Montana</option>
-                        <option value="NE">Nebraska</option>
-                        <option value="NV">Nevada</option>
-                        <option value="NH">New Hampshire</option>
-                        <option value="NJ">New Jersey</option>
-                        <option value="NM">New Mexico</option>
-                        <option value="NY">New York</option>
-                        <option value="NC">North Carolina</option>
-                        <option value="ND">North Dakota</option>
-                        <option value="OH">Ohio</option>
-                        <option value="OK">Oklahoma</option>
-                        <option value="OR">Oregon</option>
-                        <option value="PA">Pennsylvania</option>
-                        <option value="RI">Rhode Island</option>
-                        <option value="SC">South Carolina</option>
-                        <option value="SD">South Dakota</option>
-                        <option value="TN">Tennessee</option>
-                        <option value="TX">Texas</option>
-                        <option value="UT">Utah</option>
-                        <option value="VT">Vermont</option>
-                        <option value="VA">Virginia</option>
-                        <option value="WA">Washington</option>
-                        <option value="WV">West Virginia</option>
-                        <option value="WI">Wisconsin</option>
-                        <option value="WY">Wyoming</option>
+                        <option value="">Pilih</option>
+                        <option value="JK">DKI Jakarta</option>
+                        <option value="JB">Jawa Barat</option>
+                        <option value="JT">Jawa Tengah</option>
+                        <option value="JI">Jawa Timur</option>
+                        <option value="YO">Yogyakarta</option>
+                        <option value="BA">Bali</option>
+                        <!-- dst sesuai kebutuhan -->
                       </select>
-                      <label for="multiStepsState">State</label>
+                      <label for="multiStepsState">Provinsi</label>
                     </div>
                   </div>
                   <div class="col-12 d-flex justify-content-between">
                     <button class="btn btn-outline-secondary btn-prev">
                       <i class="icon-base ri ri-arrow-left-line icon-16px me-sm-1_5 me-0"></i>
-                      <span class="align-middle d-sm-inline-block d-none">Previous</span>
+                      <span class="align-middle d-sm-inline-block d-none">Sebelumnya</span>
                     </button>
                     <button class="btn btn-primary btn-next"><span
-                        class="align-middle d-sm-inline-block d-none me-sm-1_5 me-0">Next</span> <i
+                        class="align-middle d-sm-inline-block d-none me-sm-1_5 me-0">Berikutnya</span> <i
                         class="icon-base ri ri-arrow-right-line icon-16px"></i></button>
                   </div>
                 </div>
               </div>
-              <!-- Billing Links -->
+              <!-- Tagihan -->
               <div id="billingLinksValidation" class="content">
                 <div class="content-header mb-5">
-                  <h4 class="mb-1">Select Plan</h4>
-                  <span>Select plan as per your requirement</span>
+                  <h4 class="mb-1">Pilih Paket</h4>
+                  <span>Pilih paket sesuai kebutuhan Anda</span>
                 </div>
-                <!-- Custom plan options -->
+                <!-- Opsi Paket -->
                 <div class="row gap-md-0 gap-4 mb-12 gx-5">
                   <div class="col-md">
                     <div class="form-check custom-option custom-option-icon">
                       <label class="form-check-label custom-option-content" for="basicOption">
                         <span class="custom-option-body">
-                          <span class="fs-6 d-block fw-medium text-heading mb-2">Basic</span>
-                          <small>A simple start for start ups & Students</small>
+                          <span class="fs-6 d-block fw-medium text-heading mb-2">Dasar</span>
+                          <small>Awal sederhana untuk startup & mahasiswa</small>
                           <span class="d-flex justify-content-center py-2">
-                            <sup class="text-primary small lh-1 mt-3">$</sup>
+                            <sup class="text-primary small lh-1 mt-3">Rp</sup>
                             <span class="h4 mb-0 text-primary">0</span>
-                            <sub class="lh-1 mt-auto mb-3 text-body-secondary small">/month</sub>
+                            <sub class="lh-1 mt-auto mb-3 text-body-secondary small">/bulan</sub>
                           </span>
                         </span>
                         <input name="customRadioIcon" class="form-check-input" type="radio" value="" id="basicOption" />
@@ -323,12 +279,12 @@ $configData = Helper::appClasses();
                     <div class="form-check custom-option custom-option-icon">
                       <label class="form-check-label custom-option-content" for="standardOption">
                         <span class="custom-option-body">
-                          <span class="fs-6 d-block fw-medium text-heading mb-2">Standard</span>
-                          <small>For small to medium businesses</small>
+                          <span class="fs-6 d-block fw-medium text-heading mb-2">Standar</span>
+                          <small>Untuk bisnis kecil hingga menengah</small>
                           <span class="d-flex justify-content-center py-2">
-                            <sup class="text-primary small lh-1 mt-3">$</sup>
+                            <sup class="text-primary small lh-1 mt-3">Rp</sup>
                             <span class="h4 mb-0 text-primary">99</span>
-                            <sub class="lh-1 mt-auto mb-3 text-body-secondary small">/month</sub>
+                            <sub class="lh-1 mt-auto mb-3 text-body-secondary small">/bulan</sub>
                           </span>
                         </span>
                         <input name="customRadioIcon" class="form-check-input" type="radio" value="" id="standardOption"
@@ -340,12 +296,12 @@ $configData = Helper::appClasses();
                     <div class="form-check custom-option custom-option-icon">
                       <label class="form-check-label custom-option-content" for="enterpriseOption">
                         <span class="custom-option-body">
-                          <span class="fs-6 d-block fw-medium text-heading mb-2">Enterprise</span>
-                          <small>Solution for enterprise & organizations</small>
+                          <span class="fs-6 d-block fw-medium text-heading mb-2">Perusahaan</span>
+                          <small>Solusi untuk perusahaan & organisasi</small>
                           <span class="d-flex justify-content-center py-2">
-                            <sup class="text-primary small lh-1 mt-3">$</sup>
+                            <sup class="text-primary small lh-1 mt-3">Rp</sup>
                             <span class="h4 mb-0 text-primary">499</span>
-                            <sub class="lh-1 mt-auto mb-3 text-body-secondary small">/month</sub>
+                            <sub class="lh-1 mt-auto mb-3 text-body-secondary small">/bulan</sub>
                           </span>
                         </span>
                         <input name="customRadioIcon" class="form-check-input" type="radio" value=""
@@ -354,19 +310,19 @@ $configData = Helper::appClasses();
                     </div>
                   </div>
                 </div>
-                <!--/ Custom plan options -->
+                <!--/ Opsi Paket -->
                 <div class="content-header mb-5">
-                  <h4 class="mb-1">Payment Information</h4>
-                  <span>Enter your card information</span>
+                  <h4 class="mb-1">Informasi Pembayaran</h4>
+                  <span>Masukkan informasi kartu Anda</span>
                 </div>
-                <!-- Credit Card Details -->
+                <!-- Detail Kartu Kredit -->
                 <div class="row gx-5">
                   <div class="col-md-12 mb-5 form-control-validation">
                     <div class="input-group input-group-merge">
                       <div class="form-floating form-floating-outline">
                         <input id="multiStepsCard" class="form-control multi-steps-card" name="multiStepsCard"
                           type="text" placeholder="1356 3215 6548 7898" aria-describedby="multiStepsCardImg" />
-                        <label for="multiStepsCard">Card Number</label>
+                        <label for="multiStepsCard">Nomor Kartu</label>
                       </div>
                       <span class="input-group-text cursor-pointer" id="multiStepsCardImg"><span
                           class="card-type"></span></span>
@@ -376,14 +332,14 @@ $configData = Helper::appClasses();
                     <div class="form-floating form-floating-outline">
                       <input type="text" id="multiStepsName" class="form-control" name="multiStepsName"
                         placeholder="John Doe" />
-                      <label for="multiStepsName">Name On Card</label>
+                      <label for="multiStepsName">Nama di Kartu</label>
                     </div>
                   </div>
                   <div class="col-6 col-md-4 mb-5">
                     <div class="form-floating form-floating-outline">
                       <input type="text" id="multiStepsExDate" class="form-control multi-steps-exp-date"
                         name="multiStepsExDate" placeholder="MM/YY" />
-                      <label for="multiStepsExDate">Expiry Date</label>
+                      <label for="multiStepsExDate">Tanggal Kedaluwarsa</label>
                     </div>
                   </div>
                   <div class="col-6 col-md-3 mb-5">
@@ -391,35 +347,30 @@ $configData = Helper::appClasses();
                       <div class="form-floating form-floating-outline">
                         <input type="text" id="multiStepsCvv" class="form-control multi-steps-cvv" name="multiStepsCvv"
                           maxlength="3" placeholder="654" />
-                        <label for="multiStepsCvv">CVV Code</label>
+                        <label for="multiStepsCvv">Kode CVV</label>
                       </div>
                       <span class="input-group-text cursor-pointer" id="multiStepsCvvHelp"><i
                           class="icon-base ri ri-question-line" data-bs-toggle="tooltip" data-bs-placement="top"
-                          title="Card Verification Value"></i></span>
+                          title="Nilai Verifikasi Kartu"></i></span>
                     </div>
                   </div>
-                  <div class="col-12 d-flex justify-content-between form-control-validation">
+                  <div class="col-12 d-flex justify-content-between">
                     <button class="btn btn-outline-secondary btn-prev">
                       <i class="icon-base ri ri-arrow-left-line icon-16px me-sm-1_5 me-0"></i>
-                      <span class="align-middle d-sm-inline-block d-none">Previous</span>
+                      <span class="align-middle d-sm-inline-block d-none">Sebelumnya</span>
                     </button>
-                    <button type="submit" class="btn btn-success btn-next btn-submit">Submit <i
+                    <button type="submit" class="btn btn-success btn-next btn-submit">Kirim <i
                         class="icon-base ri ri-check-line icon-16px ms-1_5"></i></button>
                   </div>
                 </div>
-                <!--/ Credit Card Details -->
+                <!--/ Detail Kartu Kredit -->
               </div>
             </form>
           </div>
         </div>
       </div>
     </div>
-    <!-- / Multi Steps Registration -->
+    <!-- / Pendaftaran Multi Langkah -->
   </div>
 </div>
-
-<script type="module">
-// Check selected custom option
-window.Helpers.initCustomOptionCheck();
-</script>
 @endsection
