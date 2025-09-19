@@ -4,7 +4,7 @@ $customizerHidden = 'customizer-hide';
 $configData = Helper::appClasses();
 @endphp
 
-@extends('layouts/layoutMaster')
+@extends('layouts.layoutMaster')
 
 @section('title', 'Daftar Cover - Halaman')
 
@@ -62,38 +62,45 @@ $configData = Helper::appClasses();
         <h4 class="mb-1">Buat Akun</h4>
         <p class="mb-5">Buat akun dan nikmati kemudahan dalam mengelola aplikasi</p>
 
-        <form id="formAuthentication" class="mb-5" action="{{url('/')}}" method="GET">
-          <div class="form-floating form-floating-outline mb-5 form-control-validation">
-            <input type="text" class="form-control" id="username" name="username" placeholder="Masukkan nama pengguna"
-              autofocus />
-            <label for="username">Nama Pengguna</label>
-          </div>
-          <div class="form-floating form-floating-outline mb-5 form-control-validation">
-            <input type="text" class="form-control" id="email" name="email" placeholder="Masukkan email Anda" />
-            <label for="email">Email</label>
-          </div>
-          <div class="mb-5 form-password-toggle form-control-validation">
-            <div class="input-group input-group-merge">
-              <div class="form-floating form-floating-outline">
-                <input type="password" id="password" class="form-control" name="password"
-                  placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                  aria-describedby="password" />
-                <label for="password">Kata Sandi</label>
-              </div>
-              <span class="input-group-text cursor-pointer"><i class="icon-base ri ri-eye-off-line"></i></span>
-            </div>
-          </div>
-          <div class="mb-5 form-control-validation">
-            <div class="form-check mt-2">
-              <input class="form-check-input" type="checkbox" id="terms-conditions" name="terms" />
-              <label class="form-check-label" for="terms-conditions">
-                Saya setuju dengan
-                <a href="javascript:void(0);">kebijakan privasi & syarat</a>
-              </label>
-            </div>
-          </div>
-          <button class="btn btn-primary d-grid w-100">Daftar</button>
-        </form>
+        <form id="formAuthentication" class="mb-5" action="{{route('auth.register')}}" method="POST">
+  @csrf
+  <div class="form-floating form-floating-outline mb-5 form-control-validation">
+    <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" autofocus />
+    <label for="name">Full Name</label>
+  </div>
+
+  <div class="form-floating form-floating-outline mb-5 form-control-validation">
+    <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" />
+    <label for="email">Email</label>
+  </div>
+
+  <div class="mb-5 form-password-toggle form-control-validation">
+    <div class="input-group input-group-merge">
+      <div class="form-floating form-floating-outline">
+        <input type="password" id="password" class="form-control" name="password" placeholder="********" />
+        <label for="password">Password</label>
+      </div>
+      <span class="input-group-text cursor-pointer"><i class="icon-base ri ri-eye-off-line"></i></span>
+    </div>
+  </div>
+
+  <div class="mb-5 form-password-toggle form-control-validation">
+    <div class="form-floating form-floating-outline">
+      <input type="password" id="password_confirmation" class="form-control" name="password_confirmation" placeholder="********" />
+      <label for="password_confirmation">Confirm Password</label>
+    </div>
+  </div>
+
+  <div class="mb-5">
+    <select name="role" class="form-select">
+      <option value="operator">Operator</option>
+      <option value="admin">Admin</option>
+    </select>
+  </div>
+
+  <button class="btn btn-primary d-grid w-100">Sign up</button>
+</form>
+
 
         <p class="text-center mb-5">
           <span>Sudah punya akun?</span>
