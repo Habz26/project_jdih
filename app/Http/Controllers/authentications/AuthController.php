@@ -18,11 +18,13 @@ class AuthController extends Controller
             'email' => 'required|string|email|unique:users',
             'password' => 'required|string|min:6|confirmed',
             'role' => 'required|in:operator,admin',
+             'nip' => 'required|string|max:20|unique:users', // validasi NIP (ubah ke nullable jika opsional)
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'nip' => $request->nip, // 👈 ini ditambah
             'password' => Hash::make($request->password),
             'role' => $request->role ?? 'operator',
         ]);

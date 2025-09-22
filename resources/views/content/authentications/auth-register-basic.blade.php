@@ -64,6 +64,17 @@ $customizerHidden = 'customizer-hide';
               @enderror
             </div>
 
+            <!-- NIP -->
+<div class="form-floating form-floating-outline mb-3 form-control-validation">
+  <input type="text" class="form-control @error('nip') is-invalid @enderror" 
+         id="nip" name="nip" value="{{ old('nip') }}" placeholder="Enter your NIP" />
+  <label for="nip">NIP</label>
+  @error('nip')
+    <div class="invalid-feedback">{{ $message }}</div>
+  @enderror
+</div>
+
+
             <!-- Email -->
             <div class="form-floating form-floating-outline mb-3 form-control-validation">
               <input type="email" class="form-control @error('email') is-invalid @enderror" 
