@@ -20,9 +20,9 @@
           "slug": "dashboard-crm"
         },
         {
-          "url": "/dashboard/analytics",
+          "url": "/operator/dashboard/analytics",
           "name": "Analytics",
-          "slug": "dashboard-analytics"
+          "slug": "dashboard-analytics-pages"
         },
         {
           "url": "app/logistics/dashboard",

@@ -175,7 +175,7 @@ Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink
 // Reset Password
 Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
 Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
-Route::get('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
+Route::get('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.updates');
 
 use App\Http\Controllers\AccountSettingsAccountController;
 
@@ -307,7 +307,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
 });
 
 // ================== OPERATOR ROUTES ==================
-Route::middleware(['auth']) // <-- cuma auth aja karena role belum ada
+Route::middleware(['auth']) 
     ->prefix('operator')
     ->group(function () {
         Route::get('/dashboard/analytics', [Analytics::class, 'index'])
@@ -319,7 +319,7 @@ Route::get('/pages/account-settings-account', [AccountSettingsAccount::class, 'i
     ->middleware('auth');
 
 Route::post('/account/upload-avatar', [AccountSettingsAccount::class, 'uploadAvatar'])
-    ->name('account.uploadAvatar')
+    ->name('account.uploadAvatars')
     ->middleware('auth');
 Route::get('/account/upload-avatar', [AccountSettingsAccount::class, 'uploadAvatar'])
     ->name('account.uploadAvatar')
