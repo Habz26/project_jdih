@@ -30,7 +30,7 @@
         <a href="{{ route('auth.login') }}" class="btn btn-outline-primary">Login</a>
       </li>
       <li class="nav-item">
-        <a href="{{ route('auth-register-cover') }}" class="btn btn-primary">Register</a>
+       <a href="{{ url('auth/register-basic') }}" class="btn btn-primary">Register</a>
       </li>
     @endguest
 
