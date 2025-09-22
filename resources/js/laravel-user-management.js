@@ -748,8 +748,8 @@ document.addEventListener('DOMContentLoaded', function (e) {
           // sweetalert
           Swal.fire({
             icon: 'success',
-            title: `Successfully ${status}!`,
-            text: `User ${status} Successfully.`,
+            title: `Berhasil!`,
+            text: `Data user telah disimpan.`,
             customClass: {
               confirmButton: 'btn btn-success'
             }

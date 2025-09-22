@@ -33,7 +33,7 @@ $configData = Helper::appClasses();
           </h4>
           <p class="mb-0">Selamat datang kembali di dashboard Operator!</p>
           <p>Periksa lencana baru Anda di profil Anda.</p>
-          <a href="javascript:;" class="btn btn-primary">lihat Profil</a>
+          <a href="{{ route('pages-account-settings-account') }}" class="btn btn-primary">Lihat Profil</a>
         </div>
       </div>
       <div class="col-md-6 text-center text-md-end order-1 order-md-2">

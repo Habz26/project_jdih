@@ -27,19 +27,19 @@
                 class="icon-base ri ri-group-line icon-sm me-2"></i>Account</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ url('pages/account-settings-security') }}"><i
+            <a class="nav-link disabled" href="{{ url('pages/account-settings-security') }}"><i
                 class="icon-base ri ri-lock-line icon-sm me-2"></i>Security</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ url('pages/account-settings-billing') }}"><i
+            <a class="nav-link disabled" href="{{ url('pages/account-settings-billing') }}"><i
                 class="icon-base ri ri-bookmark-line icon-sm me-2"></i>Billing & Plans</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ url('pages/account-settings-notifications') }}"><i
+            <a class="nav-link disabled" href="{{ url('pages/account-settings-notifications') }}"><i
                 class="icon-base ri ri-notification-4-line icon-sm me-2"></i>Notifications</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ url('pages/account-settings-connections') }}"><i
+            <a class="nav-link disabled" href="{{ url('pages/account-settings-connections') }}"><i
                 class="icon-base ri ri-link-m icon-sm me-2"></i>Connections</a>
           </li>
         </ul>

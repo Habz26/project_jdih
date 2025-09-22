@@ -120,21 +120,22 @@ class UserManagement extends Controller
     $userID = $request->id;
 
     if ($userID) {
-        // update user
-        $users = User::updateOrCreate(
-            ['id' => $userID],
-            [
-                'name' => $request->name,
-                'email' => $request->email,
-                // optionally update password if provided:
-                'password' => $request->password ? bcrypt($request->password) : $existingPassword,
-                'role' => $request->role ?? 'operator',
-            ]
-        );
+        // Update user
+        $user = User::findOrFail($userID);
 
-        return response()->json('Updated');
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $request->password ? bcrypt($request->password) : $user->password,
+            'role' => $request->role ?? 'operator',
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Updated'
+        ]);
     } else {
-        // validate inputs, especially password
+        // Validate new user
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
@@ -142,15 +143,17 @@ class UserManagement extends Controller
             'role' => 'sometimes|in:admin,operator',
         ]);
 
-        // create new user with hashed password
-        $users = User::create([
+        User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => bcrypt($request->password),  // Hash password properly
+            'password' => bcrypt($request->password),
             'role' => $request->role ?? 'operator',
         ]);
 
-        return response()->json('Created');
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Created'
+        ]);
     }
 }
 
