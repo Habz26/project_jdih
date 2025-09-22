@@ -13,12 +13,13 @@ class RoleMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle($request, Closure $next, $role)
+    public function index()
 {
-    if (auth()->check() && auth()->user()->role === $role) {
-        return $next($request);
+    if (auth()->user()->role !== 'operator') {
+        abort(403, 'Unauthorized');
     }
 
-    abort(403, 'Unauthorized');
+    return view('dashboard.analytics');
 }
+
 }
