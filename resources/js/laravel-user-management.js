@@ -61,6 +61,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
         // columns according to JSON
         { data: 'id' },
         { data: 'id' },
+        { data: 'nip'},
         { data: 'name' },
         { data: 'email' },
         { data: 'email_verified_at' },
@@ -87,9 +88,19 @@ document.addEventListener('DOMContentLoaded', function (e) {
             return `<span>${full.fake_id}</span>`;
           }
         },
+
+        {
+  // Kolom NIP
+  targets: 2,
+  responsivePriority: 3,
+  render: function (data, type, full, meta) {
+    return `<span class="text-heading">${full.nip || '-'}</span>`;
+  }
+},
+
         {
           // User full name
-          targets: 2,
+          targets: 3,
           responsivePriority: 4,
           render: function (data, type, full, meta) {
             const { name } = full; // Destructuring to get 'name' from the 'full' object
@@ -128,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
         },
         {
           // User email
-          targets: 3,
+          targets: 4,
           render: function (data, type, full, meta) {
             const email = full['email'];
 
@@ -137,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
         },
         {
           // email verify
-          targets: 4,
+          targets: 5,
           className: 'text-center',
           render: function (data, type, full, meta) {
             const verified = full['email_verified_at'];
@@ -149,7 +160,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           }
         },
         {
-  targets: 5, // posisi kolom role
+  targets: 6, // posisi kolom role
   className: 'text-center',
   label: 'Role',
   render: function (data, type, full, meta) {
@@ -602,6 +613,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           .then(response => response.json())
           .then(data => {
             document.getElementById('user_id').value = data.id;
+            document.getElementById('add-user-nip').value = data.nip;
             document.getElementById('add-user-fullname').value = data.name;
             document.getElementById('add-user-email').value = data.email;
           });

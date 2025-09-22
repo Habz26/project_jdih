@@ -42,10 +42,11 @@ class UserManagement extends Controller
   {
     $columns = [
       1 => 'id',
-      2 => 'name',
-      3 => 'email',
-      4 => 'email_verified_at',
-      5 => 'role',
+      2 => 'nip',
+      3 => 'name',
+      4 => 'email',
+      5 => 'email_verified_at',
+      6 => 'role',
     ];
 
     $totalData = User::count(); // Total records without filtering
@@ -83,6 +84,7 @@ class UserManagement extends Controller
       $data[] = [
         'id' => $user->id,
         'fake_id' => ++$ids,
+        'nip' => $user->nip,
         'name' => $user->name,
         'email' => $user->email,
         'email_verified_at' => $user->email_verified_at,
@@ -124,6 +126,7 @@ class UserManagement extends Controller
         $user = User::findOrFail($userID);
 
         $user->update([
+            'nip' => $request->nip,
             'name' => $request->name,
             'email' => $request->email,
             'password' => $request->password ? bcrypt($request->password) : $user->password,
@@ -137,13 +140,15 @@ class UserManagement extends Controller
     } else {
         // Validate new user
         $request->validate([
+            'nip' => 'required|string|max:20|unique:users,nip' . ($userID ? ",$userID" : ''),
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|email|unique:users,email' . ($userID ? ",$userID" : ''),
             'password' => 'required|string|min:6',
             'role' => 'sometimes|in:admin,operator',
         ]);
 
         User::create([
+            'nip' => $request->nip,
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),

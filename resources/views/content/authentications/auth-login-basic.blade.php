@@ -49,16 +49,17 @@ $customizerHidden = 'customizer-hide';
         <!-- /Logo -->
 
         <div class="card-body mt-1">
-          <h4 class="mb-1">Welcome to {{ config('variables.templateName') }}! 👋</h4>
-          <p class="mb-5">Please sign-in to your account and start the adventure</p>
+          <h4 class="mb-1">Selamat Datang {{ config('variables.templateName') }}! 👋</h4>
+          <p class="mb-5">Silakan masuk ke akun Anda</p>
 
           <form id="formAuthentication" class="mb-5" action="{{ route('auth.login') }}" method="POST">
             @csrf
-            <!-- Email / Username -->
+            
+            <!-- NIP -->
             <div class="form-floating form-floating-outline mb-5 form-control-validation">
-              <input type="text" class="form-control" id="email" name="email"
-                     placeholder="Enter your email or username" autofocus />
-              <label for="email">Email or Username</label>
+              <input type="text" class="form-control" id="nip" name="nip"
+                    placeholder="Masukkan NIP Anda" autofocus />
+              <label for="nip">NIP</label>
             </div>
 
             <!-- Password -->
@@ -79,29 +80,29 @@ $customizerHidden = 'customizer-hide';
             <div class="mb-5 d-flex justify-content-between mt-5">
               <div class="form-check mt-2">
                 <input class="form-check-input" type="checkbox" name="remember" id="remember-me" />
-                <label class="form-check-label" for="remember-me"> Remember Me </label>
+                <label class="form-check-label" for="remember-me"> Ingat Saya </label>
               </div>
               <a href="{{ url('auth/forgot-password-basic') }}" class="float-end mb-1 mt-2">
-                <span>Forgot Password?</span>
+                <span>Lupa Password?</span>
               </a>
             </div>
 
             <!-- Submit -->
             <div class="mb-5">
-              <button class="btn btn-primary d-grid w-100" type="submit">Sign in</button>
+              <button class="btn btn-primary d-grid w-100" type="submit">Masuk</button>
             </div>
           </form>
 
           <!-- Register -->
           <p class="text-center mb-5">
-            <span>New on our platform?</span>
+            <span>Baru di aplikasi kami?</span>
             <a href="{{ url('auth/register-basic') }}">
-              <span>Create an account</span>
+              <span>Buat akun baru mu!</span>
             </a>
           </p>
 
           <!-- Social Login -->
-          <div class="divider my-5">
+          {{-- <div class="divider my-5">
             <div class="divider-text">or</div>
           </div>
           <div class="d-flex justify-content-center gap-2">
@@ -117,7 +118,7 @@ $customizerHidden = 'customizer-hide';
             <a href="javascript:;" class="btn btn-icon btn-lg rounded-pill btn-text-google-plus">
               <i class="icon-base ri ri-google-fill icon-18px"></i>
             </a>
-          </div>
+          </div> --}}
         </div>
       </div>
       <!-- /Login -->

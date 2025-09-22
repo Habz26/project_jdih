@@ -18,7 +18,7 @@ class AuthController extends Controller
             'email' => 'required|string|email|unique:users',
             'password' => 'required|string|min:6|confirmed',
             'role' => 'required|in:operator,admin',
-             'nip' => 'required|string|max:20|unique:users', // validasi NIP (ubah ke nullable jika opsional)
+            'nip' => 'required|string|max:20|unique:users', // validasi NIP (ubah ke nullable jika opsional)
         ]);
 
         $user = User::create([
@@ -37,22 +37,21 @@ class AuthController extends Controller
     // 🟡 Login user
     public function login(Request $request)
     {
-        $credentials = 
-        $request->validate([
-            'email' => 'required|email',
+        $credentials = $request->validate([
+            'nip' => 'required|string',
             'password' => 'required|string',
         ]);
 
-        if (Auth::attempt($credentials, $request->filled('remember'))) {
+        if (Auth::attempt(['nip' => $credentials['nip'], 'password' => $credentials['password']], $request->filled('remember'))) {
             $request->session()->regenerate();
             return redirect()->route('dashboard-analytics-pages');
         }
 
         return back()
             ->withErrors([
-                'email' => 'Email atau password salah!',
+                'name' => 'Username atau password salah!',
             ])
-            ->onlyInput('email');
+            ->onlyInput('name');
     }
 
     // 🔴 Logout user

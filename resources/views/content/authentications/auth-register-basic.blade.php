@@ -48,8 +48,8 @@ $customizerHidden = 'customizer-hide';
         </div>
         <!-- /Logo -->
         <div class="card-body mt-1">
-          <h4 class="mb-1">Adventure starts here 🚀</h4>
-          <p class="mb-5">Make your app management easy and fun!</p>
+          <h4 class="mb-1">Buat akun baru anda 🚀</h4>
+          <p class="mb-5"></p>
 
           <form id="formAuthentication" class="mb-5" action="{{ route('auth.register-basic') }}" method="POST">
             @csrf
@@ -57,7 +57,7 @@ $customizerHidden = 'customizer-hide';
             <!-- Username -->
             <div class="form-floating form-floating-outline mb-3 form-control-validation">
               <input type="text" class="form-control @error('name') is-invalid @enderror" 
-                     id="username" name="name" value="{{ old('name') }}" placeholder="Enter your username" autofocus />
+                     id="username" name="name" value="{{ old('name') }}" placeholder="Masukkan username Anda" autofocus />
               <label for="username">Username</label>
               @error('name')
                 <div class="invalid-feedback">{{ $message }}</div>
@@ -67,7 +67,7 @@ $customizerHidden = 'customizer-hide';
             <!-- NIP -->
 <div class="form-floating form-floating-outline mb-3 form-control-validation">
   <input type="text" class="form-control @error('nip') is-invalid @enderror" 
-         id="nip" name="nip" value="{{ old('nip') }}" placeholder="Enter your NIP" />
+         id="nip" name="nip" value="{{ old('nip') }}" placeholder="Masukkan NIP Anda" />
   <label for="nip">NIP</label>
   @error('nip')
     <div class="invalid-feedback">{{ $message }}</div>
@@ -78,7 +78,7 @@ $customizerHidden = 'customizer-hide';
             <!-- Email -->
             <div class="form-floating form-floating-outline mb-3 form-control-validation">
               <input type="email" class="form-control @error('email') is-invalid @enderror" 
-                     id="email" name="email" value="{{ old('email') }}" placeholder="Enter your email" />
+                     id="email" name="email" value="{{ old('email') }}" placeholder="Masukkan email Anda" />
               <label for="email">Email</label>
               @error('email')
                 <div class="invalid-feedback">{{ $message }}</div>
@@ -90,7 +90,7 @@ $customizerHidden = 'customizer-hide';
               <div class="input-group input-group-merge">
                 <div class="form-floating form-floating-outline flex-grow-1">
                   <input type="password" id="password" class="form-control @error('password') is-invalid @enderror" 
-                         name="password" placeholder="••••••••••••" aria-describedby="password" />
+                         name="password" placeholder="• • • • • • • • • • •" aria-describedby="password" />
                   <label for="password">Password</label>
                   @error('password')
                     <div class="invalid-feedback">{{ $message }}</div>
@@ -106,8 +106,8 @@ $customizerHidden = 'customizer-hide';
                 <div class="form-floating form-floating-outline flex-grow-1">
                   <input type="password" id="password_confirmation" 
                          class="form-control @error('password_confirmation') is-invalid @enderror" 
-                         name="password_confirmation" placeholder="••••••••••••" />
-                  <label for="password_confirmation">Confirm Password</label>
+                         name="password_confirmation" placeholder="• • • • • • • • • • • •" />
+                  <label for="password_confirmation">Konfirmasi Kata Sandi</label>
                   @error('password_confirmation')
                     <div class="invalid-feedback">{{ $message }}</div>
                   @enderror
@@ -121,7 +121,7 @@ $customizerHidden = 'customizer-hide';
               <input class="form-check-input @error('terms') is-invalid @enderror" type="checkbox" 
                      id="terms-conditions" name="terms" {{ old('terms') ? 'checked' : '' }}>
               <label class="form-check-label" for="terms-conditions">
-                I agree to <a href="javascript:void(0);">privacy policy & terms</a>
+                Saya setuju dengan <a href="javascript:void(0);">kebijakan & ketentuan privasi</a>
               </label>
               @error('terms')
                 <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -131,7 +131,7 @@ $customizerHidden = 'customizer-hide';
             <!-- Role -->
             <div class="mb-3 form-floating form-floating-outline">
                 <select class="form-select @error('role') is-invalid @enderror" id="role" name="role">
-                    <option value="" disabled {{ old('role') ? '' : 'selected' }}>Select role</option>
+                    <option value="" disabled {{ old('role') ? '' : 'selected' }}>Pilih Role</option>
                     <option value="operator" {{ old('role') == 'operator' ? 'selected' : '' }}>Operator</option>
                     <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
                 </select>
@@ -142,15 +142,15 @@ $customizerHidden = 'customizer-hide';
             </div>
 
             <!-- Submit -->
-            <button type="submit" class="btn btn-primary d-grid w-100 mb-5">Sign up</button>
+            <button type="submit" class="btn btn-primary d-grid w-100 mb-5">Daftar</button>
           </form>
 
           <p class="text-center mb-5">
-            <span>Already have an account?</span>
-            <a href="{{ url('auth/login-basic') }}"><span>Sign in instead</span></a>
+            <span>Sudah punya akun?</span>
+            <a href="{{ url('auth/login-basic') }}"><span>Masuk</span></a>
           </p>
 
-          <div class="divider my-5">
+          {{-- <div class="divider my-5">
             <div class="divider-text">or</div>
           </div>
 
@@ -167,7 +167,7 @@ $customizerHidden = 'customizer-hide';
             <a href="javascript:;" class="btn btn-icon rounded-circle btn-text-google-plus">
               <i class="icon-base ri ri-google-fill icon-18px"></i>
             </a>
-          </div>
+          </div> --}}
         </div>
       </div>
       <!-- Register Card -->
