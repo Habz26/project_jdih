@@ -16,9 +16,11 @@ class ResetPasswordController extends Controller
      */
     public function showResetForm(Request $request, $token = null)
     {
+        
         return view('content.authentications.auth-reset-password-basic', [
             'token' => $token,
-            'email' => $request->email
+            'email' => $request->email,
+            'pageConfigs' => ['myLayout' => 'blank'],
         ]);
     }
 
