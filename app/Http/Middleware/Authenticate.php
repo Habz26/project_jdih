@@ -16,7 +16,7 @@ class Authenticate
     protected function redirectTo($request)
 {
     if (! $request->expectsJson()) {
-        return route('auth-login-cover'); // arahkan ke route login cover
+        return route('auth-login-basic'); // arahkan ke route login cover
     }
 }
 

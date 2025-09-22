@@ -51,7 +51,7 @@ $customizerHidden = 'customizer-hide';
           <h4 class="mb-1">Adventure starts here 🚀</h4>
           <p class="mb-5">Make your app management easy and fun!</p>
 
-          <form id="formAuthentication" class="mb-5" action="{{ route('auth.register') }}" method="POST">
+          <form id="formAuthentication" class="mb-5" action="{{ route('auth.register-basic') }}" method="POST">
             @csrf
 
             <!-- Username -->

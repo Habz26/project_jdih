@@ -177,6 +177,8 @@ Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showRese
 Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
 Route::get('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
 
+use App\Http\Controllers\AccountSettingsAccountController;
+
 
 // Main Page Route
 Route::get('/', [HelpCenter::class, 'index'])->name('help-center-landing');
@@ -269,6 +271,7 @@ Route::get('/pages/misc-server-error', [MiscServerError::class, 'index'])->name(
 Route::get('/auth/login-basic', [LoginBasic::class, 'index'])->name('auth-login-basic');
 Route::get('/auth/login-cover', [LoginCover::class, 'index'])->name('auth-login-cover');
 Route::get('/auth/register-basic', [RegisterBasic::class, 'index'])->name('auth-register-basic');
+Route::get('/auth/register-cover', [RegisterCover::class, 'index'])->name('auth-register-cover');
 
 Route::get('/auth/register-multisteps', [RegisterMultiSteps::class, 'index'])->name('auth-register-multisteps');
 Route::get('/auth/verify-email-basic', [VerifyEmailBasic::class, 'index'])->name('auth-verify-email-basic');
@@ -282,7 +285,7 @@ Route::get('/auth/two-steps-cover', [TwoStepsCover::class, 'index'])->name('auth
 // === AUTH ===
 // Register
 Route::get('/auth/register-basic', [AuthController::class, 'index'])->name('auth-register-basic');
-Route::post('/auth/register', [AuthController::class, 'register'])->name('auth.register');
+Route::post('/auth/register-basic', [AuthController::class, 'register'])->name('auth.register-basic');
 
 // Login
 Route::get('/auth/login-basic', [AuthController::class, 'showLoginForm'])->name('auth-login-basic');
@@ -290,19 +293,45 @@ Route::post('/auth/login', [AuthController::class, 'login'])->name('auth.login')
 // Logout
 Route::post('/auth/logout', [AuthController::class, 'logout'])->name('auth.logout')->middleware('auth');
 
-// === DASHBOARD ===
-Route::get('/dashboard/analytics', [Analytics::class, 'index'])
-    ->middleware('auth')
-    ->name('dashboard-analytics-pages');
-//middleware role
-Route::middleware(['auth', 'role:operator'])->group(function () {
-    Route::get('/upload', [UploadController::class, 'index']);
-    Route::post('/upload', [UploadController::class, 'store']);
+
+
+// ================== ADMIN ROUTES ==================
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+    Route::get('/dashboard/crm', function () {
+        return view('content.dashboard.dashboards-crm'); // pastikan file ini ada di resources/views/operator/dashboard.blade.php
+    })->name('admin.dashboard');
+
+    // Verifikasi dan publish
+    Route::get('/verifikasi', [App\Http\Controllers\Admin\VerifikasiController::class, 'index'])->name('admin.verifikasi');
+    Route::post('/publish/{id}', [App\Http\Controllers\Admin\VerifikasiController::class, 'publish'])->name('admin.publish');
 });
-Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/verifikasi', [VerifikasiController::class, 'index']);
-    Route::post('/publish/{id}', [VerifikasiController::class, 'publish']);
-});
+
+// ================== OPERATOR ROUTES ==================
+Route::middleware(['auth']) // <-- cuma auth aja karena role belum ada
+    ->prefix('operator')
+    ->group(function () {
+        Route::get('/dashboard/analytics', [Analytics::class, 'index'])
+            ->name('dashboard-analytics-pages');
+    });
+
+Route::get('/pages/account-settings-account', [AccountSettingsAccount::class, 'index'])
+    ->name('pages-account-settings-account')
+    ->middleware('auth');
+
+Route::post('/account/upload-avatar', [AccountSettingsAccount::class, 'uploadAvatar'])
+    ->name('account.uploadAvatar')
+    ->middleware('auth');
+Route::get('/account/upload-avatar', [AccountSettingsAccount::class, 'uploadAvatar'])
+    ->name('account.uploadAvatar')
+    ->middleware('auth');
+
+Route::post('/account/update', [AccountSettingsAccount::class, 'update'])
+    ->name('account.update');
+
+    // Upload
+    Route::get('/upload', [App\Http\Controllers\Operator\UploadController::class, 'index'])->name('operator.upload');
+    Route::post('/upload', [App\Http\Controllers\Operator\UploadController::class, 'store'])->name('operator.upload.store');
+
 // search
 Route::get('/search', function (Illuminate\Http\Request $request) {
     $q = $request->input('q');

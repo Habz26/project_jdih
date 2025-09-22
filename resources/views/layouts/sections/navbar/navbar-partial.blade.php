@@ -27,10 +27,10 @@
     <!-- Authentication -->
     @guest
       <li class="nav-item me-2">
-        <a href="{{ route('auth.login') }}" class="btn btn-outline-primary">Login</a>
+        <a href="{{ route('auth-login-basic') }}" class="btn btn-outline-primary">Login</a>
       </li>
       <li class="nav-item">
-       <a href="{{ url('auth/register-basic') }}" class="btn btn-primary">Register</a>
+        <a href="{{ route('auth-register-basic') }}" class="btn btn-primary">Register</a>
       </li>
     @endguest
 
