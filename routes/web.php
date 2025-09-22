@@ -250,6 +250,7 @@ Route::get('/pages/misc-server-error', [MiscServerError::class, 'index'])->name(
 Route::get('/auth/login-basic', [LoginBasic::class, 'index'])->name('auth-login-basic');
 Route::get('/auth/login-cover', [LoginCover::class, 'index'])->name('auth-login-cover');
 Route::get('/auth/register-basic', [RegisterBasic::class, 'index'])->name('auth-register-basic');
+Route::get('/auth/register-cover', [RegisterCover::class, 'index'])->name('auth-register-cover');
 
 Route::get('/auth/register-multisteps', [RegisterMultiSteps::class, 'index'])->name('auth-register-multisteps');
 Route::get('/auth/verify-email-basic', [VerifyEmailBasic::class, 'index'])->name('auth-verify-email-basic');
@@ -275,15 +276,27 @@ Route::post('/auth/logout', [AuthController::class, 'logout'])->name('auth.logou
 Route::get('/dashboard/analytics', [Analytics::class, 'index'])
     ->middleware('auth')
     ->name('dashboard-analytics-pages');
-//middleware role
-Route::middleware(['auth', 'role:operator'])->group(function () {
-    Route::get('/upload', [UploadController::class, 'index']);
-    Route::post('/upload', [UploadController::class, 'store']);
+
+// ================== ADMIN ROUTES ==================
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+    Route::get('/dashboard', [Analytics::class, 'index'])->name('admin.dashboard');
+
+    // Verifikasi dan publish
+    Route::get('/verifikasi', [App\Http\Controllers\Admin\VerifikasiController::class, 'index'])->name('admin.verifikasi');
+    Route::post('/publish/{id}', [App\Http\Controllers\Admin\VerifikasiController::class, 'publish'])->name('admin.publish');
 });
-Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/verifikasi', [VerifikasiController::class, 'index']);
-    Route::post('/publish/{id}', [VerifikasiController::class, 'publish']);
+
+// ================== OPERATOR ROUTES ==================
+Route::middleware(['auth', 'role:operator'])->prefix('operator')->group(function () {
+    Route::get('/dashboard/analytics', function () {
+        return view('content.dashboard.dashboards-analytics'); // pastikan file ini ada di resources/views/operator/dashboard.blade.php
+    })->name('operator.dashboard');
+
+    // Upload
+    Route::get('/upload', [App\Http\Controllers\Operator\UploadController::class, 'index'])->name('operator.upload');
+    Route::post('/upload', [App\Http\Controllers\Operator\UploadController::class, 'store'])->name('operator.upload.store');
 });
+
 // search
 Route::get('/search', function (Illuminate\Http\Request $request) {
     $q = $request->input('q');

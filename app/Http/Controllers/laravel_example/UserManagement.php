@@ -45,6 +45,7 @@ class UserManagement extends Controller
       2 => 'name',
       3 => 'email',
       4 => 'email_verified_at',
+      5 => 'role',
     ];
 
     $totalData = User::count(); // Total records without filtering
@@ -85,6 +86,7 @@ class UserManagement extends Controller
         'name' => $user->name,
         'email' => $user->email,
         'email_verified_at' => $user->email_verified_at,
+        'role' => $user->role,
       ];
     }
 
@@ -114,36 +116,44 @@ class UserManagement extends Controller
    * @return \Illuminate\Http\Response
    */
   public function store(Request $request)
-  {
+{
     $userID = $request->id;
 
     if ($userID) {
-      // update the value
-      $users = User::updateOrCreate(
-        ['id' => $userID],
-        ['name' => $request->name, 'email' => $request->email]
-      );
-
-      // user updated
-      return response()->json('Updated');
-    } else {
-      // create new one if email is unique
-      $userEmail = User::where('email', $request->email)->first();
-
-      if (empty($userEmail)) {
+        // update user
         $users = User::updateOrCreate(
-          ['id' => $userID],
-          ['name' => $request->name, 'email' => $request->email, 'password' => bcrypt(Str::random(10))]
+            ['id' => $userID],
+            [
+                'name' => $request->name,
+                'email' => $request->email,
+                // optionally update password if provided:
+                'password' => $request->password ? bcrypt($request->password) : $existingPassword,
+                'role' => $request->role ?? 'operator',
+            ]
         );
 
-        // user created
+        return response()->json('Updated');
+    } else {
+        // validate inputs, especially password
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:6',
+            'role' => 'sometimes|in:admin,operator',
+        ]);
+
+        // create new user with hashed password
+        $users = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),  // Hash password properly
+            'role' => $request->role ?? 'operator',
+        ]);
+
         return response()->json('Created');
-      } else {
-        // user already exist
-        return response()->json(['message' => "already exits"], 422);
-      }
     }
-  }
+}
+
 
   /**
    * Display the specified resource.

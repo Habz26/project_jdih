@@ -64,6 +64,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
         { data: 'name' },
         { data: 'email' },
         { data: 'email_verified_at' },
+        { data: 'role' },
         { data: 'action' }
       ],
       columnDefs: [
@@ -148,27 +149,55 @@ document.addEventListener('DOMContentLoaded', function (e) {
           }
         },
         {
-          // Actions
-          targets: -1,
-          title: 'Actions',
-          searchable: false,
-          orderable: false,
-          render: function (data, type, full, meta) {
-            return (
-              '<div class="d-flex align-items-center gap-4">' +
-              `<button class="btn btn-icon btn-text-secondary btn-sm rounded-pill edit-record" data-id="${full['id']}" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddUser"><i class="icon-base ri ri-edit-box-line icon-22px"></i></button>` +
-              `<button class="btn btn-icon btn-text-secondary btn-sm rounded-pill delete-record" data-id="${full['id']}"><i class="icon-base ri ri-delete-bin-7-line icon-22px"></i></button>` +
-              '<button class="btn btn-icon btn-text-secondary btn-sm rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="icon-base ri ri-more-2-line icon-22px"></i></button>' +
-              '<div class="dropdown-menu dropdown-menu-end m-0">' +
-              '<a href="' +
-              userView +
-              '" class="dropdown-item">View</a>' +
-              '<a href="javascript:;" class="dropdown-item">Suspend</a>' +
-              '</div>' +
-              '</div>'
-            );
-          }
-        }
+  targets: 5, // posisi kolom role
+  className: 'text-center',
+  label: 'Role',
+  render: function (data, type, full, meta) {
+  var role = full['role'] || 'operator'; // fallback kalau null
+  var roleBadgeObj = {
+    operator: '<i class="icon-base ri ri-user-settings-line icon-22px text-info me-2"></i>',
+    admin: '<i class="icon-base ri ri-shield-user-line icon-22px text-danger me-2"></i>'
+  };
+  return (
+    "<span class='text-truncate d-flex align-items-center text-heading'>" +
+    (roleBadgeObj[role] || '') +
+    role.charAt(0).toUpperCase() + role.slice(1) +
+    '</span>'
+  );
+}
+
+},
+
+        {
+  // Actions
+  targets: -1,
+  title: 'Actions',
+  searchable: false,
+  orderable: false,
+  className: 'text-center', // <-- Tambah class ini untuk center horizontal
+  render: function (data, type, full, meta) {
+    return (
+      '<div class="d-flex justify-content-center align-items-center gap-2">' +
+        `<button class="btn btn-icon btn-text-secondary btn-sm rounded-pill edit-record" data-id="${full['id']}" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddUser">
+          <i class="icon-base ri ri-edit-box-line icon-22px"></i>
+        </button>` +
+        `<button class="btn btn-icon btn-text-secondary btn-sm rounded-pill delete-record" data-id="${full['id']}">
+          <i class="icon-base ri ri-delete-bin-7-line icon-22px"></i>
+        </button>` +
+        '<div class="dropdown">' +
+          `<button class="btn btn-icon btn-text-secondary btn-sm rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+            <i class="icon-base ri ri-more-2-line icon-22px"></i>
+          </button>` +
+          '<div class="dropdown-menu dropdown-menu-end m-0">' +
+            `<a href="${userView}" class="dropdown-item">View</a>` +
+            '<a href="javascript:;" class="dropdown-item">Suspend</a>' +
+          '</div>' +
+        '</div>' +
+      '</div>'
+    );
+  }
+}
+
       ],
       order: [[2, 'desc']],
       layout: {
