@@ -10,7 +10,7 @@
   <div class="d-flex align-items-center me-auto mt-2 mb-2 mb-xl-0">
     <!-- Brand -->
     <a href="{{ route('dashboard-analytics-pages') }}" class="navbar-brand me-4">
-      <span class="fw-bold fs-5">Dashboard Admin</span>
+      <span class="fw-bold fs-5">Dashboard Management</span>
     </a>
 
     <!-- Search Form -->

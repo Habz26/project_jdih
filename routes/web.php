@@ -159,6 +159,9 @@ use App\Http\Controllers\charts\ChartJs;
 use App\Http\Controllers\maps\Leaflet;
 use App\Http\Controllers\authentications\ForgotPasswordController;
 use App\Http\Controllers\authentications\ResetPasswordController;
+use App\Http\Controllers\DocumentController;
+// use App\Http\Controllers\VerifikasiController;
+
 
 
 //authentification
@@ -255,7 +258,12 @@ Route::get('/pages/profile-teams', [UserTeams::class, 'index'])->name('pages-pro
 Route::get('/pages/profile-projects', [UserProjects::class, 'index'])->name('pages-profile-projects');
 Route::get('/pages/profile-connections', [UserConnections::class, 'index'])->name('pages-profile-connections');
 Route::get('/pages/account-settings-account', [AccountSettingsAccount::class, 'index'])->name('pages-account-settings-account');
+
+Route::middleware(['auth'])->group(function () {
 Route::get('/pages/account-settings-security', [AccountSettingsSecurity::class, 'index'])->name('pages-account-settings-security');
+Route::post('/pages/account-settings-security/update-password', [AccountSettingsSecurity::class, 'update'])->name('password.updatesss');
+});
+
 Route::get('/pages/account-settings-billing', [AccountSettingsBilling::class, 'index'])->name('pages-account-settings-billing');
 Route::get('/pages/account-settings-notifications', [AccountSettingsNotifications::class, 'index'])->name('pages-account-settings-notifications');
 Route::get('/pages/account-settings-connections', [AccountSettingsConnections::class, 'index'])->name('pages-account-settings-connections');
@@ -299,18 +307,20 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:admin')->prefix('admin')->group(function () {
     Route::get('/laravel/user-management', [UserManagement::class, 'UserManagement'])->name('laravel-example-user-management');
     Route::resource('/user-list', UserManagement::class);
+    // Document routes
+    Route::resource('documents', DocumentController::class);
     // Verifikasi dan publish
-    Route::get('/verifikasi', [VerifikasiController::class, 'index'])->name('admin.verifikasi');
-    Route::post('/publish/{id}', [VerifikasiController::class, 'publish'])->name('admin.publish');
+    // Route::get('/verifikasi', [VerifikasiController::class, 'index'])->name('admin.verifikasi');
+    // Route::post('/publish/{id}', [VerifikasiController::class, 'publish'])->name('admin.publish');
 });
 });
 
 // ================== OPERATOR ROUTES ==================
-Route::middleware('auth')->group(function () {
-    Route::middleware('role:operator')->prefix('operator')->group(function () {
-    Route::get('/dashboard/analytics', [Analytics::class, 'index'])->name('dashboard-analytics-pages');
-});
-});
+// Route::middleware('auth')->group(function () {
+//     Route::middleware('role:operator')->prefix('operator')->group(function () {
+//     Route::get('/dashboard/analytics', [Analytics::class, 'index'])->name('dashboard-analytics-pages');
+// });
+// });
 
 // ================== MULTI ROUTES ==================
 Route::middleware(['auth', 'role:operator,admin'])->group(function () {
@@ -332,8 +342,8 @@ Route::post('/account/update', [AccountSettingsAccount::class, 'update'])
     ->name('account.update');
 
     // Upload
-    Route::get('/upload', [App\Http\Controllers\Operator\UploadController::class, 'index'])->name('operator.upload');
-    Route::post('/upload', [App\Http\Controllers\Operator\UploadController::class, 'store'])->name('operator.upload.store');
+    // Route::get('/upload', [App\Http\Controllers\Operator\UploadController::class, 'index'])->name('operator.upload');
+    // Route::post('/upload', [App\Http\Controllers\Operator\UploadController::class, 'store'])->name('operator.upload.store');
 
 // search
 Route::get('/search', function (Illuminate\Http\Request $request) {
@@ -436,3 +446,5 @@ Route::get('/maps/leaflet', [Leaflet::class, 'index'])->name('maps-leaflet');
 // laravel example
 Route::get('/laravel/user-management', [UserManagement::class, 'UserManagement'])->name('laravel-example-user-management');
 Route::resource('/user-list', UserManagement::class);
+
+
