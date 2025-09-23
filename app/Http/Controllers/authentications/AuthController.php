@@ -18,7 +18,7 @@ class AuthController extends Controller
             'email' => 'required|string|email|unique:users',
             'password' => 'required|string|min:6|confirmed',
             'role' => 'required|in:operator,admin',
-             'nip' => 'required|string|max:20|unique:users', // validasi NIP (ubah ke nullable jika opsional)
+            'nip' => 'required|string|max:20|unique:users', // validasi NIP (ubah ke nullable jika opsional)
         ]);
 
         $user = User::create([
@@ -37,32 +37,36 @@ class AuthController extends Controller
     // 🟡 Login user
     public function login(Request $request)
     {
-        $credentials = 
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|string',
-        ]);
+        $credentials = $request->only('nip', 'password');
 
-        if (Auth::attempt($credentials, $request->filled('remember'))) {
+        if (auth()->attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->route('dashboard-analytics-pages');
+            $user = auth()->user();
+            if ($user->role === 'admin') {
+                return redirect()->route('laravel-example-user-management');
+            } elseif ($user->role === 'operator') {
+                return redirect()->route('dashboard-analytics-pages');
+            } else {
+                auth()->logout();
+                return redirect()
+                    ->back()
+                    ->withErrors(['role' => 'Role tidak dikenali.']);
+            }
         }
 
-        return back()
-            ->withErrors([
-                'email' => 'Email atau password salah!',
-            ])
-            ->onlyInput('email');
+        return redirect()
+            ->back()
+            ->withErrors(['nip' => 'NIP atau password salah.']);
+
     }
 
     // 🔴 Logout user
     public function logout(Request $request)
     {
-        Auth::logout();
+        auth()->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
-        return redirect()->route('auth-login-basic')->with('success', 'Logout sukses, selamat tinggal!');
+        return redirect()->route('auth-login-basic');
     }
 
     public function index()

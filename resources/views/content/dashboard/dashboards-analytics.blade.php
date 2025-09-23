@@ -1,7 +1,7 @@
 @php
 $configData = Helper::appClasses();
 @endphp
-@extends('layouts/layoutMaster')
+@extends('layouts.layoutMaster')
 
 @section('title', 'Dashboard - Analytics')
 @section('vendor-style')
@@ -31,7 +31,7 @@ $configData = Helper::appClasses();
           <h4 class="card-title mb-4">
             Haii <span class="fw-bold">{{ auth()->user()->name }}</span> 🎉
           </h4>
-          <p class="mb-0">Selamat datang kembali di dashboard Operator!</p>
+          <p class="mb-0">Selamat datang kembali di dashboard <i>Management!</i></p>
           <p>Periksa lencana baru Anda di profil Anda.</p>
           <a href="{{ route('pages-account-settings-account') }}" class="btn btn-primary">Lihat Profil</a>
         </div>

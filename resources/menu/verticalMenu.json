@@ -20,7 +20,7 @@
           "slug": "dashboard-crm"
         },
         {
-          "url": "/operator/dashboard/analytics",
+          "url": "dashboard/analytics",
           "name": "Analytics",
           "slug": "dashboard-analytics-pages"
         },
@@ -133,7 +133,7 @@
       "slug": "laravel-example",
       "submenu": [
         {
-          "url": "laravel/user-management",
+          "url": "admin/laravel/user-management",
           "name": "User Management",
           "slug": "laravel-example-user-management"
         }
