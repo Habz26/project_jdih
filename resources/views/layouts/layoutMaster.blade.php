@@ -25,13 +25,13 @@
 </style>
 <script>
     Swal.fire({
-  icon: 'error',
-  title: 'Waduh😅...',
-  text: '{{ session("error") }}',
-  confirmButtonText: 'OK',
-  allowOutsideClick: false,
-  allowEscapeKey: false,
-  allowEnterKey: false,
+        icon: 'error',
+  title: 'Waduh 😅...',
+        text: '{{ session("error") }}',
+        confirmButtonText: 'OK',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        allowEnterKey: false,
   backdrop: `
     rgba(0,0,0,0.7)
     url("https://sweetalert2.github.io/images/nyan-cat.gif")
