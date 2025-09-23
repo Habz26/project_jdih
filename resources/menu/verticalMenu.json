@@ -136,6 +136,16 @@
           "url": "admin/laravel/user-management",
           "name": "User Management",
           "slug": "laravel-example-user-management"
+        },
+        {
+          "url": "admin/documents",
+          "name": "List Document",
+          "slug": "documents"
+        },
+        {
+          "url": "admin/documents/create",
+          "name": "Input Document",
+          "slug": "create"
         }
       ]
     },

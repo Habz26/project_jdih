@@ -43,7 +43,7 @@ class AuthController extends Controller
             $request->session()->regenerate();
             $user = auth()->user();
             if ($user->role === 'admin') {
-                return redirect()->route('laravel-example-user-management');
+                return redirect()->route('dashboard-analytics-pages');
             } elseif ($user->role === 'operator') {
                 return redirect()->route('dashboard-analytics-pages');
             } else {

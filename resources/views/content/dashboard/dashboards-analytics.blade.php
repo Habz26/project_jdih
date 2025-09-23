@@ -32,7 +32,7 @@ $configData = Helper::appClasses();
             Haii <span class="fw-bold">{{ auth()->user()->name }}</span> 🎉
           </h4>
           <p class="mb-0">Selamat datang kembali di dashboard <i>Management!</i></p>
-          <p>Periksa lencana baru Anda di profil Anda.</p>
+          <p></p>
           <a href="{{ route('pages-account-settings-account') }}" class="btn btn-primary">Lihat Profil</a>
         </div>
       </div>
