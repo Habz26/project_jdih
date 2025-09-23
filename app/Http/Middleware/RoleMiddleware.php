@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class RoleMiddleware
@@ -13,13 +14,19 @@ class RoleMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function index()
-{
-    if (auth()->user()->role !== 'operator') {
-        abort(403, 'Unauthorized');
+    public function handle(Request $request, Closure $next, ...$roles): Response
+    {
+    if (!Auth::check()) {
+        return redirect()->route('auth-login-basic');
     }
 
-    return view('dashboard.analytics');
-}
+    foreach ($roles as $role) {
+        if ($request->user()->role === $role) {
+            return $next($request);
+        }
+    }
 
+    // Kalau user nggak punya role yg sesuai
+    return redirect()->back()->with('error', 'Anda tidak memiliki hak akses untuk halaman ini.');
+}
 }

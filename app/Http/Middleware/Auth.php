@@ -15,6 +15,10 @@ class Auth
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if (!auth()->check()) {
+            return redirect()->route('auth-login-basic');
+        }
+        
         return $next($request);
     }
     

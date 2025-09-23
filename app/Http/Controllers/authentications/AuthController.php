@@ -37,31 +37,36 @@ class AuthController extends Controller
     // 🟡 Login user
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'nip' => 'required|string',
-            'password' => 'required|string',
-        ]);
+        $credentials = $request->only('nip', 'password');
 
-        if (Auth::attempt(['nip' => $credentials['nip'], 'password' => $credentials['password']], $request->filled('remember'))) {
+        if (auth()->attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->route('dashboard-analytics-pages');
+            $user = auth()->user();
+            if ($user->role === 'admin') {
+                return redirect()->route('laravel-example-user-management');
+            } elseif ($user->role === 'operator') {
+                return redirect()->route('dashboard-analytics-pages');
+            } else {
+                auth()->logout();
+                return redirect()
+                    ->back()
+                    ->withErrors(['role' => 'Role tidak dikenali.']);
+            }
         }
 
-        return back()
-            ->withErrors([
-                'name' => 'Username atau password salah!',
-            ])
-            ->onlyInput('name');
+        return redirect()
+            ->back()
+            ->withErrors(['nip' => 'NIP atau password salah.']);
+
     }
 
     // 🔴 Logout user
     public function logout(Request $request)
     {
-        Auth::logout();
+        auth()->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
-        return redirect()->route('auth-login-basic')->with('success', 'Logout sukses, selamat tinggal!');
+        return redirect()->route('auth-login-basic');
     }
 
     public function index()

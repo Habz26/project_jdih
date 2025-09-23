@@ -288,31 +288,34 @@ Route::get('/auth/register-basic', [AuthController::class, 'index'])->name('auth
 Route::post('/auth/register-basic', [AuthController::class, 'register'])->name('auth.register-basic');
 
 // Login
-Route::get('/auth/login-basic', [AuthController::class, 'showLoginForm'])->name('auth-login-basic');
-Route::post('/auth/login', [AuthController::class, 'login'])->name('auth.login');
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('auth-login-basic');
+Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 // Logout
-Route::post('/auth/logout', [AuthController::class, 'logout'])->name('auth.logout')->middleware('auth');
-
+Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout')->middleware('auth');
 
 
 // ================== ADMIN ROUTES ==================
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
-    Route::get('/dashboard/crm', function () {
-        return view('content.dashboard.dashboards-crm'); // pastikan file ini ada di resources/views/operator/dashboard.blade.php
-    })->name('admin.dashboard');
-
+Route::middleware('auth')->group(function () {
+    Route::middleware('role:admin')->prefix('admin')->group(function () {
+    Route::get('/laravel/user-management', [UserManagement::class, 'UserManagement'])->name('laravel-example-user-management');
+    Route::resource('/user-list', UserManagement::class);
     // Verifikasi dan publish
-    Route::get('/verifikasi', [App\Http\Controllers\Admin\VerifikasiController::class, 'index'])->name('admin.verifikasi');
-    Route::post('/publish/{id}', [App\Http\Controllers\Admin\VerifikasiController::class, 'publish'])->name('admin.publish');
+    Route::get('/verifikasi', [VerifikasiController::class, 'index'])->name('admin.verifikasi');
+    Route::post('/publish/{id}', [VerifikasiController::class, 'publish'])->name('admin.publish');
+});
 });
 
 // ================== OPERATOR ROUTES ==================
-Route::middleware(['auth']) 
-    ->prefix('operator')
-    ->group(function () {
-        Route::get('/dashboard/analytics', [Analytics::class, 'index'])
-            ->name('dashboard-analytics-pages');
-    });
+Route::middleware('auth')->group(function () {
+    Route::middleware('role:operator')->prefix('operator')->group(function () {
+    Route::get('/dashboard/analytics', [Analytics::class, 'index'])->name('dashboard-analytics-pages');
+});
+});
+
+// ================== MULTI ROUTES ==================
+Route::middleware(['auth', 'role:operator,admin'])->group(function () {
+    Route::get('/dashboard/analytics', [Analytics::class, 'index'])->name('dashboard-analytics-pages');
+});
 
 Route::get('/pages/account-settings-account', [AccountSettingsAccount::class, 'index'])
     ->name('pages-account-settings-account')
