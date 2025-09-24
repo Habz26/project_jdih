@@ -40,7 +40,7 @@
                         </div>
                     @elseif($isOffice)
                         {{-- Preview DOCX, XLSX, PPTX pakai OnlyOffice iframe --}}
-                        <iframe src="http://172.20.0.59:8080/?fileUrl={{ urlencode($publicUrl) }}" width="100%"
+                        <iframe src="http://172.20.0.59:8080/?fileUrl={{ urlencode($filePath) }}" width="100%"
                             height="600" frameborder="0"></iframe>
 
                         <div class="mt-2">
