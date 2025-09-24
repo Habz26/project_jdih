@@ -41,9 +41,10 @@
                     @elseif($isOffice)
                         {{-- Preview DOCX, XLSX, PPTX pakai OnlyOffice iframe --}}
                         <iframe
-                            src="http://localhost:8080/web-apps/apps/documenteditor/main/index.html?fileUrl={{ urlencode(Storage::url($document->pdf_file)) }}"
-                            width="100%" height="600" frameborder="0">
+                            src="https://docs.google.com/gview?url={{ urlencode(Storage::url($document->pdf_file)) }}&embedded=true"
+                            style="width:100%; height:600px;" frameborder="0">
                         </iframe>
+
                         <div class="mt-2">
                             <a href="{{ $filePath }}" class="btn btn-success btn-sm" download>Unduh</a>
                         </div>
