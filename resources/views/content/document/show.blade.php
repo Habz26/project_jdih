@@ -7,7 +7,7 @@
             <div class="col-md-8">
                 <div class="mb-3">
                     @php
-                        $filePath = asset('storage/' . $document->pdf_file); // Path file dokumen
+                        $filePath = Storage::url($document->pdf_file); // Path file dokumen
                         $extension = \Illuminate\Support\Str::lower(pathinfo($document->pdf_file, PATHINFO_EXTENSION));
                         $isPdf = $extension === 'pdf';
                         $isOffice = in_array($extension, ['docx', 'xlsx', 'pptx']);
