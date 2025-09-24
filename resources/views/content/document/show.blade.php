@@ -5,6 +5,13 @@
         <div class="row">
             <!-- Kolom Kiri: Preview File -->
             <div class="col-md-8">
+                <!-- Tombol Kembali -->
+                <!-- Tombol Kembali -->
+<button onclick="window.history.back()" class="btn btn-outline-primary mb-3">
+    ⬅ Kembali
+</button>
+
+
                 <div class="mb-3">
                     @php
                         $filePath = url('storage/' . $document->pdf_file);
@@ -14,7 +21,7 @@
                     @endphp
 
                     @if ($isPdf)
-                        {{-- Preview PDF (kode kamu yang sudah ada) --}}
+                        {{-- Preview PDF --}}
                         <div class="d-flex align-items-center justify-content-between mb-2">
                             <div>
                                 <button id="prev-page" class="btn btn-secondary btn-sm">⬅ Sebelumnya</button>
@@ -42,7 +49,6 @@
                         {{-- Preview DOCX, XLSX, PPTX pakai OnlyOffice iframe --}}
                         <iframe src="http://172.20.0.59:8080/web-apps/apps/documenteditor/main/index.html?fileUrl={{ urlencode($filePath) }}" width="100%" height="600" frameborder="0"></iframe>
                         <div class="mt-2">
-
                             <a href="{{ $filePath }}" class="btn btn-success btn-sm" download>Unduh</a>
                         </div>
                     @else

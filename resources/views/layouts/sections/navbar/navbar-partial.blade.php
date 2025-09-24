@@ -9,9 +9,15 @@
   <!-- Left side -->
   <div class="d-flex align-items-center me-auto mt-2 mb-2 mb-xl-0">
     <!-- Brand -->
-    <a href="{{ route('dashboard-analytics-pages') }}" class="navbar-brand me-4">
-      <span class="fw-bold fs-5">Dashboard Management</span>
-    </a>
+    @auth
+      <a href="{{ route('dashboard-analytics-pages') }}" class="navbar-brand me-4">
+        <span class="fw-bold fs-5">Dashboard Management</span>
+      </a>
+    @else
+      <a href="{{ url('/') }}" class="navbar-brand me-4">
+        <span class="fw-bold fs-5">Document Portal</span>
+      </a>
+    @endauth
 
     <!-- Search Form -->
     <form action="{{ route('search') }}" method="GET" class="d-flex" style="min-width: 280px;">
@@ -24,17 +30,35 @@
 
   <!-- Right side -->
   <ul class="navbar-nav flex-row align-items-center">
-    <!-- Authentication -->
-    @guest
+
+    {{-- Kalau Guest --}}
+    {{-- @guest
       <li class="nav-item me-2">
         <a href="{{ route('auth-login-basic') }}" class="btn btn-outline-primary">Login</a>
       </li>
       <li class="nav-item">
         <a href="{{ route('auth-register-basic') }}" class="btn btn-primary">Register</a>
       </li>
-    @endguest
+    @endguest --}}
 
+    {{-- Kalau sudah login --}}
     @auth
+      {{-- Contoh: fitur khusus user login --}}
+      <li class="nav-item me-3">
+        <a href="{{ route('documents.index') }}" class="nav-link">
+          <i class="ri ri-file-list-line me-1"></i> Dokumen
+        </a>
+      </li>
+
+      {{-- Kalau role admin/operator bisa akses input dokumen --}}
+      @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('operator'))
+        <li class="nav-item me-3">
+          <a href="{{ route('documents.create') }}" class="btn btn-sm btn-success">
+            <i class="ri ri-add-line"></i> Input Document
+          </a>
+        </li>
+      @endif
+
       <!-- User Dropdown -->
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button"
