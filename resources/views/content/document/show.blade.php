@@ -38,8 +38,9 @@
                             style="border:1px solid #ccc; height:800px; overflow:auto; text-align:center;">
                             <canvas id="pdf-render" style="max-width:100%; height:auto;"></canvas>
                         </div>
-                    @if($isOffice)
-    <iframe
+                    @elseif($isOffice)
+                        {{-- Preview DOCX, XLSX, PPTX pakai OnlyOffice iframe --}}
+                        <iframe
         src="https://docs.google.com/gview?url={{ urlencode(Storage::url($document->pdf_file)) }}&embedded=true"
         style="width:100%; height:600px;" frameborder="0">
     </iframe>
@@ -47,7 +48,9 @@
     <div class="mt-2">
         <a href="{{ Storage::url($document->pdf_file) }}" class="btn btn-success btn-sm" download>Unduh</a>
     </div>
-@endif
+                    @else
+                        <p>Format file tidak didukung untuk preview.</p>
+                    @endif
 
                 </div>
             </div>
