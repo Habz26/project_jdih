@@ -40,9 +40,8 @@
                         </div>
                     @elseif($isOffice)
                         {{-- Preview DOCX, XLSX, PPTX pakai OnlyOffice iframe --}}
-                        <iframe
-                            src="https://documentserver.onlyoffice.com/web-apps/apps/api/documents/api.js?fileUrl={{ urlencode($filePath) }}"
-                            width="100%" height="800" frameborder="0"></iframe>
+                        <iframe src="http://172.20.0.59:8080/?fileUrl={{ urlencode($publicUrl) }}" width="100%"
+                            height="600" frameborder="0"></iframe>
 
                         <div class="mt-2">
                             <a href="{{ $filePath }}" class="btn btn-success btn-sm" download>Unduh</a>
