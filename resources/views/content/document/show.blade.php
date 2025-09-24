@@ -7,7 +7,8 @@
             <div class="col-md-8">
                 <div class="mb-3">
                     @php
-                        $filePath = Storage::url($document->pdf_file); // Path file dokumen
+                        $filePath = Storage::url($document->pdf_file);
+ // Path file dokumen
                         $extension = \Illuminate\Support\Str::lower(pathinfo($document->pdf_file, PATHINFO_EXTENSION));
                         $isPdf = $extension === 'pdf';
                         $isOffice = in_array($extension, ['docx', 'xlsx', 'pptx']);
@@ -40,14 +41,10 @@
                         </div>
                     @elseif($isOffice)
                         {{-- Preview DOCX, XLSX, PPTX pakai OnlyOffice iframe --}}
-                        <iframe
-        src="https://docs.google.com/gview?url={{ urlencode(Storage::url($document->pdf_file)) }}&embedded=true"
-        style="width:100%; height:600px;" frameborder="0">
-    </iframe>
-
-    <div class="mt-2">
-        <a href="{{ Storage::url($document->pdf_file) }}" class="btn btn-success btn-sm" download>Unduh</a>
-    </div>
+                        <iframe src="http://172.20.0.59:8080/web-apps/apps/documenteditor/main/index.html?fileUrl={{ urlencode($filePath) }}" width="100%" height="600" frameborder="0"></iframe>
+                        <div class="mt-2">
+                            <a href="{{ $filePath }}" class="btn btn-success btn-sm" download>Unduh</a>
+                        </div>
                     @else
                         <p>Format file tidak didukung untuk preview.</p>
                     @endif
