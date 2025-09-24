@@ -21,7 +21,7 @@ class DocumentController extends Controller
     public function store(Request $request)
 {
     $request->validate([
-        'pdf_file' => 'required|mimes:pdf|max:20480',
+        'pdf_file' => 'required|mimes:pdf,docx,xlsx,pptx|max:20480',
         'judul' => 'required|string|max:255',
     ]);
 
@@ -49,6 +49,10 @@ class DocumentController extends Controller
         'status' => $request->status,
         'qrcode' => $request->qrcode,
     ]);
+    if (!$request->hasFile('pdf_file')) {
+    return back()->withErrors(['pdf_file' => 'File tidak ditemukan!']);
+}
+
 
     return redirect()->route('documents.show', $document->id)
                      ->with('success', 'Dokumen berhasil disimpan!');
