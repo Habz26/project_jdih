@@ -31,26 +31,15 @@
   <!-- Right side -->
   <ul class="navbar-nav flex-row align-items-center">
 
-    {{-- Kalau Guest --}}
-    {{-- @guest
-      <li class="nav-item me-2">
-        <a href="{{ route('auth-login-basic') }}" class="btn btn-outline-primary">Login</a>
-      </li>
-      <li class="nav-item">
-        <a href="{{ route('auth-register-basic') }}" class="btn btn-primary">Register</a>
-      </li>
-    @endguest --}}
-
     {{-- Kalau sudah login --}}
     @auth
-      {{-- Contoh: fitur khusus user login --}}
       <li class="nav-item me-3">
         <a href="{{ route('documents.index') }}" class="nav-link">
           <i class="ri ri-file-list-line me-1"></i> Dokumen
         </a>
       </li>
 
-      {{-- Kalau role admin/operator bisa akses input dokumen --}}
+      {{-- Role-based akses --}}
       @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('operator'))
         <li class="nav-item me-3">
           <a href="{{ route('documents.create') }}" class="btn btn-sm btn-success">
@@ -83,6 +72,17 @@
         </ul>
       </li>
     @endauth
+
+    {{-- Kalau guest (opsional, bisa diaktifkan lagi kalau perlu) --}}
+    @guest
+      <li class="nav-item me-2">
+        <a href="{{ route('auth-login-basic') }}" class="btn btn-outline-primary">Login</a>
+      </li>
+      <li class="nav-item">
+        <a href="{{ route('auth-register-basic') }}" class="btn btn-primary">Register</a>
+      </li>
+    @endguest
+
   </ul>
 </nav>
 <!-- /Navbar -->
