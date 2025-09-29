@@ -14,14 +14,32 @@ $configData = Helper::appClasses();
 <section class="section-py first-section-pt help-center-header position-relative overflow-hidden">
   <img class="banner-bg-img z-n1" src="{{asset('assets/img/pages/header-'.$configData['theme'].'.png') }}"
     alt="Help center header" data-app-light-img="pages/header-light.png" data-app-dark-img="pages/header-dark.png" />
+  
   <h4 class="text-center text-primary">Cari Dokumen Perijinan & Aturan</h4>
-  <div class="input-wrapper my-4 input-group input-group-merge position-relative mx-auto">
-    <span class="input-group-text" id="basic-addon1"><i class="icon-base ri ri-search-line"></i></span>
-    <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="basic-addon1" />
-  </div>
+
+  <!-- Search Form -->
+<form action="{{ route('search') }}" method="GET" 
+      class="input-wrapper my-4 input-group input-group-merge position-relative mx-auto" 
+      style="max-width: 480px;">
+  
+  <span class="input-group-text">
+    <i class="ri ri-search-line"></i>
+  </span>
+  
+  <input type="text" name="q" class="form-control" 
+         placeholder="Search dokumen..." 
+         value="{{ request('q') }}" required>
+  
+  <button class="btn btn-primary" type="submit">
+    Cari
+  </button>
+</form>
+
+
   <p class="text-center px-4 mb-0">Akses berbagai peraturan, keputusan direktur, dan SOP perijinan dengan mudah</p>
 </section>
 <!-- Help Center Header: End -->
+
 
 <!-- Popular Articles: Start -->
 <section class="section-py">

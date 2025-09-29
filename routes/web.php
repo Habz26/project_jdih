@@ -160,16 +160,13 @@ use App\Http\Controllers\maps\Leaflet;
 use App\Http\Controllers\authentications\ForgotPasswordController;
 use App\Http\Controllers\authentications\ResetPasswordController;
 use App\Http\Controllers\DocumentController;
+use Illuminate\Http\Request;
+use App\Models\Document;
 // use App\Http\Controllers\VerifikasiController;
 
 // Define a route for keputusan-direktur
 Route::get('/keputusan-direktur', [DocumentController::class, 'keputusanDirektur'])->name('keputusan-direktur');
 Route::get('/editor/{filename}', [App\Http\Controllers\OnlyOfficeController::class, 'edit'])->name('editor.edit');
-
-
-
-
-
 
 
 //authentification
@@ -347,10 +344,16 @@ Route::post('/account/update', [AccountSettingsAccount::class, 'update'])
     // Route::post('/upload', [App\Http\Controllers\Operator\UploadController::class, 'store'])->name('operator.upload.store');
 
 // search
-Route::get('/search', function (Illuminate\Http\Request $request) {
+Route::get('/search', function (Request $request) {
     $q = $request->input('q');
-    // contoh hasil dummy
-    return view('content.search.result', compact('q'));
+
+    $results = Document::where('judul', 'like', "%$q%")
+        ->orWhere('nomor', 'like', "%$q%")
+        ->orWhere('tahun', 'like', "%$q%")
+        ->orWhere('judul', 'like', "%$q%")
+        ->get();
+
+    return view('content.search.result', compact('q', 'results'));
 })->name('search');
 
 

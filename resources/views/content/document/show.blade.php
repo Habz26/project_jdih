@@ -6,12 +6,9 @@
             <!-- Kolom Kiri: Preview File -->
             <div class="col-md-8">
                 <!-- Tombol Kembali -->
-                <!-- Tombol Kembali -->
 <button onclick="window.history.back()" class="btn btn-outline-primary mb-3">
     ⬅ Kembali
 </button>
-
-
                 <div class="mb-3">
                     @php
                         $filePath = url('storage/' . $document->pdf_file);
