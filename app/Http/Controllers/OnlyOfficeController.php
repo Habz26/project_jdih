@@ -7,13 +7,14 @@ use Illuminate\Http\Request;
 class OnlyOfficeController extends Controller
 {
     public function edit($filename)
-    {
-    $onlyOfficeServer = 'http://172.20.0.59:8080'; // ✅ IP OnlyOffice kamu
-    $laravelHost = 'http://172.20.0.59:8000';     // ✅ IP Laravel kamu (jika satu server)
+{
+    $onlyOfficeServer = 'http://172.20.0.59:8080'; // OnlyOffice IP
+    $laravelHost = 'http://172.20.0.59/project_jdih'; // Laravel base path di subfolder
 
-        $fileUrl = $hostUrl . '/storage/documents/' . $filename;
-        $documentKey = md5($filename . time()); // kunci unik, bisa pakai uuid juga
+    $fileUrl = $laravelHost . '/storage/documents/' . $filename; // 🔁 perhatikan path storage
+    $documentKey = md5($filename . time());
 
-        return view('onlyoffice.editor', compact('fileUrl', 'serverUrl', 'filename', 'documentKey'));
-    }
+    return view('onlyoffice.editor', compact('onlyOfficeServer', 'fileUrl', 'filename', 'documentKey'));
+}
+
 }

@@ -13,7 +13,7 @@
                 fileType: '{{ pathinfo($filename, PATHINFO_EXTENSION) }}',
                 key: '{{ $documentKey }}',
                 title: '{{ $filename }}',
-                url: '{{ $fileUrl }}',
+                url: '{{ $fileUrl }}', // ✅ ini harus bisa diakses dari browser dan OnlyOffice
                 permissions: {
                     edit: true,
                     download: true,
@@ -23,9 +23,6 @@
             editorConfig: {
                 mode: 'edit',
                 lang: 'id',
-                customization: {
-                    autosave: true,
-                },
                 user: {
                     id: '1',
                     name: 'Admin Laravel',
