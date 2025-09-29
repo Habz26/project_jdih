@@ -301,7 +301,7 @@ Route::get('/auth/register-basic', [AuthController::class, 'index'])->name('auth
 Route::post('/auth/register-basic', [AuthController::class, 'register'])->name('auth.register-basic');
 
 // Login
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('auth-login-basic');
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 // Logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout')->middleware('auth');
