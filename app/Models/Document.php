@@ -15,6 +15,8 @@ class Document extends Model
         'bidang_hukum',
         'jenis_hukum',
         'jenis_dokumen',
+        'singkatan',
+        'nomor',
         'tahun',
         'judul',
         'teu_badan',

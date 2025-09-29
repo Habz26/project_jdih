@@ -163,9 +163,8 @@ use App\Http\Controllers\DocumentController;
 // use App\Http\Controllers\VerifikasiController;
 
 // Define a route for keputusan-direktur
- Route::get('/keputusan-direktur', function () {
-    return view('keputusan-direktur.index');
-})->name('keputusan-direktur');
+Route::get('/keputusan-direktur', [DocumentController::class, 'keputusanDirektur'])->name('keputusan-direktur');
+
 
 
 
