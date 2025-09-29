@@ -301,6 +301,7 @@ Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 // Logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout')->middleware('auth');
 
+Route::resource('documents', DocumentController::class)->only(['index', 'show']);
 
 // ================== ADMIN ROUTES ==================
 Route::middleware('auth')->group(function () {
@@ -308,23 +309,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/laravel/user-management', [UserManagement::class, 'UserManagement'])->name('laravel-example-user-management');
     Route::resource('/user-list', UserManagement::class);
     // Document routes
-    Route::resource('documents', DocumentController::class);
     // Verifikasi dan publish
     // Route::get('/verifikasi', [VerifikasiController::class, 'index'])->name('admin.verifikasi');
     // Route::post('/publish/{id}', [VerifikasiController::class, 'publish'])->name('admin.publish');
 });
 });
-
-// ================== OPERATOR ROUTES ==================
-// Route::middleware('auth')->group(function () {
-//     Route::middleware('role:operator')->prefix('operator')->group(function () {
-//     Route::get('/dashboard/analytics', [Analytics::class, 'index'])->name('dashboard-analytics-pages');
-// });
-// });
-
 // ================== MULTI ROUTES ==================
-Route::middleware(['auth', 'role:operator,admin'])->group(function () {
+Route::middleware(['auth', 'role:operator,admin'])->prefix('manage')->group(function () {
     Route::get('/dashboard/analytics', [Analytics::class, 'index'])->name('dashboard-analytics-pages');
+    Route::resource('/documents', DocumentController::class);
 });
 
 Route::get('/pages/account-settings-account', [AccountSettingsAccount::class, 'index'])
