@@ -164,6 +164,8 @@ use App\Http\Controllers\DocumentController;
 
 // Define a route for keputusan-direktur
 Route::get('/keputusan-direktur', [DocumentController::class, 'keputusanDirektur'])->name('keputusan-direktur');
+Route::get('/editor/{filename}', [App\Http\Controllers\OnlyOfficeController::class, 'edit'])->name('editor.edit');
+
 
 
 
