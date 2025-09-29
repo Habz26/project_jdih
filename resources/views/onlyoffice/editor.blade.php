@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Edit Dokumen</title>
-    <script src="{{ $serverUrl }}/web-apps/apps/api/documents/api.js"></script>
+    <script src="{{ $onlyOfficeServer }}/web-apps/apps/api/documents/api.js"></script>
 </head>
 <body>
     <div id="editor" style="width: 100%; height: 90vh;"></div>
@@ -21,7 +21,7 @@
             },
             documentType: 'word',
             editorConfig: {
-                mode: 'edit', // atau 'view' jika hanya lihat
+                mode: 'edit',
                 lang: 'id',
                 customization: {
                     autosave: true,
