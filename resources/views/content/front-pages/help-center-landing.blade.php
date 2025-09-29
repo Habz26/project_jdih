@@ -56,7 +56,7 @@ $configData = Helper::appClasses();
               <h5 class="my-3">Peraturan Gubernur</h5>
               <p class="mb-3 text-muted">Referensi aturan terbaru dari pemerintah provinsi.</p>
             </div>
-            <a class="btn btn-outline-primary mt-auto" href="{{ url('front-pages/help-center-article') }}">
+            <a class="btn btn-outline-primary mt-auto" href="{{ url('peraturan-gubernur') }}">
               Lihat Detail
             </a>
           </div>
@@ -85,10 +85,10 @@ $configData = Helper::appClasses();
           <div class="card-body text-center d-flex flex-column justify-content-between">
             <div>
               <i class="bi bi-building text-warning" style="font-size:2.5rem;"></i>
-              <h5 class="my-3">Perijinan</h5>
-              <p class="mb-3 text-muted">Arahan direktur rumah sakit mengenai ketentuan perijinan</p>
+              <h5 class="my-3">Perizinan</h5>
+              <p class="mb-3 text-muted">Arahan direktur rumah sakit mengenai ketentuan perizinan</p>
             </div>
-            <a class="btn btn-outline-primary mt-auto" href="{{ url('front-pages/help-center-article') }}">
+            <a class="btn btn-outline-primary mt-auto" href="{{ url('perizinan') }}">
              Lihat Detail
             </a>
           </div>
@@ -104,7 +104,7 @@ $configData = Helper::appClasses();
               <h5 class="my-3">SOP</h5>
               <p class="mb-3 text-muted">Panduan prosedur standar untuk proses perijinan rumah sakit</p>
             </div>
-            <a class="btn btn-outline-primary mt-auto" href="{{ url('front-pages/help-center-article') }}">
+            <a class="btn btn-outline-primary mt-auto" href="{{ url('sop') }}">
              Lihat Detail
             </a>
           </div>

@@ -35,8 +35,8 @@
                     <label for="tipe_dokumen">Tipe Dokumen</label>
                     <select name="tipe_dokumen" id="tipe_dokumen" class="form-control">
                         {{-- nanti ambil dari DB --}}
-                        <option value="Peraturan">Peraturan</option>
-                        <option value="Keputusan">Keputusan</option>
+                        <option value="Peraturan Perundang-Undangan">Peraturan Perundang-Undangan</option>
+                        <option value="Lainnya">Lainnya</option>
                     </select>
                 </div>
 

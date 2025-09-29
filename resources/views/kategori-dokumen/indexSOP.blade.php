@@ -1,9 +1,9 @@
-@extends('layouts.layoutMaster')
+@extends('layouts.autoLayout')
 
-@section('title', 'Keputusan Direktur - JDIH')
+@section('title', 'SOP - RSKK')
 
 @section('content')
-    <section class="section-py first-section-pt">
+    <section class="section-py first-section-pt py-4 mt-5">
         <div class="container">
             <div class="row g-6">
 
@@ -13,17 +13,22 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-2">
                             <li class="breadcrumb-item"><a href="{{ url('/') }}">Beranda</a></li>
-                            <li class="breadcrumb-item active">Keputusan Direktur</li>
+                            <li class="breadcrumb-item active">SOP</li>
                         </ol>
                     </nav>
 
-                    <h4 class="mb-4">Dokumen Keputusan Direktur</h4>
+                    <h4 class="mb-4">Dokumen SOP</h4>
 
                     <!-- Search -->
-                    <div class="input-group input-group-merge mb-4">
-                        <span class="input-group-text"><i class="ri ri-search-line"></i></span>
-                        <input type="text" class="form-control" placeholder="Cari dokumen..." />
-                    </div>
+                    <form action="{{ route('sop') }}" method="GET" class="mb-4">
+                        <div class="input-group input-group-merge">
+                            <span class="input-group-text"><i class="ri ri-search-line"></i></span>
+                            <input type="text" name="q" class="form-control" placeholder="Cari dokumen..."
+                                value="{{ request('q') }}" />
+                        </div>
+                    </form>
+
+
 
                     <!-- Table -->
                     <div class="card shadow-sm border-0">
@@ -40,7 +45,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse ($keputusanDirektur as $dokumen)
+                                        @forelse ($SOP as $dokumen)
                                             <tr>
                                                 <td>
                                                     <span class="fw-semibold">{{ $dokumen->jenis_dokumen }}</span><br>
@@ -68,7 +73,7 @@
                                         @empty
                                             <tr>
                                                 <td colspan="4" class="text-center text-muted py-4">
-                                                    Belum ada dokumen keputusan direktur yang tersedia.
+                                                    Belum ada dokumen SOP yang tersedia.
                                                 </td>
                                             </tr>
                                         @endforelse
@@ -93,30 +98,53 @@
 
                 <!-- Sidebar -->
                 <div class="col-lg-3">
-    <div class="bg-lightest py-2 px-4 rounded-3 mb-4">
-        <h5 class="mb-0">Kategori Dokumen</h5>
-    </div>
-    <ul class="list-unstyled mt-3">
-        @foreach ($categories as $category)
-        <li class="mb-2">
-            <a href="#" class="d-flex justify-content-between align-items-center text-heading">
-                {{ $category->kategori }}
-                Keputusan Direktur <span class="badge bg-label-primary">{{ $category->total }}</span>
-            </a>
-        </li>
-        @endforeach
-    </ul>
-    <ul class="list-unstyled mt-3">
-        @foreach ($categoriesPeraturanGubernur as $category)
-        <li class="mb-2">
-            <a href="#" class="d-flex justify-content-between align-items-center text-heading">
-                {{ $category->kategori }}
-                Peraturan Gubernur <span class="badge bg-label-primary">{{ $category->total }}</span>
-            </a>
-        </li>
-        @endforeach
-    </ul>
-</div>
+                    <div class="bg-lightest py-2 px-4 rounded-3 mb-4">
+                        <h5 class="mb-0">Kategori Dokumen</h5>
+                    </div>
+                    <ul class="list-unstyled mt-3">
+                        @foreach ($categories as $category)
+                            <li class="mb-2">
+                                <a href="{{ route('keputusan-direktur') }}"
+                                    class="d-flex justify-content-between align-items-center text-heading">
+                                    {{ $category->kategori }}
+                                    Keputusan Direktur <span class="badge bg-label-primary">{{ $category->total }}</span>
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                    <ul class="list-unstyled mt-3">
+                        @foreach ($categoriesPeraturanGubernur as $category)
+                            <li class="mb-2">
+                                <a href="{{ route('peraturan-gubernur') }}"
+                                    class="d-flex justify-content-between align-items-center text-heading">
+                                    {{ $category->kategori }}
+                                    Peraturan Gubernur <span class="badge bg-label-primary">{{ $category->total }}</span>
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                    <ul class="list-unstyled mt-3">
+                        @foreach ($categoriesPerizinan as $category)
+                            <li class="mb-2">
+                                <a href="{{ route('perizinan') }}"
+                                    class="d-flex justify-content-between align-items-center text-heading">
+                                    {{ $category->kategori }}
+                                    Perizinan <span class="badge bg-label-primary">{{ $category->total }}</span>
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                    <ul class="list-unstyled mt-3">
+                        @foreach ($categoriesSOP as $category)
+                            <li class="mb-2">
+                                <a href="sop" class="d-flex justify-content-between align-items-center text-heading">
+                                    {{ $category->kategori }}
+                                    SOP <span class="badge bg-label-primary">{{ $category->total }}</span>
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
 
             </div>
         </div>

@@ -164,8 +164,11 @@ use Illuminate\Http\Request;
 use App\Models\Document;
 // use App\Http\Controllers\VerifikasiController;
 
-// Define a route for keputusan-direktur
+// Define a route for kategori dokumen
 Route::get('/keputusan-direktur', [DocumentController::class, 'keputusanDirektur'])->name('keputusan-direktur');
+Route::get('/peraturan-gubernur', [DocumentController::class, 'peraturanGubernur'])->name('peraturan-gubernur');
+Route::get('/perizinan', [DocumentController::class, 'perIzinan'])->name('perizinan');
+Route::get('/sop', [DocumentController::class, 'SOP'])->name('sop');
 Route::get('/editor/{filename}', [App\Http\Controllers\OnlyOfficeController::class, 'edit'])->name('editor.edit');
 
 
