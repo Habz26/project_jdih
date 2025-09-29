@@ -20,7 +20,7 @@
           "slug": "dashboard-crm"
         },
         {
-          "url": "dashboard/analytics",
+          "url": "manage/dashboard/analytics",
           "name": "Analytics",
           "slug": "dashboard-analytics-pages"
         },
