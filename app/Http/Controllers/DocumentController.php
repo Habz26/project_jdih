@@ -12,9 +12,24 @@ class DocumentController extends Controller
     public function index()
     {
         $documents = Document::latest()->get();
-        return view('content.document.index', compact('documents'));
+        $query = Document::query();
+
+    // cek apakah ada parameter "search"
+    if ($request->has('search') && !empty($request->search)) {
+        $search = $request->search;
+        $query->where(function ($q) use ($search) {
+            $q->where('judul', 'like', "%{$search}%")
+              ->orWhere('tipe_dokumen', 'like', "%{$search}%")
+              ->orWhere('tahun', 'like', "%{$search}%")
+              ->orWhere('status', 'like', "%{$search}%");
+        });
     }
 
+    // ambil hasilnya
+    $documents = $query->latest()->paginate(10);
+
+    return view('content.document.index', compact('documents'));
+}
     public function create()
     {
         return view('content.document.create');
