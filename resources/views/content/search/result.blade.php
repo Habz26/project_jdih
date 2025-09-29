@@ -1,9 +1,56 @@
 @extends('layouts.layoutMaster')
 
 @section('content')
-  <div class="container py-4">
-    <h4>Hasil Pencarian untuk: <strong>{{ $q }}</strong></h4>
-    {{-- nanti isi hasil pencarian di sini --}}
-  </div>
-@endsection
+<div class="container py-4">
+  <button onclick="window.history.back()" class="btn btn-outline-primary mb-3">
+    ⬅ Kembali
+</button>
 
+  <h4>Hasil Pencarian untuk: <strong>{{ $q }}</strong></h4>
+
+  @if($results->isEmpty())
+    <p class="text-muted mt-3">Nggak ada dokumen yang cocok dengan pencarian kamu.</p>
+  @else
+    <div class="card shadow-sm border-0 mt-3">
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table align-middle table-hover">
+            <thead class="table-light">
+              <tr>
+                <th>Produk Hukum</th>
+                <th>Tentang</th>
+                <th>Status</th>
+                <th>Detail</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach($results as $dokumen)
+                <tr>
+                  <td>
+                    <strong>{{ $dokumen->jenis_dokumen }}</strong><br>
+                    Nomor {{ $dokumen->nomor }} Tahun {{ $dokumen->tahun }}
+                  </td>
+                  <td>{{ $dokumen->judul }}</td>
+                  <td>
+                    @if($dokumen->status == 'berlaku')
+                      <span class="badge bg-success rounded-pill px-3">Berlaku</span>
+                    @else
+                      <span class="badge bg-danger rounded-pill px-3">Tidak Berlaku</span>
+                    @endif
+                  </td>
+                  <td>
+                    <a href="{{ asset('storage/dokumen/' . $dokumen->file) }}"
+                       class="btn btn-sm btn-info rounded-pill px-3" target="_blank">
+                      Unduh
+                    </a>
+                  </td>
+                </tr>
+              @endforeach
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  @endif
+</div>
+@endsection
