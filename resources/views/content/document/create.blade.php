@@ -65,9 +65,21 @@
                     <label for="jenis_dokumen">Jenis Dokumen</label>
                     <select name="jenis_dokumen" id="jenis_dokumen" class="form-control">
                         {{-- ambil dari DB --}}
-                        <option value="Resmi">Resmi</option>
-                        <option value="Non Resmi">Non Resmi</option>
+                        <option value="Keputusan Direktur">Keputusan Direktur</option>
+                        <option value="Peraturan Gubernur">Peraturan Gubernur</option>
+                        <option value="Perizinan">Perizinan</option>
+                        <option value="SOP">SOP</option>
                     </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="singkatan">Singkatan</label>
+                    <input type="text" name="singkatan" id="singkatan" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="nomor">Nomor</label>
+                    <input type="text" name="nomor" id="nomor" class="form-control" required>
                 </div>
 
                 <!-- Tahun -->

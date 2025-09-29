@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Document;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
+
 
 class DocumentController extends Controller
 {
@@ -33,6 +35,8 @@ class DocumentController extends Controller
         'bidang_hukum' => $request->bidang_hukum,
         'jenis_hukum' => $request->jenis_hukum,
         'jenis_dokumen' => $request->jenis_dokumen,
+        'singkatan' => $request->singkatan,
+        'nomor' => $request->nomor,
         'tahun' => $request->tahun,
         'judul' => $request->judul,
         'teu_badan' => $request->teu_badan,
@@ -113,4 +117,25 @@ public function update(Request $request, $id)
     return redirect()->route('documents.show', $document->id)
                      ->with('success', 'Dokumen berhasil diperbarui!');
 }
+
+public function keputusanDirektur()
+{
+    // Ambil dokumen yang jenis_dokumen = 'Keputusan Direktur', bisa juga tambah paginate jika mau
+    $keputusanDirektur = Document::where('jenis_dokumen', 'Keputusan Direktur')
+                                ->latest()
+                                ->get();
+    $categories = Document::select('jenis_dokumen', DB::raw('count(*) as total'))
+    ->where('jenis_dokumen', 'Keputusan Direktur')
+    ->groupBy('jenis_dokumen')
+    ->get();
+    $categoriesPeraturanGubernur = Document::select('jenis_dokumen', DB::raw('count(*) as total'))
+    ->where('jenis_dokumen', 'Peraturan Gubernur')
+    ->groupBy('jenis_dokumen')
+    ->get();
+
+
+    // Kirim data ke view
+    return view('keputusan-direktur.index', compact('keputusanDirektur', 'categories','categoriesPeraturanGubernur'));
+}
+
 }

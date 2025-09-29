@@ -162,6 +162,12 @@ use App\Http\Controllers\authentications\ResetPasswordController;
 use App\Http\Controllers\DocumentController;
 // use App\Http\Controllers\VerifikasiController;
 
+// Define a route for keputusan-direktur
+Route::get('/keputusan-direktur', [DocumentController::class, 'keputusanDirektur'])->name('keputusan-direktur');
+
+
+
+
 
 
 //authentification

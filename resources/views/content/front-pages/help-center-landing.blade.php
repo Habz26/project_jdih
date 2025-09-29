@@ -54,7 +54,7 @@ $configData = Helper::appClasses();
               <h5 class="my-3">Keputusan Direktur</h5>
               <p class="mb-3 text-muted">Pedoman dan keputusan penting dari direktur rumah sakit untuk mendukung operasional layanan.</p>
             </div>
-            <a class="btn btn-outline-primary mt-auto" href="{{ url('front-pages/help-center-article') }}">
+            <a class="btn btn-outline-primary mt-auto" href="{{ url('keputusan-direktur') }}">
               Lihat Detail
             </a>
           </div>
