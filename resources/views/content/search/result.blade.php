@@ -1,7 +1,7 @@
-@extends('layouts.layoutMaster')
+@extends('layouts.blankLayout')
 
 @section('content')
-    <div class="container py-4">
+    <div class="container py-4 mt-12">
         <button onclick="window.history.back()" class="btn btn-outline-primary mb-3">
             ⬅ Kembali
         </button>

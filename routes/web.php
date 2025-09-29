@@ -344,17 +344,9 @@ Route::post('/account/update', [AccountSettingsAccount::class, 'update'])
     // Route::post('/upload', [App\Http\Controllers\Operator\UploadController::class, 'store'])->name('operator.upload.store');
 
 // search
-Route::get('/search', function (Request $request) {
-    $q = $request->input('q');
+Route::get('/search', [DocumentController::class, 'search'])->name('search');
 
-    $results = Document::where('judul', 'like', "%$q%")
-        ->orWhere('nomor', 'like', "%$q%")
-        ->orWhere('tahun', 'like', "%$q%")
-        ->orWhere('judul', 'like', "%$q%")
-        ->get();
 
-    return view('content.search.result', compact('q', 'results'));
-})->name('search');
 
 
 // wizard example

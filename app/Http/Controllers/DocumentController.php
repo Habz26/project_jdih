@@ -9,10 +9,9 @@ use Illuminate\Support\Facades\DB;
 
 class DocumentController extends Controller
 {
-    public function index()
-    {
-        $documents = Document::latest()->get();
-        $query = Document::query();
+    public function index(Request $request)
+{
+    $query = Document::query();
 
     // cek apakah ada parameter "search"
     if ($request->has('search') && !empty($request->search)) {
@@ -30,6 +29,23 @@ class DocumentController extends Controller
 
     return view('content.document.index', compact('documents'));
 }
+
+    public function search(Request $request)
+{
+    $q = $request->input('q');
+
+    $results = Document::where('judul', 'like', "%{$q}%")
+        ->orWhere('nomor', 'like', "%{$q}%")
+        ->orWhere('tahun', 'like', "%{$q}%")
+        ->orWhere('jenis_dokumen', 'like', "%{$q}%")
+        ->get();
+
+    $pageConfigs = ['layout' => 'blank'];
+
+    return view('content.search.result', compact('q', 'results', 'pageConfigs'));
+}
+
+
     public function create()
     {
         return view('content.document.create');

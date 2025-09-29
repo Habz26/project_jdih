@@ -1,6 +1,5 @@
-@extends('layouts.layoutMaster')
-
-@section('content')
+@extends('layouts.autoLayout')
+@section('page-content')
     <div class="container">
         <div class="row">
             <!-- Kolom Kiri: Preview File -->
