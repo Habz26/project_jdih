@@ -17,7 +17,11 @@
                         </ol>
                     </nav>
 
+                    <button onclick="window.history.back()" class="btn btn-outline-primary mb-3 float-end me-2">
+                        ⬅ Kembali
+                    </button>
                     <h4 class="mb-4">Dokumen Keputusan Direktur</h4>
+
 
                     <!-- Search -->
                     <!-- Search -->
@@ -114,7 +118,8 @@
                     <ul class="list-unstyled mt-3">
                         @foreach ($categoriesPeraturanGubernur as $category)
                             <li class="mb-2">
-                                <a href="{{ route('peraturan-gubernur') }}" class="d-flex justify-content-between align-items-center text-heading">
+                                <a href="{{ route('peraturan-gubernur') }}"
+                                    class="d-flex justify-content-between align-items-center text-heading">
                                     {{ $category->kategori }}
                                     Peraturan Gubernur <span class="badge bg-label-primary">{{ $category->total }}</span>
                                 </a>
@@ -124,7 +129,8 @@
                     <ul class="list-unstyled mt-3">
                         @foreach ($categoriesPerizinan as $category)
                             <li class="mb-2">
-                                <a href="{{ route('perizinan') }}" class="d-flex justify-content-between align-items-center text-heading">
+                                <a href="{{ route('perizinan') }}"
+                                    class="d-flex justify-content-between align-items-center text-heading">
                                     {{ $category->kategori }}
                                     Perizinan <span class="badge bg-label-primary">{{ $category->total }}</span>
                                 </a>
@@ -134,7 +140,8 @@
                     <ul class="list-unstyled mt-3">
                         @foreach ($categoriesSOP as $category)
                             <li class="mb-2">
-                                <a href="{{ route('sop') }}" class="d-flex justify-content-between align-items-center text-heading">
+                                <a href="{{ route('sop') }}"
+                                    class="d-flex justify-content-between align-items-center text-heading">
                                     {{ $category->kategori }}
                                     SOP <span class="badge bg-label-primary">{{ $category->total }}</span>
                                 </a>
