@@ -43,6 +43,28 @@
                     </div>
 
                     <div class="mb-3">
+                        <label for="jenis_dokumen">Jenis Dokumen</label>
+                        <select name="jenis_dokumen" id="jenis_dokumen" class="form-control">
+                            <option value="Keputusan Direktur" {{ $document->jenis_dokumen == 'Keputusan Direktur' ? 'selected' : '' }}>Keputusan Direktur</option>
+                            <option value="Peraturan Gubernur" {{ $document->jenis_dokumen == 'Peraturan Gubernur' ? 'selected' : '' }}>Peraturan Gubernur</option>
+                            <option value="Perizinan" {{ $document->jenis_dokumen == 'Perizinan' ? 'selected' : '' }}>Perizinan</option>
+                            <option value="SOP" {{ $document->jenis_dokumen == 'SOP' ? 'selected' : '' }}>SOP</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="singkatan">Singkatan</label>
+                        <input type="text" name="singkatan" id="singkatan" class="form-control"
+                            value="{{ old('singkatan', $document->singkatan) }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="nomor">Nomor</label>
+                        <input type="text" name="nomor" id="nomor" class="form-control"
+                            value="{{ old('nomor', $document->nomor) }}" required>
+                    </div>
+
+                    <div class="mb-3">
                         <label for="tahun">Tahun</label>
                         <select name="tahun" id="tahun" class="form-control">
                             @for ($i = date('Y'); $i >= 1945; $i--)

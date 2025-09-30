@@ -1,13 +1,26 @@
 @extends('layouts.blankLayout')
-
+@section('title', 'Hasil Pencarian - RSKK')
 @section('content')
+
     <div class="container py-4 mt-12">
+        <form action="{{ route('search') }}" method="GET"
+            class="input-wrapper my-4 input-group input-group-merge position-relative mx-auto" style="max-width: 480px;">
+
+            <span class="input-group-text">
+                <i class="ri ri-search-line"></i>
+            </span>
+
+            <input type="text" name="q" class="form-control" placeholder="Search dokumen..."
+                value="{{ request('q') }}" required>
+
+            <button class="btn btn-primary" type="submit">
+                Cari
+            </button>
+        </form>
         <button onclick="window.history.back()" class="btn btn-outline-primary mb-3">
             ⬅ Kembali
         </button>
-
         <h4>Hasil Pencarian untuk: <strong>{{ $q }}</strong></h4>
-
         @if ($results->isEmpty())
             <p class="text-muted mt-3">Nggak ada dokumen yang cocok dengan pencarian kamu.</p>
         @else

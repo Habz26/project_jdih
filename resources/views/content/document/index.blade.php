@@ -75,7 +75,7 @@
                                 <td>
                                     <a href="{{ route('documents.show', $doc->id) }}" 
                                        class="text-decoration-none text-dark fw-semibold">
-                                        {{ \Illuminate\Support\Str::limit($doc->judul, 50) }}
+                                        {{ \Illuminate\Support\Str::limit($doc->judul, 35) }}
                                     </a>
                                 </td>
                                 <td class="text-center">
