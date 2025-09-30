@@ -4,10 +4,6 @@
         <div class="row">
             <!-- Kolom Kiri: Preview File -->
             <div class="col-md-8">
-                <!-- Tombol Kembali -->
-                <button onclick="window.history.back()" class="btn btn-outline-primary mb-3">
-                    ⬅ Kembali
-                </button>
                 <div class="mb-3">
                     @php
                         $filePath = url('storage/' . $document->pdf_file);
@@ -30,10 +26,14 @@
                                 / <span id="page-count">0</span>
                             </div>
 
-                            <div>
+                            <div class="me-2">
                                 <button id="zoom-in" class="btn btn-info btn-sm">Zoom +</button>
                                 <button id="zoom-out" class="btn btn-info btn-sm">Zoom -</button>
                                 <a href="{{ $filePath }}" class="btn btn-success btn-sm" download>Unduh</a>
+                                <!-- Tombol Kembali -->
+                                <button onclick="window.history.back()" class="btn btn-outline-info btn-sm">
+                                    ⬅ Kembali
+                                </button>
                             </div>
                         </div>
 
