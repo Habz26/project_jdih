@@ -18,9 +18,10 @@ $configData = Helper::appClasses();
   <h4 class="text-center text-primary">Cari Dokumen Perijinan & Aturan</h4>
 
   <!-- Search Form -->
-<form action="{{ route('search') }}" method="GET" 
-      class="input-wrapper my-4 input-group input-group-merge position-relative mx-auto" 
+<form action="{{ route('search') }}" method="GET"
+      class="input-wrapper my-4 input-group input-group-merge position-relative mx-auto z-0"
       style="max-width: 480px;">
+
   
   <span class="input-group-text">
     <i class="ri ri-search-line"></i>
@@ -36,7 +37,7 @@ $configData = Helper::appClasses();
 </form>
 
 
-  <p class="text-center px-4 mb-0">Akses berbagai peraturan, keputusan direktur, dan SOP perijinan dengan mudah</p>
+  <p class="text-center px-4 mb-0">Platform ini menyediakan akses terbuka bagi masyarakat untuk menelusuri dokumen regulasi dari RSUD Kesehatan Kerja, <br> termasuk Peraturan Gubernur, Keputusan Direktur, dokumen Perizinan, dan Standar Operasional Prosedur (SOP)</p>
 </section>
 <!-- Help Center Header: End -->
 
@@ -54,7 +55,7 @@ $configData = Helper::appClasses();
             <div>
               <i class="bi bi-journal-text text-primary" style="font-size:2.5rem;"></i>
               <h5 class="my-3">Peraturan Gubernur</h5>
-              <p class="mb-3 text-muted">Referensi aturan terbaru dari pemerintah provinsi.</p>
+              <p class="mb-3 text-muted">Referensi aturan terbaru dari pemerintah provinsi</p>
             </div>
             <a class="btn btn-outline-primary mt-auto" href="{{ url('peraturan-gubernur') }}">
               Lihat Detail
@@ -70,7 +71,7 @@ $configData = Helper::appClasses();
             <div>
               <i class="bi bi-file-earmark-text text-success" style="font-size:2.5rem;"></i>
               <h5 class="my-3">Keputusan Direktur</h5>
-              <p class="mb-3 text-muted">Pedoman dan keputusan penting dari direktur rumah sakit untuk mendukung operasional layanan.</p>
+              <p class="mb-3 text-muted">Pedoman dan keputusan penting dari direktur rumah sakit untuk mendukung operasional layanan</p>
             </div>
             <a class="btn btn-outline-primary mt-auto" href="{{ url('keputusan-direktur') }}">
               Lihat Detail
