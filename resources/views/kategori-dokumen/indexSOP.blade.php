@@ -137,7 +137,7 @@
                     <ul class="list-unstyled mt-3">
                         @foreach ($categoriesSOP as $category)
                             <li class="mb-2">
-                                <a href="sop" class="d-flex justify-content-between align-items-center text-heading">
+                                <a href="{{ route('sop') }}" class="d-flex justify-content-between align-items-center text-heading">
                                     {{ $category->kategori }}
                                     SOP <span class="badge bg-label-primary">{{ $category->total }}</span>
                                 </a>
