@@ -1,9 +1,40 @@
 @extends('layouts.layoutMaster')
 
+@section('title', 'Selects and tags - Forms')
+
+<!-- Vendor Styles -->
+@section('vendor-style')
+  @vite(['resources/assets/vendor/libs/select2/select2.scss', 'resources/assets/vendor/libs/tagify/tagify.scss', 'resources/assets/vendor/libs/bootstrap-select/bootstrap-select.scss', 'resources/assets/vendor/libs/typeahead-js/typeahead.scss'])
+@endsection
+
+<!-- Vendor Scripts -->
+@section('vendor-script')
+  @vite(['resources/assets/vendor/libs/select2/select2.js', 'resources/assets/vendor/libs/tagify/tagify.js', 'resources/assets/vendor/libs/bootstrap-select/bootstrap-select.js', 'resources/assets/vendor/libs/typeahead-js/typeahead.js', 'resources/assets/vendor/libs/bloodhound/bloodhound.js'])
+@endsection
+
+<!-- Page Scripts -->
+@section('page-script')
+  @vite(['resources/assets/js/forms-selects.js', 'resources/assets/js/forms-tagify.js', 'resources/assets/js/forms-typeahead.js'])
+@endsection
+
+@section('content')
+
 @section('content')
     <div class="container">
         <h2>Edit Dokumen</h2>
         <form action="{{ route('documents.update', $document->id) }}" method="POST" enctype="multipart/form-data">
+            @section('scripts')
+<script>
+  $(document).ready(function() {
+    $('#jenis_dokumen').select2({
+      placeholder: "Pilih Jenis Dokumen",
+      allowClear: true,
+      width: '100%'
+    });
+  });
+</script>
+@endsection
+
             @csrf
             @method('PUT')
 
@@ -42,15 +73,18 @@
                         </select>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="jenis_dokumen">Jenis Dokumen</label>
-                        <select name="jenis_dokumen" id="jenis_dokumen" class="form-control">
-                            <option value="Keputusan Direktur" {{ $document->jenis_dokumen == 'Keputusan Direktur' ? 'selected' : '' }}>Keputusan Direktur</option>
-                            <option value="Peraturan Gubernur" {{ $document->jenis_dokumen == 'Peraturan Gubernur' ? 'selected' : '' }}>Peraturan Gubernur</option>
-                            <option value="Perizinan" {{ $document->jenis_dokumen == 'Perizinan' ? 'selected' : '' }}>Perizinan</option>
-                            <option value="SOP" {{ $document->jenis_dokumen == 'SOP' ? 'selected' : '' }}>SOP</option>
-                        </select>
-                    </div>
+                  <div class="mb-3">
+    <label for="jenis_dokumen">Jenis Dokumen</label>
+    <select name="jenis_dokumen" id="jenis_dokumen" class="form-control">
+        <option value="Peraturan Gubernur" {{ $document->jenis_dokumen == 'Peraturan Gubernur' ? 'selected' : '' }}>Peraturan Gubernur</option>
+        <option value="Keputusan Gubernur" {{ $document->jenis_dokumen == 'Keputusan Gubernur' ? 'selected' : '' }}>Keputusan Gubernur</option>
+        <option value="Peraturan Direktur" {{ $document->jenis_dokumen == 'Peraturan Direktur' ? 'selected' : '' }}>Peraturan Direktur</option>
+        <option value="Keputusan Direktur" {{ $document->jenis_dokumen == 'Keputusan Direktur' ? 'selected' : '' }}>Keputusan Direktur</option>
+        <option value="Perizinan" {{ $document->jenis_dokumen == 'Perizinan' ? 'selected' : '' }}>Perizinan</option>
+        <option value="SOP" {{ $document->jenis_dokumen == 'SOP' ? 'selected' : '' }}>SOP</option>
+    </select>
+</div>
+
 
                     <div class="mb-3">
                         <label for="singkatan">Singkatan</label>
@@ -83,11 +117,7 @@
                         </select>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="teu_badan">TEU Badan</label>
-                        <input type="text" name="teu_badan" id="teu_badan" class="form-control"
-                            value="{{ old('teu_badan', $document->teu_badan) }}">
-                    </div>
+               
 
                     <div class="mb-3">
                         <label for="tempat_penetapan">Tempat Penetapan</label>
@@ -151,12 +181,66 @@
                         <input type="text" name="pemrakarsa" id="pemrakarsa" class="form-control"
                             value="{{ old('pemrakarsa', $document->pemrakarsa) }}">
                     </div>
-
-                    <div class="mb-3">
-                        <label for="qrcode">QR Code</label>
-                        <input type="text" name="qrcode" id="qrcode" class="form-control"
-                            value="{{ old('qrcode', $document->qrcode) }}">
-                    </div>
+    <div class="col-md-6">
+                  <div class="form-floating form-floating-outline">
+                    <select id="collapsible-state" class="select2 form-select" data-allow-clear="true">
+                      <option value="">Select</option>
+                      <option value="AL">Alabama</option>
+                      <option value="AK">Alaska</option>
+                      <option value="AZ">Arizona</option>
+                      <option value="AR">Arkansas</option>
+                      <option value="CA">California</option>
+                      <option value="CO">Colorado</option>
+                      <option value="CT">Connecticut</option>
+                      <option value="DE">Delaware</option>
+                      <option value="DC">District Of Columbia</option>
+                      <option value="FL">Florida</option>
+                      <option value="GA">Georgia</option>
+                      <option value="HI">Hawaii</option>
+                      <option value="ID">Idaho</option>
+                      <option value="IL">Illinois</option>
+                      <option value="IN">Indiana</option>
+                      <option value="IA">Iowa</option>
+                      <option value="KS">Kansas</option>
+                      <option value="KY">Kentucky</option>
+                      <option value="LA">Louisiana</option>
+                      <option value="ME">Maine</option>
+                      <option value="MD">Maryland</option>
+                      <option value="MA">Massachusetts</option>
+                      <option value="MI">Michigan</option>
+                      <option value="MN">Minnesota</option>
+                      <option value="MS">Mississippi</option>
+                      <option value="MO">Missouri</option>
+                      <option value="MT">Montana</option>
+                      <option value="NE">Nebraska</option>
+                      <option value="NV">Nevada</option>
+                      <option value="NH">New Hampshire</option>
+                      <option value="NJ">New Jersey</option>
+                      <option value="NM">New Mexico</option>
+                      <option value="NY">New York</option>
+                      <option value="NC">North Carolina</option>
+                      <option value="ND">North Dakota</option>
+                      <option value="OH">Ohio</option>
+                      <option value="OK">Oklahoma</option>
+                      <option value="OR">Oregon</option>
+                      <option value="PA">Pennsylvania</option>
+                      <option value="RI">Rhode Island</option>
+                      <option value="SC">South Carolina</option>
+                      <option value="SD">South Dakota</option>
+                      <option value="TN">Tennessee</option>
+                      <option value="TX">Texas</option>
+                      <option value="UT">Utah</option>
+                      <option value="VT">Vermont</option>
+                      <option value="VA">Virginia</option>
+                      <option value="WA">Washington</option>
+                      <option value="WV">West Virginia</option>
+                      <option value="WI">Wisconsin</option>
+                      <option value="WY">Wyoming</option>
+                    </select>
+                    <label for="collapsible-state">State</label>
+                  </div>
+                </div>
+  </div>
                 </div>
             </div>
 

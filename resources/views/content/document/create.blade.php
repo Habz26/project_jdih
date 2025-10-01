@@ -1,4 +1,24 @@
 @extends('layouts.layoutMaster')
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+  $(document).ready(function() {
+    $('.select2').select2({
+      placeholder: "Pilih opsi",
+      allowClear: true,
+      width: '100%'
+    });
+  });
+</script>
+
+
 
 @section('content')
 <div class="container">
@@ -65,8 +85,10 @@
                     <label for="jenis_dokumen">Jenis Dokumen</label>
                     <select name="jenis_dokumen" id="jenis_dokumen" class="form-control">
                         {{-- ambil dari DB --}}
-                        <option value="Keputusan Direktur">Keputusan Direktur</option>
                         <option value="Peraturan Gubernur">Peraturan Gubernur</option>
+                         <option value="Keputusan Gubernur">Keputusan Gubernur</option> <!-- ✅ baru -->
+                        <option value="Keputusan Direktur">Keputusan Direktur</option>
+                          <option value="Peraturan Direktur">Peraturan Direktur</option> <!-- ✅ baru -->
                         <option value="Perizinan">Perizinan</option>
                         <option value="SOP">SOP</option>
                     </select>
@@ -98,11 +120,7 @@
                     <input type="text" name="judul" id="judul" class="form-control" required>
                 </div>
 
-                <!-- TEU Badan -->
-                <div class="mb-3">
-                    <label for="teu_badan">TEU Badan</label>
-                    <input type="text" name="teu_badan" id="teu_badan" class="form-control">
-                </div>
+             
 
                 <!-- Tempat Penetapan -->
                 <div class="mb-3">
@@ -178,11 +196,67 @@
                     </select>
                 </div>
 
-                <!-- QR Code -->
-                <div class="mb-3">
-                    <label for="qrcode">QR Code</label>
-                    <input type="text" name="qrcode" id="qrcode" class="form-control">
-                </div>
+                <!-- Keterangan (ganti QR Code) -->
+            <div class="col-md-6">
+                  <div class="form-floating form-floating-outline">
+                    <select id="collapsible-state" class="select2 form-select" data-allow-clear="true">
+                      <option value="">Select</option>
+                      <option value="AL">Alabama</option>
+                      <option value="AK">Alaska</option>
+                      <option value="AZ">Arizona</option>
+                      <option value="AR">Arkansas</option>
+                      <option value="CA">California</option>
+                      <option value="CO">Colorado</option>
+                      <option value="CT">Connecticut</option>
+                      <option value="DE">Delaware</option>
+                      <option value="DC">District Of Columbia</option>
+                      <option value="FL">Florida</option>
+                      <option value="GA">Georgia</option>
+                      <option value="HI">Hawaii</option>
+                      <option value="ID">Idaho</option>
+                      <option value="IL">Illinois</option>
+                      <option value="IN">Indiana</option>
+                      <option value="IA">Iowa</option>
+                      <option value="KS">Kansas</option>
+                      <option value="KY">Kentucky</option>
+                      <option value="LA">Louisiana</option>
+                      <option value="ME">Maine</option>
+                      <option value="MD">Maryland</option>
+                      <option value="MA">Massachusetts</option>
+                      <option value="MI">Michigan</option>
+                      <option value="MN">Minnesota</option>
+                      <option value="MS">Mississippi</option>
+                      <option value="MO">Missouri</option>
+                      <option value="MT">Montana</option>
+                      <option value="NE">Nebraska</option>
+                      <option value="NV">Nevada</option>
+                      <option value="NH">New Hampshire</option>
+                      <option value="NJ">New Jersey</option>
+                      <option value="NM">New Mexico</option>
+                      <option value="NY">New York</option>
+                      <option value="NC">North Carolina</option>
+                      <option value="ND">North Dakota</option>
+                      <option value="OH">Ohio</option>
+                      <option value="OK">Oklahoma</option>
+                      <option value="OR">Oregon</option>
+                      <option value="PA">Pennsylvania</option>
+                      <option value="RI">Rhode Island</option>
+                      <option value="SC">South Carolina</option>
+                      <option value="SD">South Dakota</option>
+                      <option value="TN">Tennessee</option>
+                      <option value="TX">Texas</option>
+                      <option value="UT">Utah</option>
+                      <option value="VT">Vermont</option>
+                      <option value="VA">Virginia</option>
+                      <option value="WA">Washington</option>
+                      <option value="WV">West Virginia</option>
+                      <option value="WI">Wisconsin</option>
+                      <option value="WY">Wyoming</option>
+                    </select>
+                    <label for="collapsible-state">State</label>
+</div>          
+
+
             </div>
         </div>
 

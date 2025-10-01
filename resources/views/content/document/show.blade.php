@@ -68,7 +68,6 @@
                     <li class="list-group-item"><strong>Jenis Dokumen:</strong> {{ $document->jenis_dokumen }}</li>
                     <li class="list-group-item"><strong>Tahun:</strong> {{ $document->tahun }}</li>
                     <li class="list-group-item"><strong>Judul:</strong> {{ $document->judul }}</li>
-                    <li class="list-group-item"><strong>TEU Badan:</strong> {{ $document->teu_badan }}</li>
                     <li class="list-group-item"><strong>Tempat Penetapan:</strong> {{ $document->tempat_penetapan }}</li>
                     <li class="list-group-item"><strong>Tanggal Penetapan:</strong>
                         {{ \Carbon\Carbon::parse($document->tanggal_penetapan)->format('d-m-Y') }}</li>
@@ -83,7 +82,7 @@
                     <li class="list-group-item"><strong>Penandatanganan:</strong> {{ $document->penandatanganan }}</li>
                     <li class="list-group-item"><strong>Pemrakarsa:</strong> {{ $document->pemrakarsa }}</li>
                     <li class="list-group-item"><strong>Status:</strong> {{ $document->status }}</li>
-                    <li class="list-group-item"><strong>QR Code:</strong> {{ $document->qrcode }}</li>
+                    <li class="list-group-item"><strong>Keterangan:</strong> {{ $document->keterangan }}</li>
                 </ul>
             </div>
         </div>
