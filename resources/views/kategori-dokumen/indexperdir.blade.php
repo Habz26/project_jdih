@@ -102,64 +102,68 @@
                         </ul>
                     </nav>
                 </div>
-
-                <!-- Sidebar -->
+   <!-- Sidebar -->
                 <div class="col-lg-3">
                     <div class="bg-lightest py-2 px-4 rounded-3 mb-4">
                         <h5 class="mb-0">Kategori Dokumen</h5>
                     </div>
+
+
+ <ul class="list-unstyled mt-3">
+                        @foreach ($categoriesPeraturanGubernur as $category)
+                            <li class="mb-2">
+                                <a href="{{ route('peraturan-gubernur') }}"
+                                    class="d-flex justify-content-between align-items-center text-heading">
+                                    {{ $category->kategori }}
+                                      <span class="badge bg-label-primary">{{ $category->total }}</span>
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+
+
                     <ul class="list-unstyled mt-3">
                         @foreach ($categories as $category)
                             <li class="mb-2">
                                 <a href="{{ route('keputusan-direktur') }}"
                                     class="d-flex justify-content-between align-items-center text-heading">
                                     {{ $category->kategori }}
-                                    Keputusan Direktur <span class="badge bg-label-primary">{{ $category->total }}</span>
+                                      <span class="badge bg-label-primary">{{ $category->total }}</span>
                                 </a>
                             </li>
                         @endforeach
                     </ul>
+                     <!-- Peraturan Direktur -->
+    <ul class="list-unstyled mt-3">
+        @foreach ($categoriesPeraturanDirektur as $category)
+            <li class="mb-2">
+                <a href="{{ route('peraturan-direktur') }}"
+                    class="d-flex justify-content-between align-items-center text-heading">
+                    {{ $category->kategori }} 
+                    <span class="badge bg-label-primary">{{ $category->total }}</span>
+                </a>
+            </li>
+        @endforeach
+    </ul>
                     <ul class="list-unstyled mt-3">
-                        @foreach ($categoriesPeraturanGubernur as $category)
-                            <li class="mb-2">
-                                <a href="{{ route('peraturan-gubernur') }}"
-                                    class="d-flex justify-content-between align-items-center text-heading">
-                                    {{ $category->kategori }}
-                                    Peraturan Gubernur <span class="badge bg-label-primary">{{ $category->total }}</span>
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
-                    <ul class="list-unstyled mt-3">
-                        @foreach ($categoriesKeputusanGubernur as $category)
-                            <li class="mb-2">
-                                <a href="{{ route('keputusan-gubernur') }}"
-                                    class="d-flex justify-content-between align-items-center text-heading">
-                                    {{ $category->kategori }} Keputusan Gubernur
-                                    <span class="badge bg-label-primary">{{ $category->total }}</span>
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
-                    <!-- Peraturan Direktur -->
-                    <ul class="list-unstyled mt-3">
-                        @foreach ($categoriesPeraturanDirektur as $category)
-                            <li class="mb-2">
-                                <a href="{{ route('peraturan-direktur') }}"
-                                    class="d-flex justify-content-between align-items-center text-heading">
-                                    {{ $category->kategori }} Peraturan Direktur
-                                    <span class="badge bg-label-primary">{{ $category->total }}</span>
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
+        @foreach ($categoriesKeputusanGubernur as $category)
+            <li class="mb-2">
+                <a href="{{ route('keputusan-gubernur') }}"
+                    class="d-flex justify-content-between align-items-center text-heading">
+                    {{ $category->kategori }}
+                    <span class="badge bg-label-primary">{{ $category->total }}</span>
+                </a>
+            </li>
+        @endforeach
+    </ul>
+    
                     <ul class="list-unstyled mt-3">
                         @foreach ($categoriesPerizinan as $category)
                             <li class="mb-2">
                                 <a href="{{ route('perizinan') }}"
                                     class="d-flex justify-content-between align-items-center text-heading">
                                     {{ $category->kategori }}
-                                    Perizinan <span class="badge bg-label-primary">{{ $category->total }}</span>
+                                     <span class="badge bg-label-primary">{{ $category->total }}</span>
                                 </a>
                             </li>
                         @endforeach
@@ -170,7 +174,7 @@
                                 <a href="{{ route('sop') }}"
                                     class="d-flex justify-content-between align-items-center text-heading">
                                     {{ $category->kategori }}
-                                    SOP <span class="badge bg-label-primary">{{ $category->total }}</span>
+                                     <span class="badge bg-label-primary">{{ $category->total }}</span>
                                 </a>
                             </li>
                         @endforeach
