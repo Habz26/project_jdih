@@ -41,73 +41,94 @@ $configData = Helper::appClasses();
 </section>
 <!-- Help Center Header: End -->
 
-
-<!-- Popular Articles: Start -->
+<!-- Regulasi & Pedoman Perijinan -->
 <section class="section-py">
   <div class="container">
-    <h4 class="text-center mb-2">Regulasi & Pedoman Perijinan</h4>
+    <h4 class="text-center mb-4">Regulasi & Pedoman Perijinan</h4>
+
     <div class="row g-4">
-      
-      <!-- Card 1 -->
-      <div class="col-sm-6 col-md-3">
-        <div class="card border shadow-sm h-100">
-          <div class="card-body text-center d-flex flex-column justify-content-between">
+      <!-- Peraturan Gubernur -->
+      <div class="col-6 col-md-2">
+        <div class="card border shadow-sm h-100 text-center">
+          <div class="card-body d-flex flex-column justify-content-between">
             <div>
-              <i class="bi bi-journal-text text-primary" style="font-size:2.5rem;"></i>
-              <h5 class="my-3">Peraturan Gubernur</h5>
-              <p class="mb-3 text-muted">Referensi aturan terbaru dari pemerintah provinsi</p>
+              <i class="bi bi-journal-text text-primary" style="font-size:2.2rem;"></i>
+              <h6 class="my-3">Peraturan Gubernur</h6>
+              <p class="small text-muted">Referensi aturan terbaru dari pemerintah provinsi</p>
             </div>
-            <a class="btn btn-outline-primary mt-auto" href="{{ url('peraturan-gubernur') }}">
-              Lihat Detail
-            </a>
+            <a class="btn btn-outline-primary btn-sm mt-auto" href="{{ url('peraturan-gubernur') }}">Detail</a>
           </div>
         </div>
       </div>
 
-      <!-- Card 2 -->
-      <div class="col-sm-6 col-md-3">
-        <div class="card border shadow-sm h-100">
-          <div class="card-body text-center d-flex flex-column justify-content-between">
+      <!-- Keputusan Gubernur -->
+      <div class="col-6 col-md-2">
+        <div class="card border shadow-sm h-100 text-center">
+          <div class="card-body d-flex flex-column justify-content-between">
             <div>
-              <i class="bi bi-file-earmark-text text-success" style="font-size:2.5rem;"></i>
-              <h5 class="my-3">Keputusan Direktur</h5>
-              <p class="mb-3 text-muted">Pedoman dan keputusan penting dari direktur rumah sakit untuk mendukung operasional layanan</p>
+              <i class="bi bi-file-earmark-richtext text-info" style="font-size:2.2rem;"></i>
+              <h6 class="my-3">Keputusan Gubernur</h6>
+              <p class="small text-muted">Keputusan resmi gubernur terkait kebijakan dan aturan provinsi</p>
             </div>
-            <a class="btn btn-outline-primary mt-auto" href="{{ url('keputusan-direktur') }}">
-              Lihat Detail
-            </a>
+            <a class="btn btn-outline-primary btn-sm mt-auto" href="{{ url('keputusan-gubernur') }}">Detail</a>
           </div>
         </div>
       </div>
 
-      <!-- Card 3 -->
-      <div class="col-sm-6 col-md-3">
-        <div class="card border shadow-sm h-100">
-          <div class="card-body text-center d-flex flex-column justify-content-between">
+        <!-- Peraturan Direktur -->
+      <div class="col-6 col-md-2">
+        <div class="card border shadow-sm h-100 text-center">
+          <div class="card-body d-flex flex-column justify-content-between">
             <div>
-              <i class="bi bi-building text-warning" style="font-size:2.5rem;"></i>
-              <h5 class="my-3">Perizinan</h5>
-              <p class="mb-3 text-muted">Arahan direktur rumah sakit mengenai ketentuan perizinan</p>
+              <i class="bi bi-journal-richtext text-secondary" style="font-size:2.2rem;"></i>
+              <h6 class="my-3">Peraturan Direktur</h6>
+              <p class="small text-muted">Aturan dan kebijakan yang ditetapkan oleh direktur rumah sakit</p>
             </div>
-            <a class="btn btn-outline-primary mt-auto" href="{{ url('perizinan') }}">
-             Lihat Detail
-            </a>
+            <a class="btn btn-outline-primary btn-sm mt-auto" href="{{ url('peraturan-direktur') }}">Detail</a>
           </div>
         </div>
       </div>
 
-      <!-- Card 4 -->
-      <div class="col-sm-6 col-md-3">
-        <div class="card border shadow-sm h-100">
-          <div class="card-body text-center d-flex flex-column justify-content-between">
+      <!-- Keputusan Direktur -->
+      <div class="col-6 col-md-2">
+        <div class="card border shadow-sm h-100 text-center">
+          <div class="card-body d-flex flex-column justify-content-between">
             <div>
-              <i class="bi bi-clipboard-check text-danger" style="font-size:2.5rem;"></i>
-              <h5 class="my-3">SOP</h5>
-              <p class="mb-3 text-muted">Panduan prosedur standar untuk proses perijinan rumah sakit</p>
+              <i class="bi bi-file-earmark-text text-success" style="font-size:2.2rem;"></i>
+              <h6 class="my-3">Keputusan Direktur</h6>
+              <p class="small text-muted">Pedoman dan keputusan penting dari direktur rumah sakit</p>
             </div>
-            <a class="btn btn-outline-primary mt-auto" href="{{ url('sop') }}">
-             Lihat Detail
-            </a>
+            <a class="btn btn-outline-primary btn-sm mt-auto" href="{{ url('keputusan-direktur') }}">Detail</a>
+          </div>
+        </div>
+      </div>
+
+    
+
+      <!-- Perizinan -->
+      <div class="col-6 col-md-2">
+        <div class="card border shadow-sm h-100 text-center">
+          <div class="card-body d-flex flex-column justify-content-between">
+            <div>
+              <i class="bi bi-building text-warning" style="font-size:2.2rem;"></i>
+              <h6 class="my-3">Perizinan</h6>
+              <p class="small text-muted">Arahan direktur rumah sakit mengenai ketentuan perizinan</p>
+            </div>
+            <a class="btn btn-outline-primary btn-sm mt-auto" href="{{ url('perizinan') }}">Detail</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- SOP -->
+      <div class="col-6 col-md-2">
+        <div class="card border shadow-sm h-100 text-center">
+          <div class="card-body d-flex flex-column justify-content-between">
+            <div>
+              <i class="bi bi-clipboard-check text-danger" style="font-size:2.2rem;"></i>
+              <h6 class="my-3">SOP</h6>
+              <p class="small text-muted">Panduan prosedur standar untuk proses perijinan rumah sakit</p>
+            </div>
+            <a class="btn btn-outline-primary btn-sm mt-auto" href="{{ url('sop') }}">Detail</a>
           </div>
         </div>
       </div>
@@ -115,6 +136,7 @@ $configData = Helper::appClasses();
     </div>
   </div>
 </section>
+
 <!-- Popular Articles: End -->
 
 <!-- Hover Style -->

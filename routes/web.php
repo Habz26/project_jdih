@@ -165,6 +165,11 @@ use App\Models\Document;
 // use App\Http\Controllers\VerifikasiController;
 
 // Define a route for kategori dokumen
+
+
+Route::get('/peraturan-gubernur', [DocumentController::class, 'peraturanGubernur'])->name('peraturan-gubernur');
+Route::get('/keputusan-gubernur', [DocumentController::class, 'keputusanGubernur'])->name('keputusan-gubernur');
+Route::get('/peraturan-direktur', [DocumentController::class, 'peraturanDirektur'])->name('peraturan-direktur');
 Route::get('/keputusan-direktur', [DocumentController::class, 'keputusanDirektur'])->name('keputusan-direktur');
 Route::get('/peraturan-gubernur', [DocumentController::class, 'peraturanGubernur'])->name('peraturan-gubernur');
 Route::get('/perizinan', [DocumentController::class, 'perIzinan'])->name('perizinan');

@@ -133,6 +133,30 @@
                             </li>
                         @endforeach
                     </ul>
+                                                    <!-- Keputusan Gubernur -->
+    <ul class="list-unstyled mt-3">
+        @foreach ($categoriesKeputusanGubernur as $category)
+            <li class="mb-2">
+                <a href="{{ route('keputusan-gubernur') }}"
+                    class="d-flex justify-content-between align-items-center text-heading">
+                    {{ $category->kategori }} Keputusan Gubernur
+                    <span class="badge bg-label-primary">{{ $category->total }}</span>
+                </a>
+            </li>
+        @endforeach
+    </ul>
+      <!-- Peraturan Direktur -->
+    <ul class="list-unstyled mt-3">
+        @foreach ($categoriesPeraturanDirektur as $category)
+            <li class="mb-2">
+                <a href="{{ route('peraturan-direktur') }}"
+                    class="d-flex justify-content-between align-items-center text-heading">
+                    {{ $category->kategori }} Peraturan Direktur
+                    <span class="badge bg-label-primary">{{ $category->total }}</span>
+                </a>
+            </li>
+        @endforeach
+    </ul>
                     <ul class="list-unstyled mt-3">
                         @foreach ($categoriesPerizinan as $category)
                             <li class="mb-2">
