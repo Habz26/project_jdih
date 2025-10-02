@@ -31,5 +31,6 @@ class Document extends Model
         'pemrakarsa',
         'status',
         'keterangan',
+        'keterangan_dokumen',
     ];
 }

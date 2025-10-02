@@ -43,6 +43,33 @@
   </script>
 @endsection
 
+<script>
+$(document).ready(function() {
+    function toggleKeteranganFields() {
+        var status = $('#status').val(); // ambil nilai status (0/1/2)
+
+        if (status === '2') { 
+            // Berlaku → hide
+            $('#keterangan_dokumen').closest('.mb-3').hide();
+            $('#keterangan').closest('.mb-3').hide();
+        } else {
+            // Tidak Berlaku atau Berlaku Sebagian → show
+            $('#keterangan_dokumen').closest('.mb-3').show();
+            $('#keterangan').closest('.mb-3').show();
+        }
+    }
+
+    // Panggil pertama kali saat halaman load
+    toggleKeteranganFields();
+
+    // Jalankan ulang setiap kali status berubah
+    $('#status').on('change', function() {
+        toggleKeteranganFields();
+    });
+});
+</script>
+
+
 <!-- Vendor Scripts -->
 @section('vendor-script')
   @vite([
@@ -194,13 +221,22 @@
           <input type="text" name="pemrakarsa" id="pemrakarsa" class="form-control" value="{{ old('pemrakarsa', $document->pemrakarsa) }}">
         </div>
 
-        <div class="mb-3">
-          <label for="status">Status</label>
-          <select name="status" id="status" class="form-control">
-            <option value="Berlaku" {{ old('status', $document->status)=='Berlaku' ? 'selected' : '' }}>Berlaku</option>
-            <option value="Tidak Berlaku" {{ old('status', $document->status)=='Tidak Berlaku' ? 'selected' : '' }}>Tidak Berlaku</option>
-          </select>
-        </div>
+       <div class="mb-3">
+  <label for="status">Status</label>
+  <select name="status" id="status" class="form-control">
+    <option value="2" {{ old('status', $document->status ?? '') == '2' ? 'selected' : '' }}>Berlaku</option>
+    <option value="0" {{ old('status', $document->status ?? '') == '0' ? 'selected' : '' }}>Tidak Berlaku</option>
+    <option value="1" {{ old('status', $document->status ?? '') == '1' ? 'selected' : '' }}>Berlaku Sebagian</option>
+  </select>
+</div>
+
+<div class="mb-3" id="keterangan_dokumen_wrapper">
+  <label for="keterangan_dokumen" class="form-label">Keterangan Status</label>
+  <input type="text" name="keterangan_dokumen" id="keterangan_dokumen"
+         class="form-control"
+         value="{{ old('keterangan_dokumen', $document->keterangan_dokumen ?? '') }}">
+</div>
+
 
         <!-- Keterangan dari judul -->
       <div class="mb-3">

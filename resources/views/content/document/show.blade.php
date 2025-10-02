@@ -82,6 +82,7 @@
                     <li class="list-group-item"><strong>Penandatanganan:</strong> {{ $document->penandatanganan }}</li>
                     <li class="list-group-item"><strong>Pemrakarsa:</strong> {{ $document->pemrakarsa }}</li>
                     <li class="list-group-item"><strong>Status:</strong> {{ $document->status }}</li>
+                     <li class="list-group-item"><strong>Keterangan Dokumen:</strong> {{ $document->keterangan_dokumen }}</li>
                     <li class="list-group-item"><strong>Keterangan:</strong> {{ $document->keterangan }}</li>
                 </ul>
             </div>

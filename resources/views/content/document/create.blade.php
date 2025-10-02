@@ -195,12 +195,19 @@
         </div>
 
         <div class="mb-3">
-          <label for="status">Status</label>
-          <select name="status" id="status" class="form-control">
-            <option value="Berlaku">Berlaku</option>
-            <option value="Tidak Berlaku">Tidak Berlaku</option>
-          </select>
+  <label for="status">Status</label>
+  <select name="status" id="status" class="form-control">
+    <option value="2" {{ old('status', $document->status ?? '') == '2' ? 'selected' : '' }}>Berlaku</option>
+    <option value="0" {{ old('status', $document->status ?? '') == '0' ? 'selected' : '' }}>Tidak Berlaku</option>
+    <option value="1" {{ old('status', $document->status ?? '') == '1' ? 'selected' : '' }}>Berlaku Sebagian</option>
+  </select>
+</div>
+
+          <div class="mb-3">
+          <label for="keterangan_dokumen">Keterangan Status</label>
+          <input type="text" name="keterangan_dokumen" id="keterangan_dokumen" class="form-control" value="{{ old('keterangan_dokumen') }}">
         </div>
+
 
         <!-- Dropdown Dummy State (bisa diganti ke DB documents kalau mau) -->
      <div class="mb-3">
