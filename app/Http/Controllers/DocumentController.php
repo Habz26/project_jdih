@@ -8,6 +8,31 @@ use Illuminate\Support\Facades\DB;
 
 class DocumentController extends Controller
 {
+        // ========================
+    // AJAX UNTUK SELECT2 JUDUL
+    // ========================
+        public function ajaxJudul(Request $request)
+        {
+            $q = $request->get('q', '');
+
+            $data = Document::query()
+                ->where('judul', 'like', "%{$q}%")
+                ->select('judul')
+                ->distinct()
+                ->limit(50)
+                ->get();
+
+            $results = $data->map(function ($item) {
+                return [
+                    'id' => $item->judul,   // supaya value yg tersimpan = judul
+                    'text' => $item->judul, // teks yg tampil di dropdown
+                ];
+            })->values();
+
+            return response()->json(['results' => $results]);
+        }
+    // ========================
+
     public function index(Request $request)
     {
         $query = Document::query();

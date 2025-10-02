@@ -12,6 +12,35 @@
   ])
 @endsection
 
+@section('page-script')
+<script>
+  $(document).ready(function() {
+      $('.keterangan-select').select2({
+          placeholder: 'Cari judul dokumen...',
+          ajax: {
+              url: "{{ route('ajax.judul') }}", // route ambil data judul
+              dataType: 'json',
+              delay: 250,
+              data: function(params) {
+                  return { q: params.term };
+              },
+              processResults: function(data) {
+                  return {
+                      results: data.results.map(function(item) {
+                          return {
+                              id: item.id,   // simpan ID dokumen
+                              text: item.text // tampilkan Judul dokumen
+                          };
+                      })
+                  };
+              },
+              cache: true
+          },
+          minimumInputLength: 1
+      });
+  });
+  </script>
+@endsection
 <!-- Vendor Scripts -->
 @section('vendor-script')
   @vite([
@@ -68,8 +97,8 @@
         </div>
 
          <div class="mb-3">
-          <label for="bidang_hukum">Jenis Hukum</label>
-          <select name="bidang_hukum" id="bidang_hukum" class="form-control">
+          <label for="jenis_hukum">Jenis Hukum</label>
+          <select name="jenis_hukum" id="jenis_hukum" class="form-control">
             <option value="Undang-Undang">Undang-Undang</option>
             <option value="Peraturan-Pemerintah">Peraturan-Pemerintah</option>
           </select>
@@ -166,73 +195,19 @@
         </div>
 
         <div class="mb-3">
-          <label for="bidang_hukum">Status</label>
-          <select name="bidang_hukum" id="bidang_hukum" class="form-control">
+          <label for="status">Status</label>
+          <select name="status" id="status" class="form-control">
             <option value="Berlaku">Berlaku</option>
             <option value="Tidak Berlaku">Tidak Berlaku</option>
           </select>
         </div>
 
         <!-- Dropdown Dummy State (bisa diganti ke DB documents kalau mau) -->
-        <div class="col-md-6">
-          <div class="form-floating form-floating-outline">
-            <select id="collapsible-keterangan" class="select2 form-select" data-allow-clear="true">
-              <option value="">Select</option>
-              <option value="AL">Alabama</option>
-              <option value="AK">Alaska</option>
-              <option value="AZ">Arizona</option>
-              <option value="AR">Arkansas</option>
-              <option value="CA">California</option>
-              <option value="CO">Colorado</option>
-              <option value="CT">Connecticut</option>
-              <option value="DE">Delaware</option>
-              <option value="DC">District Of Columbia</option>
-              <option value="FL">Florida</option>
-              <option value="GA">Georgia</option>
-              <option value="HI">Hawaii</option>
-              <option value="ID">Idaho</option>
-              <option value="IL">Illinois</option>
-              <option value="IN">Indiana</option>
-              <option value="IA">Iowa</option>
-              <option value="KS">Kansas</option>
-              <option value="KY">Kentucky</option>
-              <option value="LA">Louisiana</option>
-              <option value="ME">Maine</option>
-              <option value="MD">Maryland</option>
-              <option value="MA">Massachusetts</option>
-              <option value="MI">Michigan</option>
-              <option value="MN">Minnesota</option>
-              <option value="MS">Mississippi</option>
-              <option value="MO">Missouri</option>
-              <option value="MT">Montana</option>
-              <option value="NE">Nebraska</option>
-              <option value="NV">Nevada</option>
-              <option value="NH">New Hampshire</option>
-              <option value="NJ">New Jersey</option>
-              <option value="NM">New Mexico</option>
-              <option value="NY">New York</option>
-              <option value="NC">North Carolina</option>
-              <option value="ND">North Dakota</option>
-              <option value="OH">Ohio</option>
-              <option value="OK">Oklahoma</option>
-              <option value="OR">Oregon</option>
-              <option value="PA">Pennsylvania</option>
-              <option value="RI">Rhode Island</option>
-              <option value="SC">South Carolina</option>
-              <option value="SD">South Dakota</option>
-              <option value="TN">Tennessee</option>
-              <option value="TX">Texas</option>
-              <option value="UT">Utah</option>
-              <option value="VT">Vermont</option>
-              <option value="VA">Virginia</option>
-              <option value="WA">Washington</option>
-              <option value="WV">West Virginia</option>
-              <option value="WI">Wisconsin</option>
-              <option value="WY">Wyoming</option>
-            </select>
-            <label for="collapsible-keterangan">Keterangan</label>
-          </div>
-        </div>
+     <div class="mb-3">
+  <label for="keterangan" class="form-label">Keterangan (ambil dari Judul)</label>
+  <select name="keterangan" id="keterangan" class="form-control keterangan-select" required></select>
+</div>
+
       </div>
     </div>
 
