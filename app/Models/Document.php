@@ -19,7 +19,6 @@ class Document extends Model
         'nomor',
         'tahun',
         'judul',
-        'teu_badan',
         'tempat_penetapan',
         'tanggal_penetapan',
         'tanggal_pengundangan',
@@ -31,6 +30,7 @@ class Document extends Model
         'penandatanganan',
         'pemrakarsa',
         'status',
-        'qrcode',
+        'keterangan',
+        'keterangan_dokumen',
     ];
 }

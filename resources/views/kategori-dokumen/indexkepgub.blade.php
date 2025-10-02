@@ -1,6 +1,6 @@
 @extends('layouts.autoLayout')
 
-@section('title', 'Perizinan - RSKK')
+@section('title', 'Keputusan Gubernur - RSKK')
 
 @section('content')
     <section class="section-py first-section-pt py-4 mt-5">
@@ -13,17 +13,17 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-2">
                             <li class="breadcrumb-item"><a href="{{ url('/') }}">Beranda</a></li>
-                            <li class="breadcrumb-item active">Perizinan</li>
+                            <li class="breadcrumb-item active">Keputusan Gubernur</li>
                         </ol>
                     </nav>
 
                     <button onclick="window.history.back()" class="btn btn-outline-primary mb-3 float-end me-2">
                         ⬅ Kembali
                     </button>
-                    <h4 class="mb-4">Dokumen Perizinan</h4>
+                    <h4 class="mb-4">Dokumen Keputusan Gubernur</h4>
 
                     <!-- Search -->
-                    <form action="{{ route('perizinan') }}" method="GET" class="mb-4">
+                    <form action="{{ route('keputusan-gubernur') }}" method="GET" class="mb-4">
                         <div class="input-group input-group-merge">
                             <span class="input-group-text"><i class="ri ri-search-line"></i></span>
                             <input type="text" name="q" class="form-control" placeholder="Cari dokumen..."
@@ -33,7 +33,6 @@
 
                     <!-- Table -->
                     <div class="card shadow-sm border-0">
-
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table align-middle table-hover">
@@ -46,7 +45,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse ($perIzinan as $dokumen)
+                                        @forelse ($keputusanGubernur as $dokumen)
                                             <tr>
                                                 <td>
                                                     <span class="fw-semibold">{{ $dokumen->jenis_dokumen }}</span><br>
@@ -81,7 +80,7 @@
                                         @empty
                                             <tr>
                                                 <td colspan="4" class="text-center text-muted py-4">
-                                                    Belum ada dokumen Perizinan yang tersedia.
+                                                    Belum ada dokumen Keputusan Gubernur yang tersedia.
                                                 </td>
                                             </tr>
                                         @endforelse
@@ -90,7 +89,6 @@
                             </div>
                         </div>
                     </div>
-
 
                     <!-- Pagination -->
                     <nav aria-label="Page navigation" class="mt-4">
@@ -181,7 +179,6 @@
                         @endforeach
                     </ul>
                 </div>
-             
 
             </div>
         </div>

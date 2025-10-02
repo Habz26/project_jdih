@@ -162,9 +162,23 @@ use App\Http\Controllers\authentications\ResetPasswordController;
 use App\Http\Controllers\DocumentController;
 use Illuminate\Http\Request;
 use App\Models\Document;
+
+
+//select judul dokumen
+
+Route::get('/ajax/judul', [DocumentController::class, 'ajaxJudul'])->name('ajax.judul');
+Route::post('/dokumen/store', [DocumentController::class, 'store'])->name('dokumen.store');
+
+
+
 // use App\Http\Controllers\VerifikasiController;
 
 // Define a route for kategori dokumen
+
+
+Route::get('/peraturan-gubernur', [DocumentController::class, 'peraturanGubernur'])->name('peraturan-gubernur');
+Route::get('/keputusan-gubernur', [DocumentController::class, 'keputusanGubernur'])->name('keputusan-gubernur');
+Route::get('/peraturan-direktur', [DocumentController::class, 'peraturanDirektur'])->name('peraturan-direktur');
 Route::get('/keputusan-direktur', [DocumentController::class, 'keputusanDirektur'])->name('keputusan-direktur');
 Route::get('/peraturan-gubernur', [DocumentController::class, 'peraturanGubernur'])->name('peraturan-gubernur');
 Route::get('/perizinan', [DocumentController::class, 'perIzinan'])->name('perizinan');

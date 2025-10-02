@@ -20,7 +20,6 @@ return new class extends Migration
         $table->string('jenis_dokumen')->nullable();
         $table->string('tahun')->nullable();
         $table->string('judul');
-        $table->string('teu_badan')->nullable();
         $table->string('tempat_penetapan')->nullable();
         $table->date('tanggal_penetapan')->nullable();
         $table->date('tanggal_pengundangan')->nullable();
@@ -31,8 +30,10 @@ return new class extends Migration
         $table->string('urusan_pemerintahan')->nullable();
         $table->string('penandatanganan')->nullable();
         $table->string('pemrakarsa')->nullable();
-        $table->enum('status', ['berlaku', 'tidak berlaku'])->default('berlaku');
-        $table->string('qrcode')->nullable();
+        $table->tinyInteger('status')->default(2); 
+// 2 = berlaku, 0 = tidak berlaku, 1 = berlaku sebagian
+        $table->string('keterangan')->nullable();
+        $table->string('keterangan_dokumen')->nullable();
         $table->timestamps();
     });
 }
