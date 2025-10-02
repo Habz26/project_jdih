@@ -83,10 +83,12 @@
                                 </td>
                                 <td class="text-center">{{ $doc->tahun }}</td>
                                 <td class="text-center">
-                                    @if ($doc->status == 'berlaku')
+                                    @if ($doc->status == '2')
                                         <span class="badge bg-success">Berlaku</span>
-                                    @else
+                                    @elseif ($doc->status == '0')
                                         <span class="badge bg-danger">Tidak Berlaku</span>
+                                    @elseif ($doc->status == '1')
+                                        <span class="badge bg-warning text-dark">Berlaku Sebagian</span>
                                     @endif
                                 </td>
                                 <td class="text-center">

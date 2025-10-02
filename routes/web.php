@@ -323,7 +323,8 @@ Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 // Logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout')->middleware('auth');
 
-Route::resource('documents', DocumentController::class)->only(['index', 'show']);
+Route::get('documents', [DocumentController::class, 'index'])->name('document.index');
+Route::get('documents/{id}', [DocumentController::class, 'show'])->name('document.show');
 
 // ================== ADMIN ROUTES ==================
 Route::middleware('auth')->group(function () {
@@ -457,7 +458,7 @@ Route::get('/charts/chartjs', [ChartJs::class, 'index'])->name('charts-chartjs')
 Route::get('/maps/leaflet', [Leaflet::class, 'index'])->name('maps-leaflet');
 
 // laravel example
-Route::get('/laravel/user-management', [UserManagement::class, 'UserManagement'])->name('laravel-example-user-management');
-Route::resource('/user-list', UserManagement::class);
+// Route::get('/laravel/user-management', [UserManagement::class, 'UserManagement'])->name('laravel-example-user-managements');
+// Route::resource('/user-list', UserManagement::class);
 
 

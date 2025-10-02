@@ -65,14 +65,16 @@
                     <li class="list-group-item"><strong>Tipe Dokumen:</strong> {{ $document->tipe_dokumen }}</li>
                     <li class="list-group-item"><strong>Bidang Hukum:</strong> {{ $document->bidang_hukum }}</li>
                     <li class="list-group-item"><strong>Jenis Hukum:</strong> {{ $document->jenis_hukum }}</li>
-                    <li class="list-group-item"><strong>Jenis Dokumen:</strong> {{ $document->jenis_dokumen }}</li>
+                    <li class="list-group-item"><strong>Jenis Dokumen:</strong>{{ $document->jenisDokumenRef->deskripsi ?? 'Unknown' }}</li>
                     <li class="list-group-item"><strong>Tahun:</strong> {{ $document->tahun }}</li>
                     <li class="list-group-item"><strong>Judul:</strong> {{ $document->judul }}</li>
                     <li class="list-group-item"><strong>Tempat Penetapan:</strong> {{ $document->tempat_penetapan }}</li>
-                    <li class="list-group-item"><strong>Tanggal Penetapan:</strong>
-                        {{ \Carbon\Carbon::parse($document->tanggal_penetapan)->format('d-m-Y') }}</li>
-                    <li class="list-group-item"><strong>Tanggal Pengundangan:</strong>
-                        {{ \Carbon\Carbon::parse($document->tanggal_pengundangan)->format('d-m-Y') }}</li>
+                    <li class="list-group-item"><strong>Tanggal
+                            Penetapan:</strong>{{ \Carbon\Carbon::parse($document->tanggal_penetapan)->format('d-m-Y') }}
+                    </li>
+                    <li class="list-group-item"><strong>Tanggal
+                            Pengundangan:</strong>{{ \Carbon\Carbon::parse($document->tanggal_pengundangan)->format('d-m-Y') }}
+                    </li>
                     <li class="list-group-item"><strong>Sumber:</strong> {{ $document->sumber }}</li>
                     <li class="list-group-item"><strong>Subjek:</strong> {{ $document->subjek }}</li>
                     <li class="list-group-item"><strong>Bahasa:</strong> {{ $document->bahasa }}</li>
@@ -81,8 +83,10 @@
                     </li>
                     <li class="list-group-item"><strong>Penandatanganan:</strong> {{ $document->penandatanganan }}</li>
                     <li class="list-group-item"><strong>Pemrakarsa:</strong> {{ $document->pemrakarsa }}</li>
-                    <li class="list-group-item"><strong>Status:</strong> {{ $document->status }}</li>
-                     <li class="list-group-item"><strong>Keterangan Dokumen:</strong> {{ $document->keterangan_dokumen }}</li>
+                    <li class="list-group-item"><strong>Status:</strong> {{ $document->statusDokumenRef->deskripsi ?? 'Unknown' }}
+                    </li>
+                    <li class="list-group-item"><strong>Keterangan Dokumen:</strong> {{ $document->keterangan_dokumen }}
+                    </li>
                     <li class="list-group-item"><strong>Keterangan:</strong> {{ $document->keterangan }}</li>
                 </ul>
             </div>

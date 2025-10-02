@@ -33,4 +33,16 @@ class Document extends Model
         'keterangan',
         'keterangan_dokumen',
     ];
+
+    // app/Models/Document.php
+    public function jenisDokumenRef()
+    {
+        return $this->belongsTo(Referensi::class, 'jenis_dokumen', 'id')
+                    ->where('jenis', 1); // ganti 2 sesuai kode jenis dokumen di tabel referensi
+    }
+    public function statusDokumenRef()
+    {
+        return $this->belongsTo(Referensi::class, 'status', 'id')
+                    ->where('jenis', 2); // ganti 3 sesuai kode jenis status di tabel referensi
+    }   
 }
