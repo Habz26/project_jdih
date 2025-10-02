@@ -162,6 +162,15 @@ use App\Http\Controllers\authentications\ResetPasswordController;
 use App\Http\Controllers\DocumentController;
 use Illuminate\Http\Request;
 use App\Models\Document;
+
+
+//select judul dokumen
+
+Route::get('/ajax/judul', [DocumentController::class, 'ajaxJudul'])->name('ajax.judul');
+Route::post('/dokumen/store', [DocumentController::class, 'store'])->name('dokumen.store');
+
+
+
 // use App\Http\Controllers\VerifikasiController;
 
 // Define a route for kategori dokumen
