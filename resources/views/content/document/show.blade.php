@@ -65,7 +65,8 @@
                     <li class="list-group-item"><strong>Tipe Dokumen:</strong> {{ $document->tipe_dokumen }}</li>
                     <li class="list-group-item"><strong>Bidang Hukum:</strong> {{ $document->bidang_hukum }}</li>
                     <li class="list-group-item"><strong>Jenis Hukum:</strong> {{ $document->jenis_hukum }}</li>
-                    <li class="list-group-item"><strong>Jenis Dokumen:</strong>{{ $document->jenisDokumenRef->deskripsi ?? 'Unknown' }}</li>
+                    <li class="list-group-item"><strong>Jenis
+                            Dokumen:</strong>{{ $document->jenisDokumenRef->deskripsi ?? 'Unknown' }}</li>
                     <li class="list-group-item"><strong>Tahun:</strong> {{ $document->tahun }}</li>
                     <li class="list-group-item"><strong>Judul:</strong> {{ $document->judul }}</li>
                     <li class="list-group-item"><strong>Tempat Penetapan:</strong> {{ $document->tempat_penetapan }}</li>
@@ -83,16 +84,21 @@
                     </li>
                     <li class="list-group-item"><strong>Penandatanganan:</strong> {{ $document->penandatanganan }}</li>
                     <li class="list-group-item"><strong>Pemrakarsa:</strong> {{ $document->pemrakarsa }}</li>
-                    <li class="list-group-item"><strong>Status:</strong> {{ $document->statusDokumenRef->deskripsi ?? 'Unknown' }}
+                    <li class="list-group-item"><strong>Status:</strong>
+                        {{ $document->statusDokumenRef->deskripsi ?? 'Unknown' }}
                     </li>
-                    <li class="list-group-item"><strong>Keterangan Dokumen:</strong> {{ $document->keterangan_dokumen }}
+                    <li class="list-group-item"><strong>Keterangan:</strong> {{ $document->keterangan_dokumen }}
                     </li>
-                    <li class="list-group-item"><strong>Keterangan:</strong> {{ $document->keterangan }}</li>
+                    <li class="list-group-item">
+                        <strong>Keterangan Dokumen:</strong>
+                        <a href="{{ asset('storage/' . $document->file_path) }}" target="_blank">
+                            {{ $document->keterangan }}
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
     </div>
-
     @if ($isPdf)
         <!-- PDF.js -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
