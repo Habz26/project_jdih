@@ -41,7 +41,7 @@
       });
   });
   </script>
-@endsection
+
 
 <script>
 $(document).ready(function() {
@@ -68,7 +68,7 @@ $(document).ready(function() {
     });
 });
 </script>
-
+@endsection
 
 <!-- Vendor Scripts -->
 @section('vendor-script')
@@ -135,12 +135,12 @@ $(document).ready(function() {
         <div class="mb-3">
           <label for="jenis_dokumen">Jenis Dokumen</label>
           <select name="jenis_dokumen" id="jenis_dokumen" class="form-control">
-            <option value="Peraturan Gubernur" {{ old('jenis_dokumen', $document->jenis_dokumen)=='Peraturan Gubernur' ? 'selected' : '' }}>Peraturan Gubernur</option>
-            <option value="Keputusan Gubernur" {{ old('jenis_dokumen', $document->jenis_dokumen)=='Keputusan Gubernur' ? 'selected' : '' }}>Keputusan Gubernur</option>
-            <option value="Peraturan Direktur" {{ old('jenis_dokumen', $document->jenis_dokumen)=='Peraturan Direktur' ? 'selected' : '' }}>Peraturan Direktur</option>
-            <option value="Keputusan Direktur" {{ old('jenis_dokumen', $document->jenis_dokumen)=='Keputusan Direktur' ? 'selected' : '' }}>Keputusan Direktur</option>
-            <option value="Perizinan" {{ old('jenis_dokumen', $document->jenis_dokumen)=='Perizinan' ? 'selected' : '' }}>Perizinan</option>
-            <option value="SOP" {{ old('jenis_dokumen', $document->jenis_dokumen)=='SOP' ? 'selected' : '' }}>SOP</option>
+            <option value="1" {{ old('jenis_dokumen', $document->jenis_dokumen)=='Peraturan Gubernur' ? 'selected' : '' }}>Peraturan Gubernur</option>
+            <option value="2" {{ old('jenis_dokumen', $document->jenis_dokumen)=='Keputusan Gubernur' ? 'selected' : '' }}>Keputusan Gubernur</option>
+            <option value="3" {{ old('jenis_dokumen', $document->jenis_dokumen)=='Peraturan Direktur' ? 'selected' : '' }}>Peraturan Direktur</option>
+            <option value="4" {{ old('jenis_dokumen', $document->jenis_dokumen)=='Keputusan Direktur' ? 'selected' : '' }}>Keputusan Direktur</option>
+            <option value="5" {{ old('jenis_dokumen', $document->jenis_dokumen)=='Perizinan' ? 'selected' : '' }}>Perizinan</option>
+            <option value="6" {{ old('jenis_dokumen', $document->jenis_dokumen)=='SOP' ? 'selected' : '' }}>SOP</option>
           </select>
         </div>
 
@@ -242,9 +242,9 @@ $(document).ready(function() {
       <div class="mb-3">
   <label for="keterangan" class="form-label">Keterangan (ambil dari Judul)</label>
 <select name="keterangan" id="keterangan" class="form-control keterangan-select" required>
-  <option value="{{ $document->keterangan }}" selected>
+  <option value="{{ old('keterangan', $document->keterangan ?? '') }}" selected>
     {{ $document->keterangan }}
-  </option>
+</option>
 </select>
 
 </div>
