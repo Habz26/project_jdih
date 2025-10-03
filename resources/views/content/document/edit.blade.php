@@ -4,80 +4,76 @@
 
 <!-- Vendor Styles -->
 @section('vendor-style')
-    @vite(['resources/assets/vendor/libs/select2/select2.scss', 'resources/assets/vendor/libs/tagify/tagify.scss', 'resources/assets/vendor/libs/bootstrap-select/bootstrap-select.scss', 'resources/assets/vendor/libs/typeahead-js/typeahead.scss'])
-@endsection
-
-
-@section('page-script')
-    <script>
-        $(document).ready(function() {
-            $('.keterangan-select').select2({
-                placeholder: 'Cari judul dokumen...',
-                ajax: {
-                    url: "{{ route('ajax.judul') }}", // route ambil data judul
-                    dataType: 'json',
-                    delay: 250,
-                    data: function(params) {
-                        return {
-                            q: params.term
-                        };
-                    },
-                    processResults: function(data) {
-                        return {
-                            results: data.results.map(function(item) {
-                                return {
-                                    id: item.id, // simpan ID dokumen
-                                    text: item.text // tampilkan Judul dokumen
-                                };
-                            })
-                        };
-                    },
-                    cache: true
-                },
-                minimumInputLength: 1
-            });
-        });
-    </script>
-
-
-    <script>
-        $(document).ready(function() {
-            function toggleKeteranganFields() {
-                var status = $('#status').val(); // ambil nilai status (0/1/2)
-
-                if (status === '2') {
-                    // Berlaku → hide
-                    $('#keterangan_dokumen').closest('.mb-3').hide();
-                    $('#keterangan').closest('.mb-3').hide();
-                } else {
-                    // Tidak Berlaku atau Berlaku Sebagian → show
-                    $('#keterangan_dokumen').closest('.mb-3').show();
-                    $('#keterangan').closest('.mb-3').show();
-                }
-            }
-
-            // Panggil pertama kali saat halaman load
-            toggleKeteranganFields();
-
-            // Jalankan ulang setiap kali status berubah
-            $('#status').on('change', function() {
-                toggleKeteranganFields();
-            });
-        });
-    </script>
+  @vite([
+    'resources/assets/vendor/libs/select2/select2.scss',
+    'resources/assets/vendor/libs/tagify/tagify.scss',
+    'resources/assets/vendor/libs/bootstrap-select/bootstrap-select.scss',
+    'resources/assets/vendor/libs/typeahead-js/typeahead.scss'
+  ])
 @endsection
 
 <!-- Vendor Scripts -->
 @section('vendor-script')
-    @vite(['resources/assets/vendor/libs/select2/select2.js', 'resources/assets/vendor/libs/tagify/tagify.js', 'resources/assets/vendor/libs/bootstrap-select/bootstrap-select.js', 'resources/assets/vendor/libs/typeahead-js/typeahead.js', 'resources/assets/vendor/libs/bloodhound/bloodhound.js'])
+  {{-- jQuery wajib sebelum select2 --}}
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  @vite([
+    'resources/assets/vendor/libs/select2/select2.js',
+    'resources/assets/vendor/libs/tagify/tagify.js',
+    'resources/assets/vendor/libs/bootstrap-select/bootstrap-select.js',
+    'resources/assets/vendor/libs/typeahead-js/typeahead.js',
+    'resources/assets/vendor/libs/bloodhound/bloodhound.js'
+  ])
 @endsection
 
 <!-- Page Scripts -->
 @section('page-script')
-    @vite(['resources/assets/js/forms-selects.js', 'resources/assets/js/forms-tagify.js', 'resources/assets/js/forms-typeahead.js'])
+  {{-- kalau masih butuh bawaan template --}}
+  @vite([
+    'resources/assets/js/forms-selects.js',
+    'resources/assets/js/forms-tagify.js',
+    'resources/assets/js/forms-typeahead.js'
+  ])
 
+  <script>
+    $(document).ready(function () {
+      // Init select2 untuk keterangan dengan AJAX
+      $('#keterangan').select2({
+        placeholder: 'Cari judul dokumen...',
+        ajax: {
+          url: "{{ route('ajax.judul') }}",
+          dataType: 'json',
+          delay: 250,
+          data: params => ({ q: params.term }),
+          processResults: data => ({
+            results: data.results.map(item => ({
+              id: item.id,
+              text: item.text
+            }))
+          })
+        },
+        minimumInputLength: 1,
+        width: '100%' // biar full lebar input
+      });
 
+      // Toggle field keterangan berdasarkan status
+      function toggleKeteranganFields() {
+        var status = $('#status').val();
+        if (status === '2') {
+          $('#keterangan_dokumen').closest('.mb-3').hide();
+          $('#keterangan').closest('.mb-3').hide();
+        } else {
+          $('#keterangan_dokumen').closest('.mb-3').show();
+          $('#keterangan').closest('.mb-3').show();
+        }
+      }
+
+      toggleKeteranganFields();
+      $('#status').on('change', toggleKeteranganFields);
+    });
+  </script>
 @endsection
+
+
 
 @section('content')
     <div class="container">
