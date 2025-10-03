@@ -22,6 +22,7 @@ class Document extends Model
         'tempat_penetapan',
         'tanggal_penetapan',
         'tanggal_pengundangan',
+        'tanggal_perubahan',
         'sumber',
         'subjek',
         'bahasa',
@@ -30,6 +31,7 @@ class Document extends Model
         'penandatanganan',
         'pemrakarsa',
         'status',
+        'keterangan_id',
         'keterangan',
         'keterangan_dokumen',
     ];
@@ -45,4 +47,8 @@ class Document extends Model
         return $this->belongsTo(Referensi::class, 'status', 'id')
                     ->where('jenis', 2); // ganti 3 sesuai kode jenis status di tabel referensi
     }   
+    public function keteranganDoc()
+    {
+        return $this->belongsTo(Document::class, 'keterangan_id');
+    }
 }

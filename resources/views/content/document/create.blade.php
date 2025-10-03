@@ -48,10 +48,12 @@
             function toggleKeterangan() {
                 let status = $('#status').val();
                 if (status === '2') { // Berlaku
+                    $('.keterangan-id-wrapper, .keterangan-wrapper').hide();
                     $('.keterangan-status-wrapper, .keterangan-wrapper').hide();
                     $('#keterangan_dokumen').prop('required', false);
                     $('#keterangan').prop('required', false);
                 } else {
+                    $('.keterangan-id-wrapper, .keterangan-wrapper').show();
                     $('.keterangan-status-wrapper, .keterangan-wrapper').show();
                     $('#keterangan_dokumen').prop('required', true);
                     $('#keterangan').prop('required', true);
@@ -224,11 +226,18 @@
                         <input type="text" name="keterangan_dokumen" id="keterangan_dokumen" class="form-control"
                             value="{{ old('keterangan_dokumen') }}">
                     </div>
-
+                    
                     <div class="keterangan-wrapper mb-3">
-                        <label for="keterangan" class="form-label">Keterangan (ambil dari Judul)</label>
-                        <select name="keterangan" id="keterangan" class="form-control keterangan-select"
-                            required></select>
+                        <label for="keterangan" class="form-label">Keterangan Dokumen</label>
+                        <select name="keterangan_id" id="keterangan" class="form-control" required>
+                            <option value="">-- Pilih Dokumen Rujukan --</option>
+                            @foreach ($documents as $doc)
+                                <option value="{{ $doc->id }}"
+                                    {{ old('keterangan_id') == $doc->id ? 'selected' : '' }}>
+                                    {{ $doc->judul }} ({{ $doc->tahun }})
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
             </div>

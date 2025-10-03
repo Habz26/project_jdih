@@ -49,8 +49,8 @@
                                         @forelse ($peraturanDirektur as $dokumen)
                                             <tr>
                                                 <td>
-                                                    <span class="fw-semibold">{{ $dokumen->jenis_dokumen }}</span><br>
-                                                    Nomor {{ $dokumen->nomor }} Tahun {{ $dokumen->tahun }}
+                                                    <span class="fw-semibold">{{ $dokumen->jenisDOkumenRef->deskripsi ?? 'Tidak Diketehui!' }}</span><br>
+                                                    {{ $dokumen->nomor }} Tahun {{ $dokumen->tahun }}
                                                 </td>
                                                 <td>{{ $dokumen->judul }}</td>
                                                 <td>
@@ -110,38 +110,10 @@
                 <div class="col-lg-3">
                     <div class="bg-lightest py-2 px-4 rounded-3 mb-4">
                         <h5 class="mb-0">Kategori Dokumen</h5>
-                    </div>
-
-
-                    <ul class="list-unstyled mt-3">
+                    </div><ul class="list-unstyled mt-3">
                         @foreach ($categoriesPeraturanGubernur as $category)
                             <li class="mb-2">
                                 <a href="{{ route('peraturan-gubernur') }}"
-                                    class="d-flex justify-content-between align-items-center text-heading">
-                                    {{ $category->kategori }}
-                                    <span class="badge bg-label-primary">{{ $category->total }}</span>
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
-
-
-                    <ul class="list-unstyled mt-3">
-                        @foreach ($categories as $category)
-                            <li class="mb-2">
-                                <a href="{{ route('keputusan-direktur') }}"
-                                    class="d-flex justify-content-between align-items-center text-heading">
-                                    {{ $category->kategori }}
-                                    <span class="badge bg-label-primary">{{ $category->total }}</span>
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
-                    <!-- Peraturan Direktur -->
-                    <ul class="list-unstyled mt-3">
-                        @foreach ($categoriesPeraturanDirektur as $category)
-                            <li class="mb-2">
-                                <a href="{{ route('peraturan-direktur') }}"
                                     class="d-flex justify-content-between align-items-center text-heading">
                                     {{ $category->kategori }}
                                     <span class="badge bg-label-primary">{{ $category->total }}</span>
@@ -160,7 +132,28 @@
                             </li>
                         @endforeach
                     </ul>
-
+                    <ul class="list-unstyled mt-3">
+                        @foreach ($categories as $category)
+                            <li class="mb-2">
+                                <a href="{{ route('keputusan-direktur') }}"
+                                    class="d-flex justify-content-between align-items-center text-heading">
+                                    {{ $category->kategori }}
+                                    <span class="badge bg-label-primary">{{ $category->total }}</span>
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                    <ul class="list-unstyled mt-3">
+                        @foreach ($categoriesPeraturanDirektur as $category)
+                            <li class="mb-2">
+                                <a href="{{ route('peraturan-direktur') }}"
+                                    class="d-flex justify-content-between align-items-center text-heading">
+                                    {{ $category->kategori }}
+                                    <span class="badge bg-label-primary">{{ $category->total }}</span>
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
                     <ul class="list-unstyled mt-3">
                         @foreach ($categoriesPerizinan as $category)
                             <li class="mb-2">

@@ -70,12 +70,8 @@
                     <li class="list-group-item"><strong>Tahun:</strong> {{ $document->tahun }}</li>
                     <li class="list-group-item"><strong>Judul:</strong> {{ $document->judul }}</li>
                     <li class="list-group-item"><strong>Tempat Penetapan:</strong> {{ $document->tempat_penetapan }}</li>
-                    <li class="list-group-item"><strong>Tanggal
-                            Penetapan:</strong>{{ \Carbon\Carbon::parse($document->tanggal_penetapan)->format('d-m-Y') }}
-                    </li>
-                    <li class="list-group-item"><strong>Tanggal
-                            Pengundangan:</strong>{{ \Carbon\Carbon::parse($document->tanggal_pengundangan)->format('d-m-Y') }}
-                    </li>
+                    <li class="list-group-item"><strong>Tanggal Penetapan:</strong> {{ $document->tanggal_penetapan? \Carbon\Carbon::parse($document->tanggal_penetapan)->format('d-m-Y'): '-' }}</li>
+                    <li class="list-group-item"><strong>Tanggal Pengundangan:</strong>{{ $document->tanggal_pengundangan? \Carbon\Carbon::parse($document->tanggal_pengundangan)->format('d-m-Y'): '-' }}</li>
                     <li class="list-group-item"><strong>Sumber:</strong> {{ $document->sumber }}</li>
                     <li class="list-group-item"><strong>Subjek:</strong> {{ $document->subjek }}</li>
                     <li class="list-group-item"><strong>Bahasa:</strong> {{ $document->bahasa }}</li>
@@ -84,17 +80,10 @@
                     </li>
                     <li class="list-group-item"><strong>Penandatanganan:</strong> {{ $document->penandatanganan }}</li>
                     <li class="list-group-item"><strong>Pemrakarsa:</strong> {{ $document->pemrakarsa }}</li>
-                    <li class="list-group-item"><strong>Status:</strong>
-                        {{ $document->statusDokumenRef->deskripsi ?? 'Unknown' }}
-                    </li>
-                    <li class="list-group-item"><strong>Keterangan:</strong> {{ $document->keterangan_dokumen }}
-                    </li>
-                    <li class="list-group-item">
-                        <strong>Keterangan Dokumen:</strong>
-                        <a href="{{ asset('storage/' . $document->file_path) }}" target="_blank">
-                            {{ $document->keterangan }}
-                        </a>
-                    </li>
+                    <li class="list-group-item"><strong>Status:</strong>{{ $document->statusDokumenRef->deskripsi ?? 'Unknown' }}</li>
+                    <li class="list-group-item"><strong>Keterangan:</strong> {{ $document->keterangan_dokumen ?? '-' }}</li>
+                    <li class="list-group-item"><strong>Keterangan Dokumen:</strong>@if ($document->keteranganDoc)<a href="{{ asset('storage/' . $document->keteranganDoc->pdf_file) }}" target="_blank"> {{ $document->keteranganDoc->judul }} </a>@else<span class="text-muted">-</span>@endif</li>
+                    <li class="list-group-item"><strong>Tanggal Perubahan:</strong>{{ $document->tanggal_perubahan ? \Carbon\Carbon::parse($document->tanggal_perubahan)->format('d-m-Y') : '-' }}</li>
                 </ul>
             </div>
         </div>
