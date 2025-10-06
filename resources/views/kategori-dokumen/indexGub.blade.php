@@ -113,8 +113,6 @@
                     <div class="bg-lightest py-2 px-4 rounded-3 mb-4">
                         <h5 class="mb-0">Kategori Dokumen</h5>
                     </div>
-
-
                     <ul class="list-unstyled mt-3">
                         @foreach ($categoriesPeraturanGubernur as $category)
                             <li class="mb-2">

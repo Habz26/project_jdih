@@ -133,7 +133,7 @@
       "slug": "operator",
       "submenu": [
         {
-          "url": "op/status-dokumen",
+          "url": "manage/status-dokumen",
           "name": "Status Verifikasi Dokumen",
           "slug": "operator-status-dokumen"
         },
@@ -165,10 +165,20 @@
           "slug": "documents"
         },
         {
-  "url": "manage/documents/create",
-  "name": "Input Document",
-  "slug": "create"
-}
+          "url": "manage/documents/create",
+          "name": "Input Document",
+          "slug": "create"
+        },
+        {
+          "url": "manage/status-dokumen",
+          "name": "Status Verifikasi Dokumen",
+          "slug": "status-dokumen"
+        },
+        {
+          "url": "admin/documents/verifikasi",
+          "name": "Verifikasi Dokumen",
+          "slug": "admin-verifikasi-dokumen"
+        }
 
       ]
     },
