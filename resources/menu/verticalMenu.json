@@ -128,9 +128,31 @@
       ]
     },
     {
-      "name": "Laravel Example",
-      "icon": "menu-icon icon-base ri ri-database-2-line",
-      "slug": "laravel-example",
+      "name": "Operator",
+      "icon": "menu-icon icon-base ri ri-shield-user-line",
+      "slug": "operator",
+      "submenu": [
+        {
+          "url": "manage/status-dokumen",
+          "name": "Status Verifikasi Dokumen",
+          "slug": "operator-status-dokumen"
+        },
+        {
+          "url": "manage/documents",
+          "name": "List Document",
+          "slug": "documents"
+        },
+        {
+          "url": "manage/documents/create",
+          "name": "Input Document",
+          "slug": "create"
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "icon": "menu-icon icon-base ri ri-admin-line",
+      "slug": "admin",
       "submenu": [
         {
           "url": "admin/laravel/user-management",
@@ -143,10 +165,20 @@
           "slug": "documents"
         },
         {
-  "url": "manage/documents/create",
-  "name": "Input Document",
-  "slug": "create"
-}
+          "url": "manage/documents/create",
+          "name": "Input Document",
+          "slug": "create"
+        },
+        {
+          "url": "manage/status-dokumen",
+          "name": "Status Verifikasi Dokumen",
+          "slug": "status-dokumen"
+        },
+        {
+          "url": "admin/documents/verifikasi",
+          "name": "Verifikasi Dokumen",
+          "slug": "admin-verifikasi-dokumen"
+        }
 
       ]
     },

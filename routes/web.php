@@ -162,19 +162,16 @@ use App\Http\Controllers\authentications\ResetPasswordController;
 use App\Http\Controllers\DocumentController;
 use Illuminate\Http\Request;
 use App\Models\Document;
-
+use App\Http\Controllers\StatusDokumenController;
 
 //select judul dokumen
 
 Route::get('/ajax/judul', [DocumentController::class, 'ajaxJudul'])->name('ajax.judul');
 Route::post('/dokumen/store', [DocumentController::class, 'store'])->name('dokumen.store');
 
-
-
 // use App\Http\Controllers\VerifikasiController;
 
 // Define a route for kategori dokumen
-
 
 Route::get('/peraturan-gubernur', [DocumentController::class, 'peraturanGubernur'])->name('peraturan-gubernur');
 Route::get('/keputusan-gubernur', [DocumentController::class, 'keputusanGubernur'])->name('keputusan-gubernur');
@@ -185,13 +182,11 @@ Route::get('/perizinan', [DocumentController::class, 'perIzinan'])->name('perizi
 Route::get('/sop', [DocumentController::class, 'SOP'])->name('sop');
 Route::get('/editor/{filename}', [App\Http\Controllers\OnlyOfficeController::class, 'edit'])->name('editor.edit');
 
-
 //authentification
 
 Route::get('/auth/login-basic', function () {
     return view('content.authentications.auth-login-basic');
 })->name('login');
-
 
 // Forgot Password
 Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
@@ -203,7 +198,6 @@ Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name(
 Route::get('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.updates');
 
 use App\Http\Controllers\AccountSettingsAccountController;
-
 
 // Main Page Route
 Route::get('/', [HelpCenter::class, 'index'])->name('help-center-landing');
@@ -282,8 +276,8 @@ Route::get('/pages/profile-connections', [UserConnections::class, 'index'])->nam
 Route::get('/pages/account-settings-account', [AccountSettingsAccount::class, 'index'])->name('pages-account-settings-account');
 
 Route::middleware(['auth'])->group(function () {
-Route::get('/pages/account-settings-security', [AccountSettingsSecurity::class, 'index'])->name('pages-account-settings-security');
-Route::post('/pages/account-settings-security/update-password', [AccountSettingsSecurity::class, 'update'])->name('password.updatesss');
+    Route::get('/pages/account-settings-security', [AccountSettingsSecurity::class, 'index'])->name('pages-account-settings-security');
+    Route::post('/pages/account-settings-security/update-password', [AccountSettingsSecurity::class, 'update'])->name('password.updatesss');
 });
 
 Route::get('/pages/account-settings-billing', [AccountSettingsBilling::class, 'index'])->name('pages-account-settings-billing');
@@ -321,28 +315,34 @@ Route::post('/auth/register-basic', [AuthController::class, 'register'])->name('
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 // Logout
-Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout')->middleware('auth');
+Route::post('/logout', [AuthController::class, 'logout'])
+    ->name('auth.logout')
+    ->middleware('auth');
 
-Route::get('documents', [DocumentController::class, 'index'])->name('document.index');
-Route::get('documents/{id}', [DocumentController::class, 'show'])->name('document.show');
+Route::get('documents', [DocumentController::class, 'index'])->name('documents.index');
+Route::get('documents/{id}', [DocumentController::class, 'show'])->name('documents.show');
 
 // ================== ADMIN ROUTES ==================
 Route::middleware('auth')->group(function () {
-    Route::middleware('role:admin')->prefix('admin')->group(function () {
-    Route::get('/laravel/user-management', [UserManagement::class, 'UserManagement'])->name('laravel-example-user-management');
-    Route::resource('/user-list', UserManagement::class);
-    // Document routes
-    // Verifikasi dan publish
-    // Route::get('/verifikasi', [VerifikasiController::class, 'index'])->name('admin.verifikasi');
-    // Route::post('/publish/{id}', [VerifikasiController::class, 'publish'])->name('admin.publish');
-});
+    Route::middleware('role:admin')
+        ->prefix('admin')
+        ->group(function () {
+            Route::get('/laravel/user-management', [UserManagement::class, 'UserManagement'])->name('laravel-example-user-management');
+            Route::resource('/user-list', UserManagement::class);
+            Route::get('/documents/verifikasi', [DocumentController::class, 'indexVerifikasiTabs'])->name('documents.verifikasi');
+            Route::get('/documents/verifikasi/{id}', [DocumentController::class, 'showVerifikasi'])->name('documents.showVerifikasi');
+            Route::put('/documents/{id}/update-status-verifikasi', [DocumentController::class, 'updateStatusVerifikasi'])->name('documents.updateStatusVerifikasi');
+        });
 });
 // ================== MULTI ROUTES ==================
-Route::middleware(['auth', 'role:operator,admin'])->prefix('manage')->group(function () {
-    Route::get('/dashboard/analytics', [Analytics::class, 'index'])->name('dashboard-analytics-pages');
-    Route::resource('/documents', DocumentController::class);
-});
-
+Route::middleware(['auth', 'role:operator,admin'])
+    ->prefix('manage')
+    ->group(function () {
+        Route::get('/dashboard/analytics', [Analytics::class, 'index'])->name('dashboard-analytics-pages');
+        Route::resource('/documents', DocumentController::class)->except(['index', 'show']);
+        Route::resource('status-dokumen', StatusDokumenController::class);
+    });
+// ================== OPERATOR ROUTES ==================
 Route::get('/pages/account-settings-account', [AccountSettingsAccount::class, 'index'])
     ->name('pages-account-settings-account')
     ->middleware('auth');
@@ -354,18 +354,14 @@ Route::get('/account/upload-avatar', [AccountSettingsAccount::class, 'uploadAvat
     ->name('account.uploadAvatar')
     ->middleware('auth');
 
-Route::post('/account/update', [AccountSettingsAccount::class, 'update'])
-    ->name('account.update');
+Route::post('/account/update', [AccountSettingsAccount::class, 'update'])->name('account.update');
 
-    // Upload
-    // Route::get('/upload', [App\Http\Controllers\Operator\UploadController::class, 'index'])->name('operator.upload');
-    // Route::post('/upload', [App\Http\Controllers\Operator\UploadController::class, 'store'])->name('operator.upload.store');
+// Upload
+// Route::get('/upload', [App\Http\Controllers\Operator\UploadController::class, 'index'])->name('operator.upload');
+// Route::post('/upload', [App\Http\Controllers\Operator\UploadController::class, 'store'])->name('operator.upload.store');
 
 // search
 Route::get('/search', [DocumentController::class, 'search'])->name('search');
-
-
-
 
 // wizard example
 Route::get('/wizard/ex-checkout', [WizardCheckout::class, 'index'])->name('wizard-ex-checkout');
@@ -460,5 +456,3 @@ Route::get('/maps/leaflet', [Leaflet::class, 'index'])->name('maps-leaflet');
 // laravel example
 // Route::get('/laravel/user-management', [UserManagement::class, 'UserManagement'])->name('laravel-example-user-managements');
 Route::resource('/user-list', UserManagement::class);
-
-

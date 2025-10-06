@@ -38,17 +38,30 @@ class Document extends Model
 
     // app/Models/Document.php
     public function jenisDokumenRef()
-    {
-        return $this->belongsTo(Referensi::class, 'jenis_dokumen', 'id')
-                    ->where('jenis', 1); // ganti 2 sesuai kode jenis dokumen di tabel referensi
-    }
-    public function statusDokumenRef()
-    {
-        return $this->belongsTo(Referensi::class, 'status', 'id')
-                    ->where('jenis', 2); // ganti 3 sesuai kode jenis status di tabel referensi
-    }   
-    public function keteranganDoc()
-    {
-        return $this->belongsTo(Document::class, 'keterangan_id');
-    }
+{
+    return $this->belongsTo(Referensi::class, 'jenis_dokumen', 'id')
+                ->where('jenis', 1)
+                ->withDefault([
+                    'deskripsi' => '-',
+                ]);
+}
+
+public function statusDokumenRef()
+{
+    return $this->belongsTo(Referensi::class, 'status', 'id')
+                ->where('jenis', 2)
+                ->withDefault([
+                    'deskripsi' => '-',
+                ]);
+}
+
+public function keteranganDoc()
+{
+    return $this->belongsTo(Document::class, 'keterangan_id')
+                ->withDefault([
+                    'judul' => '-',
+                    'pdf_file' => null,
+                ]);
+}
+
 }

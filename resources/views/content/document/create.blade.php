@@ -229,7 +229,7 @@
                     
                     <div class="keterangan-wrapper mb-3">
                         <label for="keterangan" class="form-label">Keterangan Dokumen</label>
-                        <select name="keterangan_id" id="keterangan" class="form-control" required>
+                        <select name="keterangan_id" id="keterangan" class="form-control select2" required>
                             <option value="">-- Pilih Dokumen Rujukan --</option>
                             @foreach ($documents as $doc)
                                 <option value="{{ $doc->id }}"
