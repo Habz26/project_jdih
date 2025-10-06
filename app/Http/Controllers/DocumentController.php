@@ -51,9 +51,9 @@ class DocumentController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('judul', 'like', "%{$search}%")
-                  ->orWhere('tipe_dokumen', 'like', "%{$search}%")
-                  ->orWhere('tahun', 'like', "%{$search}%")
-                  ->orWhere('status', 'like', "%{$search}%");
+                ->orWhere('tipe_dokumen', 'like', "%{$search}%")
+                ->orWhere('tahun', 'like', "%{$search}%")
+                ->orWhere('status', 'like', "%{$search}%");
             });
         }
 
@@ -182,7 +182,7 @@ class DocumentController extends Controller
     $document->save();
 
     return redirect()->route('documents.show', $document->id)
-                     ->with('success', 'Dokumen berhasil diperbarui!');
+                    ->with('success', 'Dokumen berhasil diperbarui!');
 }
     public function destroy($id)
     {

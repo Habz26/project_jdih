@@ -75,8 +75,6 @@
 <!-- Page Scripts -->
 @section('page-script')
     @vite(['resources/assets/js/forms-selects.js', 'resources/assets/js/forms-tagify.js', 'resources/assets/js/forms-typeahead.js'])
-
-
 @endsection
 
 @section('content')
@@ -150,7 +148,8 @@
                                 {{ old('jenis_dokumen', $document->jenis_dokumen) == 'Perizinan' ? 'selected' : '' }}>
                                 Perizinan</option>
                             <option value="6"
-                                {{ old('jenis_dokumen', $document->jenis_dokumen) == 'SOP' ? 'selected' : '' }}>SOP</option>
+                                {{ old('jenis_dokumen', $document->jenis_dokumen) == 'SOP' ? 'selected' : '' }}>SOP
+                            </option>
                         </select>
                     </div>
 
@@ -171,7 +170,8 @@
                         <select name="tahun" id="tahun" class="form-control">
                             @for ($i = date('Y'); $i >= 1945; $i--)
                                 <option value="{{ $i }}"
-                                    {{ (int) old('tahun', $document->tahun) === $i ? 'selected' : '' }}>{{ $i }}
+                                    {{ (int) old('tahun', $document->tahun) === $i ? 'selected' : '' }}>
+                                    {{ $i }}
                                 </option>
                             @endfor
                         </select>
@@ -266,8 +266,8 @@
 
 
                     <div class="mb-3">
-                        <label for="keterangan" class="form-label">Keterangan Dokumen</label>
-                        <select name="keterangan_id" id="keterangan" class="form-control" required>
+                        <label for="keterangan" class="form-label">Dokumen Perubahan</label>
+                        <select name="keterangan_id" id="keterangan" class="form-control select2" required>
                             <option value="">-- Pilih Dokumen --</option>
                             @foreach ($documents as $doc)
                                 <option value="{{ $doc->id }}"

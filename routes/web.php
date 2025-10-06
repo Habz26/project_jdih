@@ -162,6 +162,7 @@ use App\Http\Controllers\authentications\ResetPasswordController;
 use App\Http\Controllers\DocumentController;
 use Illuminate\Http\Request;
 use App\Models\Document;
+use App\Http\Controllers\StatusDokumenController;
 
 
 //select judul dokumen
@@ -331,16 +332,16 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:admin')->prefix('admin')->group(function () {
     Route::get('/laravel/user-management', [UserManagement::class, 'UserManagement'])->name('laravel-example-user-management');
     Route::resource('/user-list', UserManagement::class);
-    // Document routes
-    // Verifikasi dan publish
-    // Route::get('/verifikasi', [VerifikasiController::class, 'index'])->name('admin.verifikasi');
-    // Route::post('/publish/{id}', [VerifikasiController::class, 'publish'])->name('admin.publish');
 });
 });
 // ================== MULTI ROUTES ==================
 Route::middleware(['auth', 'role:operator,admin'])->prefix('manage')->group(function () {
     Route::get('/dashboard/analytics', [Analytics::class, 'index'])->name('dashboard-analytics-pages');
     Route::resource('/documents', DocumentController::class);
+});
+// ================== OPERATOR ROUTES ==================
+Route::middleware(['auth', 'role:operator'])->prefix('op')->group(function () {
+    Route::resource('status-dokumen', StatusDokumenController::class);
 });
 
 Route::get('/pages/account-settings-account', [AccountSettingsAccount::class, 'index'])
