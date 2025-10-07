@@ -1,5 +1,6 @@
 @php
 $configData = Helper::appClasses();
+use Illuminate\Support\Facades\Auth;
 @endphp
 @extends('layouts.layoutMaster')
 
@@ -29,10 +30,9 @@ $configData = Helper::appClasses();
       <div class="col-md-6 order-2 order-md-1">
         <div class="card-body">
           <h4 class="card-title mb-4">
-            Haii <span class="fw-bold">{{ auth()->user()->name }}</span> 🎉
+            Haii <span class="fw-bold">{{ auth()->user()->name }} </span> <span style="font-family:Roboto; font:lighter;">[{{ Auth::user()->role }}]</span>🎉
           </h4>
-          <p class="mb-0">Selamat datang kembali di dashboard <i>Management!</i></p>
-          <p></p>
+          <p class="mb-2">Selamat datang kembali di dashboard <i>Management!</i></p>
           <a href="{{ route('pages-account-settings-account') }}" class="btn btn-primary">Lihat Profil</a>
         </div>
       </div>
@@ -42,8 +42,8 @@ $configData = Helper::appClasses();
                height="186"
                class="scaleX-n1-rtl"
                alt="View Profile"
-               data-app-light-img="illustrations/illustration-john-light.png"
-               data-app-dark-img="illustrations/illustration-john-dark.png" />
+               data-app-light-img="illustrations/John-Gaya-removebg-preview.png"
+               data-app-dark-img="illustrations/John-Programmer-removebg-preview.png" />
         </div>
       </div>
     </div>

@@ -16,7 +16,7 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'required|string|min:8|confirmed',
             'role' => 'required|in:operator,admin',
             'nip' => 'required|string|max:20|unique:users', // validasi NIP (ubah ke nullable jika opsional)
         ]);

@@ -87,7 +87,7 @@
                     <li class="list-group-item"><strong>Status:</strong> {{ $document->statusDokumenRef->deskripsi }}</li>
                     <li class="list-group-item"><strong>Keterangan:</strong> {{ $document->keterangan_dokumen ?? '-' }}
                     </li>
-                    <li class="list-group-item"><strong>Keterangan Dokumen:</strong>
+                    <li class="list-group-item"><strong>Dokumen Perubahan:</strong>
                         @if ($document->keteranganDoc)
                             <a href="{{ asset('storage/' . $document->keteranganDoc->pdf_file) }}" target="_blank">
                                 {{ $document->keteranganDoc->judul }}
