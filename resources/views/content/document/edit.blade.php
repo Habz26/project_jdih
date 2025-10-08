@@ -256,7 +256,7 @@
                             <option value="1" {{ old('status', $document->status ?? '') == '1' ? 'selected' : '' }}>
                                 Berlaku Sebagian</option>
                         </select>
-                    </div>
+                    </div>  
 
                     <div class="mb-3" id="keterangan_dokumen_wrapper">
                         <label for="keterangan_dokumen" class="form-label">Keterangan Status</label>
