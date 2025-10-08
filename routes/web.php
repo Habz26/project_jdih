@@ -319,8 +319,8 @@ Route::post('/logout', [AuthController::class, 'logout'])
     ->name('auth.logout')
     ->middleware('auth');
 
-Route::get('documents', [DocumentController::class, 'index'])->name('documents.index');
-Route::get('documents/{id}', [DocumentController::class, 'show'])->name('documents.show');
+Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
+Route::get('/documents/{id}', [DocumentController::class, 'show'])->name('documents.show');
 
 // ================== ADMIN ROUTES ==================
 Route::middleware('auth')->group(function () {
@@ -339,7 +339,7 @@ Route::middleware(['auth', 'role:operator,admin'])
     ->prefix('manage')
     ->group(function () {
         Route::get('/dashboard/analytics', [Analytics::class, 'index'])->name('dashboard-analytics-pages');
-        Route::resource('/documents', DocumentController::class)->except(['index', 'show']);
+        Route::resource('/documents', DocumentController::class);
         Route::resource('status-dokumen', StatusDokumenController::class);
     });
 // ================== OPERATOR ROUTES ==================
