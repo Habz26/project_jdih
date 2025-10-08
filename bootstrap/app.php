@@ -13,12 +13,15 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // $middleware->append(CorsMiddleware::class);
         $middleware->web(LocaleMiddleware::class);
         $middleware->alias([
             'role' => \App\Http\Middleware\RoleMiddleware::class
         ]);
     })
+    ->withCommands([
+        \App\Console\Commands\SendReminderEmails::class, // <-- ini
+    ])
     ->withExceptions(function (Exceptions $exceptions) {
         //
-    })->create();
+    })
+    ->create();

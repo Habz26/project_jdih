@@ -97,7 +97,7 @@
                                             {{ $doc->catatan_admin ? \Illuminate\Support\Str::limit($doc->catatan_admin, 255, '...') : '-' }}
                                         </span>
                                     </td>
-                                    <td class="text-center">
+                                    <td class="">
                                         <a href="{{ route('documents.show', $doc->id) }}" class="btn btn-info btn-sm me-1"
                                             title="Lihat">
                                             <i class="bi bi-eye"></i>
