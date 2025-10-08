@@ -267,7 +267,7 @@
 
                     <div class="mb-3">
                         <label for="keterangan" class="form-label">Dokumen Perubahan</label>
-                        <select name="keterangan_id" id="keterangan" class="form-control select2" required>
+                        <select name="keterangan_id" id="keterangan" class="form-control select2">
                             <option value="">-- Pilih Dokumen --</option>
                             @foreach ($documents as $doc)
                                 <option value="{{ $doc->id }}"

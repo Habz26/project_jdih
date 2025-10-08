@@ -55,8 +55,8 @@
                 } else {
                     $('.keterangan-id-wrapper, .keterangan-wrapper').show();
                     $('.keterangan-status-wrapper, .keterangan-wrapper').show();
-                    $('#keterangan_dokumen').prop('required', true);
-                    $('#keterangan').prop('required', true);
+                    $('#keterangan_dokumen').prop('required', false);
+                    $('#keterangan').prop('required', false);
                 }
             }
 
@@ -223,13 +223,12 @@
 
                     <div class="keterangan-status-wrapper mb-3">
                         <label for="keterangan_dokumen">Keterangan Status</label>
-                        <input type="text" name="keterangan_dokumen" id="keterangan_dokumen" class="form-control"
-                            value="{{ old('keterangan_dokumen') }}">
+                        <input type="text" name="keterangan_dokumen" id="keterangan_dokumen" class="form-control"value="{{ old('keterangan_dokumen') }}">
                     </div>
                     
                     <div class="keterangan-wrapper mb-3">
                         <label for="keterangan" class="form-label">Keterangan Dokumen</label>
-                        <select name="keterangan_id" id="keterangan" class="form-control select2" required>
+                        <select name="keterangan_id" id="keterangan" class="form-control select2" >
                             <option value="">-- Pilih Dokumen Rujukan --</option>
                             @foreach ($documents as $doc)
                                 <option value="{{ $doc->id }}"
