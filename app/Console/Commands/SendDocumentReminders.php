@@ -17,25 +17,17 @@ class SendDocumentReminders extends Command
     {
         $today = Carbon::now();
 
-        $documents = Document::all(); // bisa filter sesuai kebutuhan
+        $documents = Document::where('status_verifikasi', 2)
+            ->whereBetween('tanggal_penetapan', [$today->copy()->subMonths(6), $today->copy()->subMonth()])
+            ->get();
+
         foreach ($documents as $document) {
+            $monthsLeft = $today->diffInMonths(Carbon::parse($document->tanggal_penetapan), false);
 
-            $date = Carbon::parse($document->tanggal_penetapan);
-            $monthsLeft = $today->diffInMonths($date, false);
-
-            // Kirim email cuma kalau sisa bulan 6 → 1
-            $monthsLeft = $today->diffInMinutes($date, false);
-
-$monthsLeft = $today->diffInMonths($date, false); // negatif kalau sudah lewat
-
-// Kirim email kalau sisa bulan -6 s/d -1
-if ($monthsLeft <= -1 && $monthsLeft >= -6) {
-    Mail::to('test@example.com')->send(new DocumentReminderMail($document, abs($monthsLeft)));
-    $this->info("Logged reminder for '{$document->judul}' (terlewat " . abs($monthsLeft) . " bulan)");
-}
-
-
-
+            if ($monthsLeft <= -1 && $monthsLeft >= -6) {
+                Mail::to('test@example.com')->send(new DocumentReminderMail($document, abs($monthsLeft)));
+                $this->info("Logged reminder for '{$document->judul}' (terlewat " . abs($monthsLeft) . ' bulan)');
+            }
         }
 
         $this->info('Dry-run reminders completed. Check storage/logs/laravel.log for email content.');
