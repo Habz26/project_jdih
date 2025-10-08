@@ -40,13 +40,13 @@
       </li>
 
       {{-- Role-based akses --}}
-      @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('operator'))
+      {{-- @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('operator'))
         <li class="nav-item me-3">
           <a href="{{ route('documents.create') }}" class="btn btn-sm btn-success">
             <i class="ri ri-add-line"></i> Input Document
           </a>
         </li>
-      @endif
+      @endif --}}
 
       <!-- User Dropdown -->
       <li class="nav-item dropdown">

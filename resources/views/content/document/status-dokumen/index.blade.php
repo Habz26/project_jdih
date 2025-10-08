@@ -35,6 +35,21 @@
         }
     </style>
 @endsection
+@section('page-script')
+    <script>
+    const input = document.getElementById('autoSearchInput');
+    const form = document.getElementById('autoSearchForm');
+    let timer;
+
+    input.addEventListener('input', () => {
+        clearTimeout(timer);
+        // kasih jeda 500ms biar gak nge-trigger tiap huruf
+        timer = setTimeout(() => {
+            form.submit();
+        }, 500);
+    });
+</script>
+@endsection
 
 @section('content')
     <div class="container py-4">
@@ -43,14 +58,18 @@
                 <h4 class="mb-2 mb-md-0 fw-bold">Status Verifikasi Dokumen</h4>
 
                 <div class="d-flex gap-2">
-                    <form action="{{ route('status-dokumen.index') }}" method="GET" class="d-flex">
-                        <input type="text" name="search" class="form-control form-control-sm me-2"
-                            placeholder="Cari dokumen..." value="{{ request('search') }}">
-                        <button type="submit" class="btn btn-sm btn-outline-secondary">
-                            <i class="bi bi-search"></i>
-                        </button>
-                    </form>
-                </div>
+    <form action="{{ route('status-dokumen.index') }}" method="GET" id="autoSearchForm" class="d-flex">
+        <input type="text" 
+               name="search" 
+               id="autoSearchInput" 
+               class="form-control form-control-sm me-2"
+               placeholder="Cari dokumen..." 
+               value="{{ request('search') }}">
+        {{-- <button type="submit" class="btn btn-sm btn-outline-secondary">
+            <i class="bi bi-search"></i>
+        </button> --}}
+    </form>
+</div>
             </div>
 
             <div class="card-body">
