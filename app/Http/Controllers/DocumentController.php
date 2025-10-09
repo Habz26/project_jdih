@@ -59,7 +59,7 @@ class DocumentController extends Controller
             });
         }
 
-        $documents = $query->latest()->paginate(10);
+        $documents = $query->latest()->get();
 
         return view('content.document.index', compact('documents'));
     }
@@ -69,10 +69,10 @@ class DocumentController extends Controller
         // Dokumen yang harus diverifikasi (status_verifikasi = 1)
         $pendingDocuments = Document::where('status_verifikasi', 1)
             ->latest()
-            ->paginate(10, ['*'], 'pending_page');
+            ->get(['*'], 'pending_page');
 
         // Semua dokumen untuk history
-        $allDocuments = Document::latest()->paginate(10, ['*'], 'history_page');
+        $allDocuments = Document::latest()->get( ['*'], 'history_page');
 
         return view('content.document.index-verifikasi', compact('pendingDocuments', 'allDocuments'));
     }

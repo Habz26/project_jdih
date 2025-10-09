@@ -10,7 +10,11 @@ class HelpCenter extends Controller
 {
   public function index()
   {
-    $documents = Document::latest()->take(10)->get(); 
+    $documents = Document::where('status_verifikasi', 2) // cuma yang diverifikasi
+                     ->latest()
+                     ->take(10) // maksimal 10 dokumen terakhir
+                     ->get(); // jangan lupa get() biar hasilnya keluar
+ 
     $pageConfigs = ['myLayout' => 'front'];
     return view('content.front-pages.help-center-landing', compact('documents'), ['pageConfigs' => $pageConfigs]);
   }
