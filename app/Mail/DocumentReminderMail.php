@@ -3,10 +3,7 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
 class DocumentReminderMail extends Mailable
@@ -14,47 +11,17 @@ class DocumentReminderMail extends Mailable
     use Queueable, SerializesModels;
 
     public $document;
-    public $monthsLeft;
+    public $monthsText;
 
-    public function __construct($document, $monthsLeft)
+    public function __construct($document, $monthsText)
     {
         $this->document = $document;
-        $this->monthsLeft = $monthsLeft;
+        $this->monthsText = $monthsText;
     }
 
     public function build()
     {
-        return $this->subject('Pengingat Dokumen akan Expired')
+        return $this->subject('Document Reminder Mail')
                     ->view('email.reminder');
-    }
-
-    /**
-     * Get the message envelope.
-     */
-    public function envelope(): Envelope
-    {
-        return new Envelope(
-            subject: 'Document Reminder Mail',
-        );
-    }
-
-    /**
-     * Get the message content definition.
-     */
-    public function content(): Content
-    {
-        return new Content(
-            view: 'email.reminder',
-        );
-    }
-
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-     */
-    public function attachments(): array
-    {
-        return [];
     }
 }

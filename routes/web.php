@@ -454,5 +454,5 @@ Route::get('/charts/chartjs', [ChartJs::class, 'index'])->name('charts-chartjs')
 Route::get('/maps/leaflet', [Leaflet::class, 'index'])->name('maps-leaflet');
 
 // laravel example
-// Route::get('/laravel/user-management', [UserManagement::class, 'UserManagement'])->name('laravel-example-user-managements');
-// Route::resource('/user-list', UserManagement::class);
+// Route::get('/laravel/user-management', [UserManagement::class, 'UserManagement'])->name('user-list');
+Route::resource('/user-list', UserManagement::class);
