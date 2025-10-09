@@ -37,18 +37,18 @@
 @endsection
 @section('page-script')
     <script>
-    const input = document.getElementById('autoSearchInput');
-    const form = document.getElementById('autoSearchForm');
-    let timer;
+        const input = document.getElementById('autoSearchInput');
+        const form = document.getElementById('autoSearchForm');
+        let timer;
 
-    input.addEventListener('input', () => {
-        clearTimeout(timer);
-        // kasih jeda 500ms biar gak nge-trigger tiap huruf
-        timer = setTimeout(() => {
-            form.submit();
-        }, 500);
-    });
-</script>
+        input.addEventListener('input', () => {
+            clearTimeout(timer);
+            // kasih jeda 500ms biar gak nge-trigger tiap huruf
+            timer = setTimeout(() => {
+                form.submit();
+            }, 500);
+        });
+    </script>
 @endsection
 
 @section('content')
@@ -58,18 +58,14 @@
                 <h4 class="mb-2 mb-md-0 fw-bold">Status Verifikasi Dokumen</h4>
 
                 <div class="d-flex gap-2">
-    <form action="{{ route('status-dokumen.index') }}" method="GET" id="autoSearchForm" class="d-flex">
-        <input type="text" 
-               name="search" 
-               id="autoSearchInput" 
-               class="form-control form-control-sm me-2"
-               placeholder="Cari dokumen..." 
-               value="{{ request('search') }}">
-        {{-- <button type="submit" class="btn btn-sm btn-outline-secondary">
+                    <form action="{{ route('status-dokumen.index') }}" method="GET" id="autoSearchForm" class="d-flex">
+                        <input type="text" name="search" id="autoSearchInput" class="form-control form-control-sm me-2"
+                            placeholder="Cari dokumen..." value="{{ request('search') }}">
+                        {{-- <button type="submit" class="btn btn-sm btn-outline-secondary">
             <i class="bi bi-search"></i>
         </button> --}}
-    </form>
-</div>
+                    </form>
+                </div>
             </div>
 
             <div class="card-body">
@@ -101,16 +97,21 @@
                                     </td>
                                     <td class="text-center">{{ $doc->tahun }}</td>
                                     <td class="text-center">
-                                        @if ($doc->status_verifikasi == '2')
-                                            <span class="badge bg-success">Terverifikasi</span>
-                                        @elseif ($doc->status_verifikasi == '0')
-                                            <span class="badge bg-danger">Batal</span>
-                                        @elseif ($doc->status_verifikasi == '1')
-                                            <span class="badge bg-warning text-dark">Menunggu..</span>
-                                        @elseif ($doc->status_verifikasi == '3')
-                                            <span class="badge bg-warning text-dark">Butuh Perbaikan</span>
-                                        @endif
+                                        <span class="badge d-inline-flex align-items-center justify-content-center" style="min-width: 140px; @if ($doc->status_verifikasi == '2') background-color: #28a745; color: #fff; @endif @if ($doc->status_verifikasi == '0') background-color: #dc3545; color: #fff; @endif @if ($doc->status_verifikasi == '1') background-color: #ffc107; color: #212529; @endif @if ($doc->status_verifikasi == '3') background-color: #fd7e14; color: #fff; @endif">
+                                            @if ($doc->status_verifikasi == '2')
+                                                <i class="bi bi-check-circle-fill me-1"></i> Terverifikasi
+                                            @elseif ($doc->status_verifikasi == '0')
+                                                <i class="bi bi-x-circle-fill me-1"></i> Batal
+                                            @elseif ($doc->status_verifikasi == '1')
+                                                <i class="bi bi-clock-fill me-1"></i> Menunggu..
+                                            @elseif ($doc->status_verifikasi == '3')
+                                                <i class="bi bi-exclamation-triangle-fill me-1"></i> Butuh Perbaikan
+                                            @endif
+                                        </span>
                                     </td>
+
+
+
                                     <td style="max-width: 250px; white-space: normal; word-wrap: break-word;">
                                         <span title="{{ $doc->catatan_admin }}">
                                             {{ $doc->catatan_admin ? \Illuminate\Support\Str::limit($doc->catatan_admin, 255, '...') : '-' }}
