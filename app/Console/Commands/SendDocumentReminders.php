@@ -29,11 +29,11 @@ class SendDocumentReminders extends Command
 
             // Ambil teks human-readable, misal "3 bulan lagi" atau "1 bulan lagi"
             if ($monthsLeft < 0) {
-                $monthsText = abs($monthsLeft) . ' bulan yang lalu';
+                $monthsText = 'sudah expired ' . abs($monthsLeft) . ' bulan yang lalu';
             } elseif ($monthsLeft > 0) {
-                $monthsText = $monthsLeft . ' bulan lagi';
+                $monthsText = 'akan expired ' . $monthsLeft . ' bulan lagi';
             } else {
-                $monthsText = 'bulan ini';
+                $monthsText = 'akan expired bulan ini';
             }
 
             Mail::to('test@example.com')->send(new DocumentReminderMail($document, $monthsText));

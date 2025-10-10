@@ -8,6 +8,14 @@
 @section('page-style')
     @vite('resources/assets/vendor/scss/pages/front-page-help-center.scss')
 @endsection
+@section('page-script')
+<script>
+    // Simpan URL awal saat user pertama kali masuk
+    if (!sessionStorage.getItem('startUrl')) {
+        sessionStorage.setItem('startUrl', window.location.href);
+    }
+</script>
+@endsection
 
 @section('content')
     <!-- Help Center Header: Start -->

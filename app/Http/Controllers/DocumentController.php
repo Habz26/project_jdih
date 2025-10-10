@@ -72,7 +72,7 @@ class DocumentController extends Controller
             ->get(['*'], 'pending_page');
 
         // Semua dokumen untuk history
-        $allDocuments = Document::latest()->get( ['*'], 'history_page');
+        $allDocuments = Document::latest()->get(['*'], 'history_page');
 
         return view('content.document.index-verifikasi', compact('pendingDocuments', 'allDocuments'));
     }
@@ -81,10 +81,14 @@ class DocumentController extends Controller
     {
         $q = $request->input('q');
 
-        $results = Document::where('judul', 'like', "%{$q}%")
-            ->orWhere('nomor', 'like', "%{$q}%")
-            ->orWhere('tahun', 'like', "%{$q}%")
-            ->orWhere('jenis_dokumen', 'like', "%{$q}%")
+        $results = Document::where('status_verifikasi', 2)
+            ->where(function ($query) use ($q) {
+                $query
+                    ->where('judul', 'like', "%{$q}%")
+                    ->orWhere('nomor', 'like', "%{$q}%")
+                    ->orWhere('tahun', 'like', "%{$q}%")
+                    ->orWhere('jenis_dokumen', 'like', "%{$q}%");
+            })
             ->get();
 
         $pageConfigs = ['layout' => 'blank'];

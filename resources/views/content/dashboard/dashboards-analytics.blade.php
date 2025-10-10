@@ -19,6 +19,12 @@ use Illuminate\Support\Facades\Auth;
 
 @section('page-script')
 @vite(['resources/assets/js/dashboards-analytics.js'])
+<script>
+    // Simpan URL awal saat user pertama kali masuk
+    if (!sessionStorage.getItem('startUrl')) {
+        sessionStorage.setItem('startUrl', window.location.href);
+    }
+</script>
 @endsection
 
 @section('content')
