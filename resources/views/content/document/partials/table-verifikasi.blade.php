@@ -7,6 +7,7 @@
                 <th>Tipe Dokumen</th>
                 <th>Tahun</th>
                 <th>Status</th>
+                <th>Catatan</th>
                 <th>Aksi</th>
             </tr>
         </thead>
@@ -14,7 +15,7 @@
             @forelse ($documents as $doc)
                 <tr>
                     <td class="text-center">{{ $loop->iteration }}</td>
-                    <td style="max-width: 250px; white-space: normal; word-wrap: break-word;">
+                    <td style="max-width: 200px; white-space: normal; word-wrap: break-word;">
                         <a href="{{ route('documents.showVerifikasi', $doc->id) }}"
                             class="text-decoration-none text-dark fw-semibold">
                             {{ \Illuminate\Support\Str::limit($doc->judul, 255) }}
@@ -37,6 +38,7 @@
                             @endif
                         </span>
                     </td>
+                    <td style="max-width: 200px; white-space: normal; word-wrap: break-word;">{{ $doc->catatan_admin ?? '-' }}</td>
                     <td class="text-center">
                         <a href="{{ route('documents.showVerifikasi', $doc->id) }}" class="btn btn-info btn-sm me-1"><i
                                 class="bi bi-eye"></i></a>
