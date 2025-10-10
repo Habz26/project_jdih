@@ -1,6 +1,18 @@
 @extends('layouts.blankLayout')
 @section('title', 'Hasil Pencarian - RSKK')
 @section('content')
+@section('page-script')
+<script>
+    function goBackToStart() {
+        const startUrl = sessionStorage.getItem('startUrl');
+        if (startUrl) {
+            window.location.href = startUrl;
+        } else {
+            window.history.back(); // fallback kalau belum tersimpan
+        }
+    }
+</script>
+@endsection
 
     <div class="container py-4 mt-12">
         <form action="{{ route('search') }}" method="GET"
@@ -17,9 +29,9 @@
                 Cari
             </button>
         </form>
-        <button onclick="window.history.back()" class="btn btn-outline-primary mb-3">
-            ⬅ Kembali
-        </button>
+        <button onclick="goBackToStart()" class="btn btn-outline-primary mb-3">
+    ⬅ Kembali
+</button>
         <h4>Hasil Pencarian untuk: <strong>{{ $q }}</strong></h4>
         @if ($results->isEmpty())
             <p class="text-muted mt-3">Nggak ada dokumen yang cocok dengan pencarian kamu.</p>
@@ -51,10 +63,21 @@
                                         </td>
 
                                         <td>
-                                            @if ($dokumen->status == 'berlaku')
-                                                <span class="badge bg-success rounded-pill px-3">Berlaku</span>
-                                            @else
-                                                <span class="badge bg-danger rounded-pill px-3">Tidak Berlaku</span>
+                                            @if ($dokumen->status == '2')
+                                                <span
+                                                    style="min-width:140px; display:inline-flex; align-items:center; justify-content:center; color:white; font-weight:300; background-color:#05b130; border-radius:.395rem;">
+                                                    <i class="bi bi-check-circle-fill me-1"></i> Berlaku
+                                                </span>
+                                            @elseif ($dokumen->status == '0')
+                                                <span
+                                                    style="min-width:140px; display:inline-flex; align-items:center; justify-content:center; color:white; font-weight:300; background-color:#c00909; border-radius:.395rem;">
+                                                    <i class="bi bi-x-circle-fill me-1"></i> Tidak Berlaku
+                                                </span>
+                                            @elseif ($dokumen->status == '1')
+                                                <span
+                                                    style="min-width:140px; display:inline-flex; align-items:center; justify-content:center; color:white; font-weight:300; background-color:#b5da12; border-radius:.395rem;">
+                                                    <i class="bi bi-exclamation-circle-fill me-1"></i> Berlaku Sebagian
+                                                </span>
                                             @endif
                                         </td>
                                         <td>
