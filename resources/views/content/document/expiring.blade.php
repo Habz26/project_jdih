@@ -10,24 +10,32 @@
             <div class="row row-cols-1 row-cols-md-3 g-4">
                 @foreach ($documents as $doc)
                     @php
-                        // Tanggal penetapan dokumen
                         $tanggalPenetapan = Carbon::parse($doc->tanggal_penetapan)->startOfDay();
-                        // Tanggal expired = 6 bulan setelah penetapan
-                        $expiredAt = $tanggalPenetapan->copy()->addMonths(6);
-                        // Hitung selisih hari dari tanggal penetapan ke expired
-                        $daysLeft = $tanggalPenetapan->diffInDays($expiredAt, false); // bisa negatif kalau tanggal expired sebelum penetapan, tapi biasanya positif
-                        // Tentukan text & badge berdasarkan sisa hari
+
+                        if ($doc->jenis_dokumen == 5 && $doc->periode_berlaku) {
+                            // Expired = tanggal penetapan + periode_berlaku tahun
+                            $expiredAt = $tanggalPenetapan->copy()->addYears($doc->periode_berlaku);
+                        } else {
+                            // Dokumen lain bisa tetap 6 bulan dari penetapan (opsional)
+                            $expiredAt = $tanggalPenetapan->copy()->addMonths(6);
+                        }
+
+                        // Selisih hari dari sekarang
+                        // Selisih hari dari sekarang, pastikan bulat
+                        $daysLeft = (int) Carbon::now()->diffInDays($expiredAt, false);
+
                         if ($daysLeft < 0) {
-                            $daysText = 'sudah expired ' . abs($daysLeft) . ' hari dari tanggal penetapan';
+                            $daysText = 'sudah expired ' . abs($daysLeft) . ' hari';
                             $badgeClass = 'bg-danger';
                         } elseif ($daysLeft > 0) {
-                            $daysText = 'akan expired dalam ' . $daysLeft . ' hari dari tanggal penetapan';
+                            $daysText = 'akan expired dalam ' . $daysLeft . ' hari';
                             $badgeClass = $daysLeft <= 30 ? 'bg-warning text-dark' : 'bg-success';
                         } else {
                             $daysText = 'expired hari ini';
                             $badgeClass = 'bg-warning text-dark';
                         }
                     @endphp
+
 
 
                     <div class="col d-flex">

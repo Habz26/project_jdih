@@ -11,35 +11,46 @@ use Carbon\Carbon;
 class SendDocumentReminders extends Command
 {
     protected $signature = 'reminders:send';
-    protected $description = 'Send document reminders (dry-run to log)';
+    protected $description = 'Send document reminders (6 months before period expires)';
 
     public function handle()
     {
         $today = Carbon::now('Asia/Jakarta');
-        // Ambil dokumen yang sudah diverifikasi
-        $documents = Document::where('status_verifikasi', 2)
-            ->whereBetween('tanggal_penetapan', [$today->copy()->subMonths(6), $today->copy()->subMonth()])
-            ->get();
+
+        // Ambil dokumen Perizinan yang diverifikasi
+        $documents = Document::where('jenis_dokumen', 5)->where('status_verifikasi', 2)->get();
 
         foreach ($documents as $document) {
-            // Hitung selisih bulan (absolute)
-            $monthsLeft = Carbon::parse($document->tanggal_penetapan)->diffInMonths($today, false); // tetap hitung selisih bulan
-
-            $monthsLeft = (int) round($monthsLeft); // pastikan bulat
-
-            // Ambil teks human-readable, misal "3 bulan lagi" atau "1 bulan lagi"
-            if ($monthsLeft < 0) {
-                $monthsText = 'sudah expired ' . abs($monthsLeft) . ' bulan yang lalu';
-            } elseif ($monthsLeft > 0) {
-                $monthsText = 'akan expired ' . $monthsLeft . ' bulan lagi';
-            } else {
-                $monthsText = 'akan expired bulan ini';
+            // Pastikan ada periode_berlaku
+            if (!$document->periode_berlaku) {
+                continue;
             }
+            // Hitung tanggal expired dokumen
+            $expiredAt = Carbon::parse($document->tanggal_penetapan)->addYears($document->periode_berlaku);
 
-            Mail::to('test@example.com')->send(new DocumentReminderMail($document, $monthsText));
-            $this->info("Logged reminder for '{$document->judul}' ({$monthsText})");
+            // Hitung tanggal reminder: 6 bulan sebelum expired
+            $reminderAt = $expiredAt->copy()->subMonths(6);
+
+            // Cek apakah reminder harus dikirim hari ini
+            if ($today->isSameDay($reminderAt)) {
+                // Hitung sisa bulan sampai expired
+                $monthsLeft = $today->diffInMonths($expiredAt, false);
+                $monthsLeft = (int) round($monthsLeft);
+
+                // Buat teks human-readable
+                if ($monthsLeft < 0) {
+                    $monthsText = 'sudah expired ' . abs($monthsLeft) . ' bulan yang lalu';
+                } elseif ($monthsLeft > 0) {
+                    $monthsText = 'akan expired ' . $monthsLeft . ' bulan lagi';
+                } else {
+                    $monthsText = 'akan expired bulan ini';
+                }
+
+                Mail::to('test@example.com')->send(new DocumentReminderMail($document, $monthsText));
+                $this->info("Reminder sent for '{$document->judul}' ({$monthsText})");
+            }
         }
 
-        $this->info('Dry-run reminders completed. Check storage/logs/laravel.log for email content.');
+        $this->info('Reminders check completed.');
     }
 }
