@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Document;
+use App\Models\DocumentAnalytics;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 
@@ -34,15 +35,14 @@ class DocumentController extends Controller
         $results = $data
             ->map(function ($item) {
                 return [
-                    'id' => $item->judul, // value yg tersimpan = judul
-                    'text' => $item->judul, // teks yg tampil di dropdown
+                    'id' => $item->judul,
+                    'text' => $item->judul,
                 ];
             })
             ->values();
 
         return response()->json(['results' => $results]);
     }
-    // ========================
 
     public function index(Request $request)
     {
@@ -66,12 +66,10 @@ class DocumentController extends Controller
 
     public function indexVerifikasiTabs(Request $request)
     {
-        // Dokumen yang harus diverifikasi (status_verifikasi = 1)
         $pendingDocuments = Document::where('status_verifikasi', 1)
             ->latest()
             ->get(['*'], 'pending_page');
 
-        // Semua dokumen untuk history
         $allDocuments = Document::latest()->get(['*'], 'history_page');
 
         return view('content.document.index-verifikasi', compact('pendingDocuments', 'allDocuments'));
@@ -98,7 +96,7 @@ class DocumentController extends Controller
 
     public function create()
     {
-        $documents = Document::all(); // ambil semua dokumen
+        $documents = Document::all();
         return view('content.document.create', compact('documents'));
     }
 
@@ -119,6 +117,21 @@ class DocumentController extends Controller
     public function show($id)
     {
         $document = Document::with('jenisDokumenRef')->findOrFail($id);
+
+        // =====================================
+        // ✅ Simpan ke tabel document_analytics
+        // =====================================
+        DocumentAnalytics::create([
+            'document_id' => $document->id,
+            'user_id' => auth()->id(),
+            'ip' => request()->ip(),
+            'user_agent' => request()->header('User-Agent'),
+            'visited_at' => now(),
+        ]);
+
+        // Tambah view count di tabel documents
+        $document->increment('views');
+
         return view('content.document.show', compact('document'));
     }
 
@@ -131,7 +144,7 @@ class DocumentController extends Controller
     public function edit($id)
     {
         $document = Document::findOrFail($id);
-        $documents = Document::all(); // ambil semua dokumen buat dropdown
+        $documents = Document::all();
 
         return view('content.document.edit', compact('document', 'documents'));
     }
@@ -140,7 +153,7 @@ class DocumentController extends Controller
     {
         $request->validate([
             'judul' => 'required|string|max:255',
-            'status' => 'required|in:0,1,2', // 2=Berlaku, 0=Tidak Berlaku, 1=Berlaku Sebagian
+            'status' => 'required|in:0,1,2',
             'keterangan_id' => 'nullable|integer|exists:documents,id',
             'keterangan_dokumen' => 'nullable|string|max:255',
             'pdf_file' => 'nullable|mimes:pdf|max:20480',
@@ -165,12 +178,10 @@ class DocumentController extends Controller
 
         $document = Document::findOrFail($id);
 
-        // Update tanggal_perubahan kalau status berubah
         if ($document->status != $request->status) {
             $document->tanggal_perubahan = now();
         }
 
-        // Handle file PDF
         if ($request->hasFile('pdf_file')) {
             if ($document->pdf_file && Storage::disk('public')->exists($document->pdf_file)) {
                 Storage::disk('public')->delete($document->pdf_file);
@@ -178,14 +189,17 @@ class DocumentController extends Controller
             $document->pdf_file = $request->file('pdf_file')->store('documents', 'public');
         }
 
-        // Update semua field lain (kecuali keterangan_id & keterangan_dokumen)
-        $fields = ['judul', 'status', 'tipe_dokumen', 'bidang_hukum', 'jenis_hukum', 'jenis_dokumen', 'singkatan', 'nomor', 'tahun', 'tempat_penetapan', 'tanggal_penetapan', 'tanggal_pengundangan', 'sumber', 'subjek', 'bahasa', 'lokasi', 'urusan_pemerintahan', 'penandatanganan', 'pemrakarsa'];
+        $fields = [
+            'judul', 'status', 'tipe_dokumen', 'bidang_hukum', 'jenis_hukum', 'jenis_dokumen',
+            'singkatan', 'nomor', 'tahun', 'tempat_penetapan', 'tanggal_penetapan',
+            'tanggal_pengundangan', 'sumber', 'subjek', 'bahasa', 'lokasi', 'urusan_pemerintahan',
+            'penandatanganan', 'pemrakarsa'
+        ];
 
         foreach ($fields as $field) {
             $document->$field = $request->$field;
         }
 
-        // Reset keterangan kalau status jadi Berlaku (2), atau update kalau status bukan 2
         if ($request->status === '2') {
             $document->keterangan_id = null;
             $document->keterangan_dokumen = null;
@@ -255,24 +269,25 @@ class DocumentController extends Controller
         return [
             'categories' => Document::select(DB::raw("'Keputusan Direktur' as kategori"), DB::raw('count(*) as total'))
                 ->where('jenis_dokumen', 4)
-                ->where('status_verifikasi', 2) // hanya yang diverifikasi
+                ->where('status_verifikasi', 2)
                 ->get(),
 
-            'categoriesPeraturanGubernur' => Document::select(DB::raw("'Peraturan Gubernur' as kategori"), DB::raw('count(*) as total'))->where('jenis_dokumen', 1)->where('status_verifikasi', 2)->get(),
+            'categoriesPeraturanGubernur' => Document::select(DB::raw("'Peraturan Gubernur' as kategori"), DB::raw('count(*) as total'))
+                ->where('jenis_dokumen', 1)->where('status_verifikasi', 2)->get(),
 
-            'categoriesKeputusanGubernur' => Document::select(DB::raw("'Keputusan Gubernur' as kategori"), DB::raw('count(*) as total'))->where('jenis_dokumen', 2)->where('status_verifikasi', 2)->get(),
+            'categoriesKeputusanGubernur' => Document::select(DB::raw("'Keputusan Gubernur' as kategori"), DB::raw('count(*) as total'))
+                ->where('jenis_dokumen', 2)->where('status_verifikasi', 2)->get(),
 
-            'categoriesPeraturanDirektur' => Document::select(DB::raw("'Peraturan Direktur' as kategori"), DB::raw('count(*) as total'))->where('jenis_dokumen', 3)->where('status_verifikasi', 2)->get(),
+            'categoriesPeraturanDirektur' => Document::select(DB::raw("'Peraturan Direktur' as kategori"), DB::raw('count(*) as total'))
+                ->where('jenis_dokumen', 3)->where('status_verifikasi', 2)->get(),
 
-            'categoriesPerizinan' => Document::select(DB::raw("'Perizinan' as kategori"), DB::raw('count(*) as total'))->where('jenis_dokumen', 5)->where('status_verifikasi', 2)->get(),
+            'categoriesPerizinan' => Document::select(DB::raw("'Perizinan' as kategori"), DB::raw('count(*) as total'))
+                ->where('jenis_dokumen', 5)->where('status_verifikasi', 2)->get(),
 
-            'categoriesSOP' => Document::select(DB::raw("'SOP' as kategori"), DB::raw('count(*) as total'))->where('jenis_dokumen', 6)->where('status_verifikasi', 2)->get(),
+            'categoriesSOP' => Document::select(DB::raw("'SOP' as kategori"), DB::raw('count(*) as total'))
+                ->where('jenis_dokumen', 6)->where('status_verifikasi', 2)->get(),
         ];
     }
-
-    // ========================
-    // METHOD KATEGORI DOKUMEN
-    // ========================
 
     public function handleCategory(Request $request, $jenisStr, $viewVar, $viewName)
     {
@@ -281,7 +296,7 @@ class DocumentController extends Controller
         $search = $request->input('q');
 
         $documents = Document::where('jenis_dokumen', $jenis)
-            ->where('status_verifikasi', 2) // hanya yang sudah diverifikasi
+            ->where('status_verifikasi', 2)
             ->when(
                 $search,
                 fn($query) => $query
@@ -323,5 +338,35 @@ class DocumentController extends Controller
     public function SOP(Request $request)
     {
         return $this->handleCategory($request, 'SOP', 'SOP', 'kategori-dokumen.indexSOP');
+    }
+
+    public function analytics()
+    {
+        $popularDocuments = Document::where('status_verifikasi', 2)
+            ->orderByDesc('views')
+            ->take(10)
+            ->get(['judul', 'views', 'jenis_dokumen']);
+
+        $byType = Document::select('jenis_dokumen', DB::raw('SUM(views) as total_views'))
+            ->groupBy('jenis_dokumen')
+            ->orderByDesc('total_views')
+            ->get();
+
+        return view('content.document.analytics', compact('popularDocuments', 'byType'));
+    }
+
+    public function dashboardAnalytics()
+    {
+        $topDocuments = Document::where('status_verifikasi', 2)
+            ->orderByDesc('views')
+            ->take(5)
+            ->get(['judul', 'views']);
+
+        $byType = Document::select('jenis_dokumen', DB::raw('SUM(views) as total_views'))
+            ->groupBy('jenis_dokumen')
+            ->orderByDesc('total_views')
+            ->get();
+
+        return view('content.dashboard.logistics-dashboard', compact('topDocuments', 'byType'));
     }
 }

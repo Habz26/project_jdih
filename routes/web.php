@@ -159,10 +159,36 @@ use App\Http\Controllers\charts\ChartJs;
 use App\Http\Controllers\maps\Leaflet;
 use App\Http\Controllers\authentications\ForgotPasswordController;
 use App\Http\Controllers\authentications\ResetPasswordController;
-use App\Http\Controllers\DocumentController;
 use Illuminate\Http\Request;
 use App\Models\Document;
 use App\Http\Controllers\StatusDokumenController;
+use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\DocumentAnalyticsController;
+use App\Models\DocumentAnalytics;
+
+Route::get('/analytics/dashboard', [DocumentAnalyticsController::class, 'index'])->name('analytics.dashboard');
+
+Route::get('/analytics', [DocumentAnalyticsController::class, 'index'])->name('analytics.index');
+
+
+Route::get('/documents/analytics', [DocumentController::class, 'analyticsDashboard'])
+    ->name('documents.analytics')
+    ->middleware('auth'); // bisa hapus kalau belum pakai login
+
+
+Route::get('/test-analytics', function () {return DocumentAnalytics::count();
+    });
+
+
+Route::get('/dashboard/analytics', [DocumentAnalyticsController::class, 'index'])->name('analytics.dashboard');
+
+
+Route::get('/dashboard/analytics', [DocumentAnalyticsController::class, 'index'])->name('analytics.dashboard');
+
+Route::get('/documents/analytics', [DocumentController::class, 'analytics'])->name('documents.analytics');
+Route::get('/app/logistics/dashboard', [DocumentController::class, 'dashboardAnalytics'])->name('dashboard.analytics');
+
+
 
 //select judul dokumen
 
