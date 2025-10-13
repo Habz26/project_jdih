@@ -198,6 +198,15 @@ class DocumentController extends Controller
 
         return redirect()->route('documents.show', $document->id)->with('success', 'Dokumen berhasil diperbarui!');
     }
+    public function expiring()
+    {
+        $today = now();
+
+        // Ambil semua dokumen yang sudah diverifikasi
+        $documents = \App\Models\Document::where('status_verifikasi', 2)->get();
+
+        return view('content.document.expiring', compact('documents', 'today'));
+    }
 
     public function updateStatusVerifikasi(Request $request, $id)
     {
