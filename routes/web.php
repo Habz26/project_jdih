@@ -339,8 +339,9 @@ Route::middleware(['auth', 'role:operator,admin'])
     ->prefix('manage')
     ->group(function () {
         Route::get('/dashboard/analytics', [Analytics::class, 'index'])->name('dashboard-analytics-pages');
-        Route::resource('/documents', DocumentController::class);
         Route::resource('status-dokumen', StatusDokumenController::class);
+        Route::get('/documents/expiring', [DocumentController::class, 'expiring'])->name('documents.expiring');
+        Route::resource('/documents', DocumentController::class);
     });
 // ================== OPERATOR ROUTES ==================
 Route::get('/pages/account-settings-account', [AccountSettingsAccount::class, 'index'])
