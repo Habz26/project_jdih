@@ -154,6 +154,7 @@ class DocumentController extends Controller
             'tempat_penetapan' => 'nullable|string|max:255',
             'tanggal_penetapan' => 'nullable|date',
             'tanggal_pengundangan' => 'nullable|date',
+            'periode_berlaku' => 'nullable|integer|min:1|max:10',
             'sumber' => 'nullable|string|max:255',
             'subjek' => 'nullable|string|max:255',
             'bahasa' => 'nullable|string|max:255',
@@ -179,7 +180,7 @@ class DocumentController extends Controller
         }
 
         // Update semua field lain (kecuali keterangan_id & keterangan_dokumen)
-        $fields = ['judul', 'status', 'tipe_dokumen', 'bidang_hukum', 'jenis_hukum', 'jenis_dokumen', 'singkatan', 'nomor', 'tahun', 'tempat_penetapan', 'tanggal_penetapan', 'tanggal_pengundangan', 'sumber', 'subjek', 'bahasa', 'lokasi', 'urusan_pemerintahan', 'penandatanganan', 'pemrakarsa'];
+        $fields = ['judul', 'status', 'tipe_dokumen', 'bidang_hukum', 'jenis_hukum', 'jenis_dokumen', 'singkatan', 'nomor', 'tahun', 'tempat_penetapan', 'tanggal_penetapan', 'tanggal_pengundangan', 'periode_berlaku', 'sumber', 'subjek', 'bahasa', 'lokasi', 'urusan_pemerintahan', 'penandatanganan', 'pemrakarsa'];
 
         foreach ($fields as $field) {
             $document->$field = $request->$field;
@@ -203,7 +204,7 @@ class DocumentController extends Controller
         $today = now();
 
         // Ambil semua dokumen yang sudah diverifikasi
-        $documents = \App\Models\Document::where('status_verifikasi', 2)->get();
+        $documents = \App\Models\Document::where('jenis_dokumen', 5)->where('status_verifikasi', 2)->get();
 
         return view('content.document.expiring', compact('documents', 'today'));
     }

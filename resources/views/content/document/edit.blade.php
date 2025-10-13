@@ -64,6 +64,24 @@
                 toggleKeteranganFields();
             });
         });
+
+        // Toggle Periode Berlaku jika jenis_dokumen = 5
+        function togglePeriodeBerlaku() {
+            let jenis = $('#jenis_dokumen').val();
+            if (jenis === '5') { // Perizinan
+                $('#periode_berlaku_wrapper').show();
+                $('#periode_berlaku').prop('required', true);
+            } else {
+                $('#periode_berlaku_wrapper').hide();
+                $('#periode_berlaku').prop('required', false);
+            }
+        }
+
+        // Jalankan saat halaman load
+        togglePeriodeBerlaku();
+
+        // Event saat jenis_dokumen berubah
+        $('#jenis_dokumen').on('change', togglePeriodeBerlaku);
     </script>
 @endsection
 
@@ -204,6 +222,19 @@
                             value="{{ old('tanggal_pengundangan', $document->tanggal_pengundangan) }}">
                     </div>
 
+                    <div class="mb-3" id="periode_berlaku_wrapper" style="display: none;">
+                        <label for="periode_berlaku">Periode Berlaku</label>
+                        <select name="periode_berlaku" id="periode_berlaku" class="form-control">
+                            @for ($i = 1; $i <= 10; $i++)
+                                <option value="{{ $i }}"
+                                    {{ old('periode_berlaku', $document->periode_berlaku ?? '') == $i ? 'selected' : '' }}>
+                                    {{ $i }} Tahun
+                                </option>
+                            @endfor
+                        </select>
+                    </div>
+
+
                     <div class="mb-3">
                         <label for="sumber">Sumber</label>
                         <input type="text" name="sumber" id="sumber" class="form-control"
@@ -256,7 +287,7 @@
                             <option value="1" {{ old('status', $document->status ?? '') == '1' ? 'selected' : '' }}>
                                 Berlaku Sebagian</option>
                         </select>
-                    </div>  
+                    </div>
 
                     <div class="mb-3" id="keterangan_dokumen_wrapper">
                         <label for="keterangan_dokumen" class="form-label">Keterangan Status</label>

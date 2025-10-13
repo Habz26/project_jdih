@@ -44,7 +44,7 @@
                 <a href="{{ route('documents.expiring') }}" class="nav-link position-relative">
                     <i class="bi bi-bell fs-6"></i>
                     @php
-                        $countExpiring = \App\Models\Document::where('status_verifikasi', 2)
+                        $countExpiring = \App\Models\Document::where('jenis_dokumen', 5)->where('status_verifikasi', 2)
     ->where('tanggal_penetapan', '>=', now()->subMonths(6))
     ->count();
 

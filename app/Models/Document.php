@@ -23,6 +23,7 @@ class Document extends Model
         'tanggal_penetapan',
         'tanggal_pengundangan',
         'tanggal_perubahan',
+        'periode_berlaku',
         'sumber',
         'subjek',
         'bahasa',
