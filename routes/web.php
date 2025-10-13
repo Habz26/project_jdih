@@ -168,6 +168,7 @@ use App\Models\DocumentAnalytics;
 
 Route::get('/analytics/dashboard', [DocumentAnalyticsController::class, 'index'])->name('analytics.dashboard');
 
+
 Route::get('/analytics', [DocumentAnalyticsController::class, 'index'])->name('analytics.index');
 
 

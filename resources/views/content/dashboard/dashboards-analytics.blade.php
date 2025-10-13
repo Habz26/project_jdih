@@ -4,9 +4,14 @@ use Illuminate\Support\Facades\Auth;
 @endphp
 @extends('layouts.layoutMaster')
 
-@section('title', 'Dashboard - Analytics')
+@section('title', 'Dashboard Analisis Dokumen')
+
 @section('vendor-style')
-@vite(['resources/assets/vendor/libs/apex-charts/apex-charts.scss', 'resources/assets/vendor/libs/swiper/swiper.scss'])
+@vite([
+  'resources/assets/vendor/libs/apex-charts/apex-charts.scss',
+  'resources/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.scss',
+  'resources/assets/vendor/libs/swiper/swiper.scss'
+])
 @endsection
 
 @section('page-style')
@@ -14,11 +19,16 @@ use Illuminate\Support\Facades\Auth;
 @endsection
 
 @section('vendor-script')
-@vite(['resources/assets/vendor/libs/apex-charts/apexcharts.js', 'resources/assets/vendor/libs/swiper/swiper.js'])
+@vite([
+  'resources/assets/vendor/libs/apex-charts/apexcharts.js',
+  'resources/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js',
+  'resources/assets/vendor/libs/swiper/swiper.js'
+])
 @endsection
 
 @section('page-script')
 @vite(['resources/assets/js/dashboards-analytics.js'])
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     // Simpan URL awal saat user pertama kali masuk
     if (!sessionStorage.getItem('startUrl')) {
@@ -31,57 +41,34 @@ use Illuminate\Support\Facades\Auth;
 <div class="row g-6">
   <!-- Gamification Card -->
   <div class="col-12">
-  <div class="card w-100">
-    <div class="d-flex align-items-end row">
-      <div class="col-md-6 order-2 order-md-1">
-        <div class="card-body">
-          <h4 class="card-title mb-4">
-            Haii <span class="fw-bold">{{ auth()->user()->name }} </span> <span style="font-family:Roboto; font:lighter;">[{{ Auth::user()->role }}]</span>🎉
-          </h4>
-          <p class="mb-2">Selamat datang kembali di dashboard <i>Management!</i></p>
-          <a href="{{ route('pages-account-settings-account') }}" class="btn btn-primary">Lihat Profil</a>
+    <div class="card w-100">
+      <div class="d-flex align-items-end row">
+        <div class="col-md-6 order-2 order-md-1">
+          <div class="card-body">
+            <h4 class="card-title mb-4">
+              Haii <span class="fw-bold">{{ auth()->user()->name }} </span> 
+              <span style="font-family:Roboto; font:lighter;">[{{ Auth::user()->role }}]</span>🎉
+            </h4>
+            <p class="mb-2">Selamat datang kembali di dashboard <i>Management!</i></p>
+            <a href="{{ route('pages-account-settings-account') }}" class="btn btn-primary">Lihat Profil</a>
+          </div>
         </div>
-      </div>
-      <div class="col-md-6 text-center text-md-end order-1 order-md-2">
-        <div class="card-body pb-0 px-0 pt-2">
-          <img src="{{ asset('assets/img/illustrations/illustration-john-'.$configData['theme'].'.png') }}"
-               height="186"
-               class="scaleX-n1-rtl"
-               alt="View Profile"
-               data-app-light-img="illustrations/John-Gaya-removebg-preview.png"
-               data-app-dark-img="illustrations/John-Programmer-removebg-preview.png" />
+        <div class="col-md-6 text-center text-md-end order-1 order-md-2">
+          <div class="card-body pb-0 px-0 pt-2">
+            <img src="{{ asset('assets/img/illustrations/illustration-john-'.$configData['theme'].'.png') }}"
+                 height="186"
+                 class="scaleX-n1-rtl"
+                 alt="View Profile"
+                 data-app-light-img="illustrations/John-Gaya-removebg-preview.png"
+                 data-app-dark-img="illustrations/John-Programmer-removebg-preview.png" />
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-
   <!--/ Gamification Card -->
 </div>
-@extends('layouts/layoutMaster')
 
-@section('title', 'Dashboard Analisis Dokumen')
-
-@section('vendor-style')
-@vite([
-  'resources/assets/vendor/libs/apex-charts/apex-charts.scss',
-  'resources/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.scss',
-])
-@endsection
-
-@section('vendor-script')
-@vite([
-  'resources/assets/vendor/libs/apex-charts/apexcharts.js',
-  'resources/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js',
-])
-@endsection
-
-@section('page-script')
-<!-- Chart.js CDN -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-@endsection
-
-@section('content')
 <div class="row g-3">
 
   {{-- Top small cards (4) --}}
@@ -143,9 +130,7 @@ use Illuminate\Support\Facades\Auth;
     </div>
   </div>
 
-  {{-- Second row: Overview + Shipment-like statistics (menggunakan visitsLabels & visitsData) --}}
-
-  {{-- Shipment statistics (menggunakan visitsLabels & visitsData) --}}
+  {{-- Second row: Overview + Shipment-like statistics --}}
   <div class="col-xxl-6 col-lg-12">
     <div class="card rounded-3 shadow-sm h-100">
       <div class="card-header d-flex align-items-center justify-content-between">
@@ -176,12 +161,10 @@ use Illuminate\Support\Facades\Auth;
         </div>
       </div>
       <div class="card-body">
-        {{-- Chart area --}}
         <canvas id="shipmentStatisticsChart" height="160"></canvas>
       </div>
     </div>
   </div>
-
 
   <div class="col-lg-4 col-md-6">
     <div class="card rounded-3 shadow-sm h-100">
@@ -200,7 +183,6 @@ use Illuminate\Support\Facades\Auth;
       <div class="card-body">
         <h6 class="fw-bold mb-2">(Top Dokumen)</h6>
         <p class="text-muted small mb-3">{{ $topDocuments->count() }} dokumen teratas</p>
-
         <div class="list-group list-group-flush">
           @foreach($topDocuments->take(6) as $doc)
           <div class="list-group-item d-flex justify-content-between align-items-start">
@@ -215,7 +197,6 @@ use Illuminate\Support\Facades\Auth;
           </div>
           @endforeach
         </div>
-
       </div>
     </div>
   </div>
@@ -258,13 +239,14 @@ use Illuminate\Support\Facades\Auth;
 {{-- Charts JS --}}
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    // DATA dari controller
     const visitsLabels = @json($visitsLabels);
     const visitsData = @json($visitsData);
     const topLabels = @json($topDocuments->pluck('judul'));
     const topData = @json($topDocuments->pluck('total_visits'));
 
-    // Shipment-like chart = bar + line combination
+    const maxVisits = visitsData.length ? Math.max(...visitsData) : 0;
+
+    // Shipment chart
     const ctxShipment = document.getElementById('shipmentStatisticsChart').getContext('2d');
     new Chart(ctxShipment, {
       type: 'bar',
@@ -275,7 +257,7 @@ use Illuminate\Support\Facades\Auth;
             type: 'bar',
             label: 'Visits',
             data: visitsData,
-            backgroundColor: 'rgba(255, 193, 7, 0.9)', // yellow bars like screenshot
+            backgroundColor: 'rgba(255, 193, 7, 0.9)',
             borderRadius: 4,
             yAxisID: 'y',
           },
@@ -294,29 +276,21 @@ use Illuminate\Support\Facades\Auth;
       },
       options: {
         responsive: true,
-        plugins: {
-          legend: { display: false },
-        },
+        plugins: { legend: { display: false } },
         scales: {
-          y: {
-            beginAtZero: true,
-            ticks: { stepSize: Math.max(1, Math.ceil(Math.max(...visitsData) / 5)) }
-          },
-          x: {
-            ticks: { maxRotation: 0, minRotation: 0 }
-          }
+          y: { beginAtZero: true, ticks: { stepSize: Math.max(1, Math.ceil(maxVisits / 5)) } },
+          x: { ticks: { maxRotation: 0, minRotation: 0 } }
         }
       }
     });
 
-    // Donut chart (distribution) — pakai topDocuments
+    // Donut chart
     const ctxDonut = document.getElementById('donutChartCenter').getContext('2d');
     new Chart(ctxDonut, {
       type: 'doughnut',
       data: {
         labels: topLabels,
-        datasets: [{
-          data: topData,
+        datasets: [{ data: topData,
           backgroundColor: [
             '#7b3ff3','#ffd666','#52c41a','#40a9ff','#fa8c16','#eb2f96','#13c2c2','#2f54eb','#fa541c','#73d13d'
           ]
@@ -325,12 +299,9 @@ use Illuminate\Support\Facades\Auth;
       options: {
         responsive: true,
         cutout: '70%',
-        plugins: {
-          legend: { position: 'bottom', labels: { boxWidth: 12 } }
-        }
+        plugins: { legend: { position: 'bottom', labels: { boxWidth: 12 } } }
       }
     });
-
   });
 </script>
 @endsection
