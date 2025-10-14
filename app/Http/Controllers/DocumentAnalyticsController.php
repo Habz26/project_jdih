@@ -58,14 +58,14 @@ class DocumentAnalyticsController extends Controller
         $visitsLabels = $visitsPerDay->pluck('date');
         $visitsData = $visitsPerDay->pluck('total');
 
-        return view('content.analytics.dashboard', compact(
-            'totalVisits',
-            'uniqueDocuments',
-            'uniqueUsers',
-            'topDocuments',
-            'filter',
-            'visitsLabels',
-            'visitsData'
-        ));
+       return view('content.dashboard.dashboards-analytics', compact(
+    'totalVisits',
+    'uniqueDocuments',
+    'uniqueUsers',
+    'topDocuments',
+    'filter',
+    'visitsLabels',
+    'visitsData'
+));
     }
 }

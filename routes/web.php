@@ -163,31 +163,17 @@ use Illuminate\Http\Request;
 use App\Models\Document;
 use App\Http\Controllers\StatusDokumenController;
 use App\Http\Controllers\DocumentController;
-use App\Http\Controllers\DocumentAnalyticsController;
 use App\Models\DocumentAnalytics;
+use App\Http\Controllers\DocumentAnalyticsController;
+use App\Http\Middleware\AdminMiddleware;
 
-Route::get('/analytics/dashboard', [DocumentAnalyticsController::class, 'index'])->name('analytics.dashboard');
-
-
-Route::get('/analytics', [DocumentAnalyticsController::class, 'index'])->name('analytics.index');
-
-
-Route::get('/documents/analytics', [DocumentController::class, 'analyticsDashboard'])
-    ->name('documents.analytics')
-    ->middleware('auth'); // bisa hapus kalau belum pakai login
+Route::middleware([AdminMiddleware::class])->group(function () { Route::get('/analytics', [DocumentAnalyticsController::class, 'index'])->name('admin.analytics');
+});
 
 
-Route::get('/test-analytics', function () {return DocumentAnalytics::count();
-    });
 
 
-Route::get('/dashboard/analytics', [DocumentAnalyticsController::class, 'index'])->name('analytics.dashboard');
 
-
-Route::get('/dashboard/analytics', [DocumentAnalyticsController::class, 'index'])->name('analytics.dashboard');
-
-Route::get('/documents/analytics', [DocumentController::class, 'analytics'])->name('documents.analytics');
-Route::get('/app/logistics/dashboard', [DocumentController::class, 'dashboardAnalytics'])->name('dashboard.analytics');
 
 
 
@@ -223,8 +209,6 @@ Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink
 Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
 Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
 Route::get('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.updates');
-
-use App\Http\Controllers\AccountSettingsAccountController;
 
 // Main Page Route
 Route::get('/', [HelpCenter::class, 'index'])->name('help-center-landing');
@@ -365,7 +349,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'role:operator,admin'])
     ->prefix('manage')
     ->group(function () {
-        Route::get('/dashboard/analytics', [Analytics::class, 'index'])->name('dashboard-analytics-pages');
+        Route::get('analytics', [Analytics::class, 'index'])->name('dashboard-analytics-pages');
         Route::resource('/documents', DocumentController::class);
         Route::resource('status-dokumen', StatusDokumenController::class);
     });
@@ -482,4 +466,3 @@ Route::get('/maps/leaflet', [Leaflet::class, 'index'])->name('maps-leaflet');
 
 // laravel example
 // Route::get('/laravel/user-management', [UserManagement::class, 'UserManagement'])->name('user-list');
-Route::resource('/user-list', UserManagement::class);

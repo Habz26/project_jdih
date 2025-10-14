@@ -69,7 +69,7 @@ use Illuminate\Support\Facades\Auth;
   <!--/ Gamification Card -->
 </div>
 
-<div class="row g-3">
+<div class="row g-3 mt-2">
 
   {{-- Top small cards (4) --}}
   <div class="col-sm-6 col-lg-3">
@@ -201,38 +201,6 @@ use Illuminate\Support\Facades\Auth;
     </div>
   </div>
 
-  {{-- Full-width Top 10 Table --}}
-  <div class="col-12">
-    <div class="card rounded-3 shadow-sm">
-      <div class="card-header bg-secondary text-white">
-        <h5 class="mb-0">📊 Top 10 Dokumen Paling Sering Dikunjungi</h5>
-      </div>
-      <div class="table-responsive">
-        <table class="table table-hover mb-0">
-          <thead class="table-light">
-            <tr>
-              <th style="width:60px">#</th>
-              <th>Judul Dokumen</th>
-              <th style="width:160px">Total Kunjungan</th>
-            </tr>
-          </thead>
-          <tbody>
-            @forelse ($topDocuments as $index => $doc)
-              <tr>
-                <td>{{ $index + 1 }}</td>
-                <td>{{ $doc->judul }}</td>
-                <td><strong>{{ $doc->total_visits }}</strong></td>
-              </tr>
-            @empty
-              <tr>
-                <td colspan="3" class="text-center text-muted">Belum ada data kunjungan.</td>
-              </tr>
-            @endforelse
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
 
 </div>
 

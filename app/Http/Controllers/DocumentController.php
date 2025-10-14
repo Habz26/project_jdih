@@ -352,7 +352,10 @@ class DocumentController extends Controller
             ->orderByDesc('total_views')
             ->get();
 
-        return view('content.document.analytics', compact('popularDocuments', 'byType'));
+        $totalVisits = Document::sum('views');
+
+
+        return view('content.dashboard.dashboards-analytics', compact('popularDocuments', 'byType', 'totalVisits'));
     }
 
     public function dashboardAnalytics()
@@ -367,6 +370,6 @@ class DocumentController extends Controller
             ->orderByDesc('total_views')
             ->get();
 
-        return view('content.dashboard.logistics-dashboard', compact('topDocuments', 'byType'));
+        return view('content.dashboard.dashboards-analytics', compact('topDocuments', 'byType'));
     }
 }
