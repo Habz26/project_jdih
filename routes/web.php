@@ -359,3 +359,5 @@ Route::get('/search', [DocumentController::class, 'search'])->name('search');
 Route::get('/wizard/ex-checkout', [WizardCheckout::class, 'index'])->name('wizard-ex-checkout');
 Route::get('/wizard/ex-property-listing', [PropertyListing::class, 'index'])->name('wizard-ex-property-listing');
 Route::get('/wizard/ex-create-deal', [CreateDeal::class, 'index'])->name('wizard-ex-create-deal');
+
+Route::resource('/user-list', UserManagement::class);
