@@ -21,7 +21,6 @@ class DocumentReminderMail extends Mailable
 
     public function build()
     {
-        return $this->subject('Document Reminder Mail')
-                    ->view('email.reminder');
+        return $this->subject('Document Reminder Mail')->view('email.reminder');
     }
 }

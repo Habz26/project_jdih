@@ -342,7 +342,6 @@ Route::post('/logout', [AuthController::class, 'logout'])
     ->name('auth.logout')
     ->middleware('auth');
 
-Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
 Route::get('/documents/{id}', [DocumentController::class, 'show'])->name('documents.show');
 
 // ================== ADMIN ROUTES ==================
@@ -355,12 +354,17 @@ Route::middleware('auth')->group(function () {
             Route::get('/documents/verifikasi', [DocumentController::class, 'indexVerifikasiTabs'])->name('documents.verifikasi');
             Route::get('/documents/verifikasi/{id}', [DocumentController::class, 'showVerifikasi'])->name('documents.showVerifikasi');
             Route::put('/documents/{id}/update-status-verifikasi', [DocumentController::class, 'updateStatusVerifikasi'])->name('documents.updateStatusVerifikasi');
+            Route::get('/documents/expiring', [DocumentController::class, 'expiring'])->name('documents.expiring');
         });
 });
 // ================== MULTI ROUTES ==================
-
-
-
+Route::middleware(['auth', 'role:operator,admin'])
+    ->prefix('manage')
+    ->group(function () {
+        Route::get('/dashboard/analytics', [Analytics::class, 'index'])->name('dashboard-analytics-pages');
+        Route::resource('status-dokumen', StatusDokumenController::class);
+        Route::resource('/documents', DocumentController::class);
+    });
 // ================== OPERATOR ROUTES ==================
 Route::get('/pages/account-settings-account', [AccountSettingsAccount::class, 'index'])
     ->name('pages-account-settings-account')

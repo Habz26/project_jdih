@@ -76,6 +76,10 @@
                     <li class="list-group-item"><strong>Tanggal
                             Pengundangan:</strong>{{ $document->tanggal_pengundangan ? \Carbon\Carbon::parse($document->tanggal_pengundangan)->format('d-m-Y') : '-' }}
                     </li>
+                    @if ($document->jenis_dokumen == 5)
+                        <li class="list-group-item"><strong>Periode Berlaku:</strong> {{ $document->periode_berlaku }}
+                            Tahun</li>
+                    @endif
                     <li class="list-group-item"><strong>Sumber:</strong> {{ $document->sumber }}</li>
                     <li class="list-group-item"><strong>Subjek:</strong> {{ $document->subjek }}</li>
                     <li class="list-group-item"><strong>Bahasa:</strong> {{ $document->bahasa }}</li>

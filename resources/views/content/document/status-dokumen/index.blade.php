@@ -48,7 +48,7 @@
                             placeholder="Cari dokumen..." value="{{ request('search') }}">
                         <button type="submit" class="btn btn-primary btn-sm"><i class="bi bi-search"></i></button>
                     </form>
-                    
+
                 </div>
             </div>
 
@@ -81,7 +81,8 @@
                                     </td>
                                     <td class="text-center">{{ $doc->tahun }}</td>
                                     <td class="text-center">
-                                        <span class="badge d-inline-flex align-items-center justify-content-center" style="min-width: 140px; @if ($doc->status_verifikasi == '2') background-color: #28a745; color: #fff; @endif @if ($doc->status_verifikasi == '0') background-color: #dc3545; color: #fff; @endif @if ($doc->status_verifikasi == '1') background-color: #ffc107; color: #212529; @endif @if ($doc->status_verifikasi == '3') background-color: #fd7e14; color: #fff; @endif">
+                                        <span class="badge d-inline-flex align-items-center justify-content-center"
+                                            style="min-width: 140px; @if ($doc->status_verifikasi == '2') background-color: #28a745; color: #fff; @endif @if ($doc->status_verifikasi == '0') background-color: #dc3545; color: #fff; @endif @if ($doc->status_verifikasi == '1') background-color: #ffc107; color: #212529; @endif @if ($doc->status_verifikasi == '3') background-color: #fd7e14; color: #fff; @endif">
                                             @if ($doc->status_verifikasi == '2')
                                                 <i class="bi bi-check-circle-fill me-1"></i> Terverifikasi
                                             @elseif ($doc->status_verifikasi == '0')
@@ -93,9 +94,6 @@
                                             @endif
                                         </span>
                                     </td>
-
-
-
                                     <td style="max-width: 250px; white-space: normal; word-wrap: break-word;">
                                         <span title="{{ $doc->catatan_admin }}">
                                             {{ $doc->catatan_admin ? \Illuminate\Support\Str::limit($doc->catatan_admin, 255, '...') : '-' }}
