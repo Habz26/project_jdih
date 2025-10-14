@@ -319,7 +319,6 @@ Route::post('/logout', [AuthController::class, 'logout'])
     ->name('auth.logout')
     ->middleware('auth');
 
-Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
 Route::get('/documents/{id}', [DocumentController::class, 'show'])->name('documents.show');
 
 // ================== ADMIN ROUTES ==================
