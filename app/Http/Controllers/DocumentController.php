@@ -206,6 +206,29 @@ class DocumentController extends Controller
         // Ambil semua dokumen yang sudah diverifikasi
         $documents = \App\Models\Document::where('jenis_dokumen', 5)->where('status_verifikasi', 2)->get();
 
+        // Loop untuk update status dokumen yang sudah expired
+        foreach ($documents as $doc) {
+            $tanggalPenetapan = \Carbon\Carbon::parse($doc->tanggal_penetapan)->startOfDay();
+
+            if ($doc->jenis_dokumen == 5 && $doc->periode_berlaku) {
+                // Expired = tanggal penetapan + periode_berlaku tahun
+                $expiredAt = $tanggalPenetapan->copy()->addYears($doc->periode_berlaku);
+            } else {
+                // Dokumen lain bisa tetap 6 bulan (opsional)
+                $expiredAt = $tanggalPenetapan->copy()->addMonths(6);
+            }
+
+            // Jika sudah lewat dari tanggal expired
+            if ($expiredAt->isPast()) {
+                $doc->status = 0; // tidak berlaku
+                $doc->keterangan_dokumen = 'Expired';
+                $doc->save();
+            }
+        }
+
+        // Setelah update, ambil ulang dokumen yang MASIH BERLAKU aja
+        $documents = \App\Models\Document::where('jenis_dokumen', 5)->where('status_verifikasi', 2)->where('status', '!=', 0)->get();
+
         return view('content.document.expiring', compact('documents', 'today'));
     }
 
