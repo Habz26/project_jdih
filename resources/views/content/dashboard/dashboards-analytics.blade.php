@@ -130,78 +130,76 @@ use Illuminate\Support\Facades\Auth;
     </div>
   </div>
 
-  {{-- Second row: Overview + Shipment-like statistics --}}
-  <div class="col-xxl-6 col-lg-12">
-    <div class="card rounded-3 shadow-sm h-100">
-      <div class="card-header d-flex align-items-center justify-content-between">
-        <div class="card-title mb-0">
-          <h5 class="m-0 me-2 mb-1">📈 Statistik Kunjungan Dokumen</h5>
-          <p class="card-subtitle mb-0 text-muted">Total kunjungan: {{ number_format($totalVisits) }}</p>
-        </div>
-        <div class="btn-group">
-          <button type="button" class="btn btn-outline-primary btn-sm">January</button>
-          <button type="button" class="btn btn-outline-primary btn-sm dropdown-toggle dropdown-toggle-split"
-            data-bs-toggle="dropdown" aria-expanded="false">
-            <span class="visually-hidden">Toggle Dropdown</span>
-          </button>
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="javascript:void(0);">January</a></li>
-            <li><a class="dropdown-item" href="javascript:void(0);">February</a></li>
-            <li><a class="dropdown-item" href="javascript:void(0);">March</a></li>
-            <li><a class="dropdown-item" href="javascript:void(0);">April</a></li>
-            <li><a class="dropdown-item" href="javascript:void(0);">May</a></li>
-            <li><a class="dropdown-item" href="javascript:void(0);">June</a></li>
-            <li><a class="dropdown-item" href="javascript:void(0);">July</a></li>
-            <li><a class="dropdown-item" href="javascript:void(0);">August</a></li>
-            <li><a class="dropdown-item" href="javascript:void(0);">September</a></li>
-            <li><a class="dropdown-item" href="javascript:void(0);">October</a></li>
-            <li><a class="dropdown-item" href="javascript:void(0);">November</a></li>
-            <li><a class="dropdown-item" href="javascript:void(0);">December</a></li>
-          </ul>
-        </div>
+{{-- Second row: Overview + Shipment-like statistics --}}
+<div class="col-12">
+  <div class="card rounded-3 shadow-sm h-100">
+    <div class="card-header d-flex align-items-center justify-content-between">
+      <div class="card-title mb-0">
+        <h5 class="m-0 me-2 mb-1">📈 Statistik Kunjungan Dokumen</h5>
+        <p class="card-subtitle mb-0 text-muted">Total kunjungan: {{ number_format($totalVisits) }}</p>
       </div>
-      <div class="card-body">
-        <canvas id="shipmentStatisticsChart" height="160"></canvas>
+      <div class="btn-group">
+        <button type="button" class="btn btn-outline-primary btn-sm">January</button>
+        <button type="button" class="btn btn-outline-primary btn-sm dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+          <span class="visually-hidden">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li><a class="dropdown-item" href="javascript:void(0);">January</a></li>
+          <li><a class="dropdown-item" href="javascript:void(0);">February</a></li>
+          <li><a class="dropdown-item" href="javascript:void(0);">March</a></li>
+          <li><a class="dropdown-item" href="javascript:void(0);">April</a></li>
+          <li><a class="dropdown-item" href="javascript:void(0);">May</a></li>
+          <li><a class="dropdown-item" href="javascript:void(0);">June</a></li>
+          <li><a class="dropdown-item" href="javascript:void(0);">July</a></li>
+          <li><a class="dropdown-item" href="javascript:void(0);">August</a></li>
+          <li><a class="dropdown-item" href="javascript:void(0);">September</a></li>
+          <li><a class="dropdown-item" href="javascript:void(0);">October</a></li>
+          <li><a class="dropdown-item" href="javascript:void(0);">November</a></li>
+          <li><a class="dropdown-item" href="javascript:void(0);">December</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="card-body">
+      <canvas id="shipmentStatisticsChart" height="60"></canvas>
+    </div>
+  </div>
+</div>
+
+{{-- Dua card di bawah sejajar kiri-kanan --}}
+<div class="col-lg-6 col-md-12">
+  <div class="card rounded-3 shadow-sm h-100">
+    <div class="card-body">
+      <h6 class="fw-bold mb-3">Reasons for access (distribution)</h6>
+      <canvas id="donutChartCenter" height="220"></canvas>
+      <div class="mt-3 small text-muted">
+        Legend: top dokumen akses
       </div>
     </div>
   </div>
+</div>
 
-  <div class="col-lg-4 col-md-6">
-    <div class="card rounded-3 shadow-sm h-100">
-      <div class="card-body">
-        <h6 class="fw-bold mb-3">Reasons for access (distribution)</h6>
-        <canvas id="donutChartCenter" height="220"></canvas>
-        <div class="mt-3 small text-muted">
-          Legend: top dokumen akses
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-lg-4 col-md-12">
-    <div class="card rounded-3 shadow-sm h-100">
-      <div class="card-body">
-        <h6 class="fw-bold mb-2">(Top Dokumen)</h6>
-        <p class="text-muted small mb-3">{{ $topDocuments->count() }} dokumen teratas</p>
-        <div class="list-group list-group-flush">
-          @foreach($topDocuments->take(6) as $doc)
-          <div class="list-group-item d-flex justify-content-between align-items-start">
-            <div class="me-2">
-              <div class="small text-muted">DOC</div>
-              <div class="fw-semibold text-truncate" style="max-width:200px;">{{ $doc->judul }}</div>
-            </div>
-            <div class="text-end">
-              <div class="fw-bold">{{ $doc->total_visits }}</div>
-              <small class="text-muted">visits</small>
-            </div>
+<div class="col-lg-6 col-md-12">
+  <div class="card rounded-3 shadow-sm h-100">
+    <div class="card-body">
+      <h6 class="fw-bold mb-2">(Top Dokumen)</h6>
+      <p class="text-muted small mb-3">{{ $topDocuments->count() }} dokumen teratas</p>
+      <div class="list-group list-group-flush">
+        @foreach($topDocuments->take(6) as $doc)
+        <div class="list-group-item d-flex justify-content-between align-items-start">
+          <div class="me-2">
+            <div class="small text-muted">DOC</div>
+            <div class="fw-semibold text-truncate" style="max-width:200px;">{{ $doc->judul }}</div>
           </div>
-          @endforeach
+          <div class="text-end">
+            <div class="fw-bold">{{ $doc->total_visits }}</div>
+            <small class="text-muted">visits</small>
+          </div>
         </div>
+        @endforeach
       </div>
     </div>
   </div>
-
-
+</div>
 </div>
 
 {{-- Charts JS --}}
