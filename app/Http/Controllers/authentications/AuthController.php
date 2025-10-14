@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    // 🟢 Register user baru
+    // 🟢 REGISTER USER BARU
     public function register(Request $request)
     {
         $request->validate([
@@ -18,23 +18,32 @@ class AuthController extends Controller
             'email' => 'required|string|email|unique:users',
             'password' => 'required|string|min:8|confirmed',
             'role' => 'required|in:operator,admin',
-            'nip' => 'required|string|max:20|unique:users', // validasi NIP (ubah ke nullable jika opsional)
+            'nip' => 'required|string|max:20|unique:users', // validasi NIP
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'nip' => $request->nip, // 👈 ini ditambah
+            'nip' => $request->nip,
             'password' => Hash::make($request->password),
             'role' => $request->role ?? 'operator',
         ]);
 
-        Auth::login($user); // langsung login setelah register
+        // Login langsung setelah register
+        Auth::login($user);
 
-        return redirect()->route('dashboard-analytics-pages')->with('success', 'Register sukses, selamat datang!');
+        // 🔁 Arahkan berdasarkan role
+        if ($user->role === 'admin') {
+            return redirect('/analytics')->with('success', 'Registrasi sukses, selamat datang Admin!');
+        } elseif ($user->role === 'operator') {
+            return redirect('/manage/analytics')->with('success', 'Registrasi sukses, selamat datang Operator!');
+        }
+
+        // Jika role tidak dikenali
+        return redirect()->route('auth-login-basic')->withErrors(['role' => 'Role tidak dikenali.']);
     }
 
-    // 🟡 Login user
+    // 🟡 LOGIN USER
     public function login(Request $request)
     {
         $credentials = $request->only('nip', 'password');
@@ -42,43 +51,42 @@ class AuthController extends Controller
         if (auth()->attempt($credentials)) {
             $request->session()->regenerate();
             $user = auth()->user();
+
+            // 🔁 Arahkan sesuai role
             if ($user->role === 'admin') {
-                return redirect()->route('dashboard-analytics-pages');
+                return redirect('/analytics');
             } elseif ($user->role === 'operator') {
-                return redirect()->route('dashboard-analytics-pages');
+                return redirect('/manage/analytics');
             } else {
                 auth()->logout();
-                return redirect()
-                    ->back()
-                    ->withErrors(['role' => 'Role tidak dikenali.']);
+                return redirect()->back()->withErrors(['role' => 'Role tidak dikenali.']);
             }
         }
 
-        return redirect()
-            ->back()
-            ->withErrors(['nip' => 'NIP atau password salah.']);
-
+        return redirect()->back()->withErrors(['nip' => 'NIP atau password salah.']);
     }
 
-    // 🔴 Logout user
+    // 🔴 LOGOUT USER
     public function logout(Request $request)
     {
         auth()->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
         return redirect()->route('auth-login-basic');
     }
 
+    // 📄 HALAMAN REGISTER
     public function index()
     {
         $pageConfigs = ['myLayout' => 'blank'];
         return view('content.authentications.auth-register-basic', ['pageConfigs' => $pageConfigs]);
     }
 
+    // 📄 HALAMAN LOGIN
     public function showLoginForm()
     {
         $pageConfigs = ['myLayout' => 'blank'];
         return view('content.authentications.auth-login-basic', ['pageConfigs' => $pageConfigs]);
-        // pastikan view ini ada
     }
 }

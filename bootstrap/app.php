@@ -12,12 +12,16 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__ . '/../routes/console.php',
         health: '/up',
     )
-    ->withMiddleware(function (Middleware $middleware) {
-        $middleware->web(LocaleMiddleware::class);
-        $middleware->alias([
-            'role' => \App\Http\Middleware\RoleMiddleware::class
-        ]);
-    })
+->withMiddleware(function (Middleware $middleware) {
+    $middleware->web(LocaleMiddleware::class);
+
+    // Alias middleware (daftar semua di sini)
+    $middleware->alias([
+        'role' => \App\Http\Middleware\RoleMiddleware::class,
+        'admin' => \App\Http\Middleware\AdminMiddleware::class, // ✅ tambahkan ini
+    ]);
+})
+
     ->withCommands([
         \App\Console\Commands\SendReminderEmails::class, // <-- ini
     ])
