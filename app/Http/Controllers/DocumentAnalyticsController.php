@@ -12,6 +12,19 @@ class DocumentAnalyticsController extends Controller
 {
     public function index(Request $request)
     {
+        $user = auth()->user();
+
+        // 🧩 Jika user belum login, redirect ke login (aman)
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        // 🧩 Jika role = operator → tampilkan halaman khusus operator
+        if ($user->role === 'operator') {
+            return view('content.manage.operator-analytics');
+        }
+
+        // 🧩 Hanya admin yang sampai ke sini
         $filter = $request->get('filter', 'all');
         $month = $request->get('month', date('m'));
         $year = $request->get('year', date('Y'));
@@ -63,6 +76,7 @@ class DocumentAnalyticsController extends Controller
         $visitsLabels = $visitsPerDay->pluck('date');
         $visitsData = $visitsPerDay->pluck('total');
 
+        // View untuk admin
         return view('content.dashboard.dashboards-analytics', compact(
             'totalVisits',
             'uniqueDocuments',

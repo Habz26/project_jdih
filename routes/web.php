@@ -167,8 +167,20 @@ use App\Models\DocumentAnalytics;
 use App\Http\Controllers\DocumentAnalyticsController;
 use App\Http\Middleware\AdminMiddleware;
 
-Route::middleware([AdminMiddleware::class])->group(function () { Route::get('/analytics', [DocumentAnalyticsController::class, 'index'])->name('admin.analytics');
+// ================== ANALYTICS ROUTES ==================;
+
+Route::middleware(['auth'])->group(function () {
+    // Admin → /analytics
+    Route::get('/analytics', [DocumentAnalyticsController::class, 'index'])
+        ->middleware('role:admin')
+        ->name('dashboard-analytics-pages');
+
+    // Operator → /manage/analytics
+    Route::get('/manage/analytics', [DocumentAnalyticsController::class, 'index'])
+        ->middleware('role:operator')
+        ->name('operator-analytics-pages');
 });
+
 
 
 
@@ -346,13 +358,9 @@ Route::middleware('auth')->group(function () {
         });
 });
 // ================== MULTI ROUTES ==================
-Route::middleware(['auth', 'role:operator,admin'])
-    ->prefix('manage')
-    ->group(function () {
-        Route::get('analytics', [Analytics::class, 'index'])->name('dashboard-analytics-pages');
-        Route::resource('/documents', DocumentController::class);
-        Route::resource('status-dokumen', StatusDokumenController::class);
-    });
+
+
+
 // ================== OPERATOR ROUTES ==================
 Route::get('/pages/account-settings-account', [AccountSettingsAccount::class, 'index'])
     ->name('pages-account-settings-account')
