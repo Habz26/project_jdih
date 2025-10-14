@@ -139,23 +139,20 @@ use Illuminate\Support\Facades\Auth;
         <p class="card-subtitle mb-0 text-muted">Total kunjungan: {{ number_format($totalVisits) }}</p>
       </div>
       <div class="btn-group">
-        <button type="button" class="btn btn-outline-primary btn-sm">January</button>
+        <button type="button" class="btn btn-outline-primary btn-sm" id="current-month-year">
+          {{ DateTime::createFromFormat('!m', $month)->format('F') }} {{ $year }}
+        </button>
         <button type="button" class="btn btn-outline-primary btn-sm dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
           <span class="visually-hidden">Toggle Dropdown</span>
         </button>
         <ul class="dropdown-menu dropdown-menu-end">
-          <li><a class="dropdown-item" href="javascript:void(0);">January</a></li>
-          <li><a class="dropdown-item" href="javascript:void(0);">February</a></li>
-          <li><a class="dropdown-item" href="javascript:void(0);">March</a></li>
-          <li><a class="dropdown-item" href="javascript:void(0);">April</a></li>
-          <li><a class="dropdown-item" href="javascript:void(0);">May</a></li>
-          <li><a class="dropdown-item" href="javascript:void(0);">June</a></li>
-          <li><a class="dropdown-item" href="javascript:void(0);">July</a></li>
-          <li><a class="dropdown-item" href="javascript:void(0);">August</a></li>
-          <li><a class="dropdown-item" href="javascript:void(0);">September</a></li>
-          <li><a class="dropdown-item" href="javascript:void(0);">October</a></li>
-          <li><a class="dropdown-item" href="javascript:void(0);">November</a></li>
-          <li><a class="dropdown-item" href="javascript:void(0);">December</a></li>
+          @for ($i = 1; $i <= 12; $i++)
+            <li>
+              <a class="dropdown-item" href="javascript:void(0);" onclick="updateMonth('{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}')">
+                {{ DateTime::createFromFormat('!m', $i)->format('F') }}
+              </a>
+            </li>
+          @endfor
         </ul>
       </div>
     </div>
@@ -200,6 +197,30 @@ use Illuminate\Support\Facades\Auth;
     </div>
   </div>
 </div>
+</div>
+
+<div class="row mb-4">
+  <div class="col-md-3">
+    <label for="filter-month" class="form-label">Pilih Bulan</label>
+    <select id="filter-month" class="form-select">
+      @for ($i = 1; $i <= 12; $i++)
+        <option value="{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}" {{ $month == $i ? 'selected' : '' }}>
+          {{ DateTime::createFromFormat('!m', $i)->format('F') }}
+        </option>
+      @endfor
+    </select>
+  </div>
+  <div class="col-md-3">
+    <label for="filter-year" class="form-label">Pilih Tahun</label>
+    <select id="filter-year" class="form-select">
+      @for ($i = date('Y'); $i >= 2000; $i--)
+        <option value="{{ $i }}" {{ $year == $i ? 'selected' : '' }}>{{ $i }}</option>
+      @endfor
+    </select>
+  </div>
+  <div class="col-md-3 align-self-end">
+    <button id="apply-filter" class="btn btn-primary">Terapkan</button>
+  </div>
 </div>
 
 {{-- Charts JS --}}
@@ -268,6 +289,50 @@ use Illuminate\Support\Facades\Auth;
         plugins: { legend: { position: 'bottom', labels: { boxWidth: 12 } } }
       }
     });
+
+    const currentDate = new Date();
+    const currentMonth = currentDate.toLocaleString('default', { month: 'long' }); // Nama bulan
+    const currentYear = currentDate.getFullYear(); // Tahun
+
+    // Set tombol bulan dan tahun saat ini
+    const monthButton = document.querySelector('.btn-outline-primary.btn-sm');
+    if (monthButton) {
+      monthButton.textContent = `${currentMonth} ${currentYear}`;
+    }
+
+    // Dropdown bulan
+    const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
+    dropdownItems.forEach(item => {
+      item.addEventListener('click', function () {
+        const selectedMonth = this.textContent;
+        if (monthButton) {
+          monthButton.textContent = `${selectedMonth} ${currentYear}`;
+        }
+      });
+    });
   });
+
+  document.getElementById('apply-filter').addEventListener('click', function () {
+    const month = document.getElementById('filter-month').value;
+    const year = document.getElementById('filter-year').value;
+    const url = new URL(window.location.href);
+
+    url.searchParams.set('month', month);
+    url.searchParams.set('year', year);
+    url.searchParams.set('filter', 'month');
+
+    window.location.href = url;
+  });
+
+  function updateMonth(selectedMonth) {
+    const year = document.getElementById('filter-year').value; // Ambil tahun dari dropdown
+    const url = new URL(window.location.href);
+
+    url.searchParams.set('month', selectedMonth);
+    url.searchParams.set('year', year);
+    url.searchParams.set('filter', 'month');
+
+    window.location.href = url;
+  }
 </script>
 @endsection

@@ -358,18 +358,28 @@ class DocumentController extends Controller
         return view('content.dashboard.dashboards-analytics', compact('popularDocuments', 'byType', 'totalVisits'));
     }
 
-    public function dashboardAnalytics()
+    public function dashboardAnalytics(Request $request)
     {
+        $currentMonth = $request->input('month', date('F')); // Nama bulan
+        $currentYear = $request->input('year', date('Y')); // Tahun
+
         $topDocuments = Document::where('status_verifikasi', 2)
+            ->whereMonth('created_at', date('m', strtotime($currentMonth)))
+            ->whereYear('created_at', $currentYear)
             ->orderByDesc('views')
             ->take(5)
             ->get(['judul', 'views']);
 
         $byType = Document::select('jenis_dokumen', DB::raw('SUM(views) as total_views'))
+            ->whereMonth('created_at', date('m', strtotime($currentMonth)))
+            ->whereYear('created_at', $currentYear)
             ->groupBy('jenis_dokumen')
             ->orderByDesc('total_views')
             ->get();
 
-        return view('content.dashboard.dashboards-analytics', compact('topDocuments', 'byType'));
+        $visitsLabels = $topDocuments->pluck('judul');
+        $visitsData = $topDocuments->pluck('views');
+
+        return view('content.dashboard.dashboards-analytics', compact('topDocuments', 'byType', 'visitsLabels', 'visitsData', 'currentMonth', 'currentYear'));
     }
 }

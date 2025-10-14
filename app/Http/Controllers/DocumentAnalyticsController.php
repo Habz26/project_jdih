@@ -13,13 +13,17 @@ class DocumentAnalyticsController extends Controller
     public function index(Request $request)
     {
         $filter = $request->get('filter', 'all');
+        $month = $request->get('month', date('m'));
+        $year = $request->get('year', date('Y'));
+
         $query = DocumentAnalytics::query();
 
-        // Filter waktu
-        if ($filter === 'week') {
-            $query->where('visited_at', '>=', Carbon::now()->subWeek());
-        } elseif ($filter === 'month') {
-            $query->where('visited_at', '>=', Carbon::now()->subMonth());
+        // Filter waktu berdasarkan bulan dan tahun
+        if ($filter === 'month') {
+            $query->whereYear('visited_at', $year)
+                  ->whereMonth('visited_at', $month);
+        } elseif ($filter === 'year') {
+            $query->whereYear('visited_at', $year);
         }
 
         // Statistik utama
@@ -34,11 +38,12 @@ class DocumentAnalyticsController extends Controller
                 DB::raw('COUNT(document_analytics.id) as total_visits')
             )
             ->leftJoin('document_analytics', 'documents.id', '=', 'document_analytics.document_id')
-            ->when($filter !== 'all', function ($q) use ($filter) {
-                if ($filter === 'week') {
-                    $q->where('document_analytics.visited_at', '>=', Carbon::now()->subWeek());
-                } elseif ($filter === 'month') {
-                    $q->where('document_analytics.visited_at', '>=', Carbon::now()->subMonth());
+            ->when($filter !== 'all', function ($q) use ($filter, $month, $year) {
+                if ($filter === 'month') {
+                    $q->whereYear('document_analytics.visited_at', $year)
+                      ->whereMonth('document_analytics.visited_at', $month);
+                } elseif ($filter === 'year') {
+                    $q->whereYear('document_analytics.visited_at', $year);
                 }
             })
             ->groupBy('documents.id', 'documents.judul')
@@ -58,14 +63,16 @@ class DocumentAnalyticsController extends Controller
         $visitsLabels = $visitsPerDay->pluck('date');
         $visitsData = $visitsPerDay->pluck('total');
 
-       return view('content.dashboard.dashboards-analytics', compact(
-    'totalVisits',
-    'uniqueDocuments',
-    'uniqueUsers',
-    'topDocuments',
-    'filter',
-    'visitsLabels',
-    'visitsData'
-));
+        return view('content.dashboard.dashboards-analytics', compact(
+            'totalVisits',
+            'uniqueDocuments',
+            'uniqueUsers',
+            'topDocuments',
+            'filter',
+            'month',
+            'year',
+            'visitsLabels',
+            'visitsData'
+        ));
     }
 }
