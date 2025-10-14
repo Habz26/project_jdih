@@ -18,52 +18,46 @@ class AuthController extends Controller
             'email' => 'required|string|email|unique:users',
             'password' => 'required|string|min:8|confirmed',
             'role' => 'required|in:operator,admin',
-            'nip' => 'required|string|max:20|unique:users', // validasi NIP
+            'nip' => 'required|string|max:20|unique:users', // validasi NIP (ubah ke nullable jika opsional)
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'nip' => $request->nip,
+            'nip' => $request->nip, // 👈 ini ditambah
             'password' => Hash::make($request->password),
             'role' => $request->role ?? 'operator',
         ]);
 
-        // Login langsung setelah register
-        Auth::login($user);
+        Auth::login($user); // langsung login setelah register
 
-        // 🔁 Arahkan berdasarkan role
-        if ($user->role === 'admin') {
-            return redirect('/analytics')->with('success', 'Registrasi sukses, selamat datang Admin!');
-        } elseif ($user->role === 'operator') {
-            return redirect('/manage/analytics')->with('success', 'Registrasi sukses, selamat datang Operator!');
-        }
-
-        // Jika role tidak dikenali
-        return redirect()->route('auth-login-basic')->withErrors(['role' => 'Role tidak dikenali.']);
+        return redirect()->route('dashboard-analytics-pages')->with('success', 'Register sukses, selamat datang!');
     }
 
     // 🟡 LOGIN USER
-    public function login(Request $request)
+     public function login(Request $request)
     {
         $credentials = $request->only('nip', 'password');
 
         if (auth()->attempt($credentials)) {
             $request->session()->regenerate();
             $user = auth()->user();
-
-            // 🔁 Arahkan sesuai role
             if ($user->role === 'admin') {
-                return redirect('/analytics');
+                return redirect()->route('dashboard-analytics-pages');
             } elseif ($user->role === 'operator') {
-                return redirect('/manage/analytics');
+                return redirect()->route('dashboard-analytics-pages');
             } else {
                 auth()->logout();
-                return redirect()->back()->withErrors(['role' => 'Role tidak dikenali.']);
+                return redirect()
+                    ->back()
+                    ->withErrors(['role' => 'Role tidak dikenali.']);
             }
         }
 
-        return redirect()->back()->withErrors(['nip' => 'NIP atau password salah.']);
+        return redirect()
+            ->back()
+            ->withErrors(['nip' => 'NIP atau password salah.']);
+
     }
 
     // 🔴 LOGOUT USER

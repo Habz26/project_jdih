@@ -166,29 +166,6 @@ use App\Http\Controllers\DocumentController;
 use App\Models\DocumentAnalytics;
 use App\Http\Controllers\DocumentAnalyticsController;
 use App\Http\Middleware\AdminMiddleware;
-
-// ================== ANALYTICS ROUTES ==================;
-
-Route::middleware(['auth'])->group(function () {
-    // Admin → /analytics
-    Route::get('/analytics', [DocumentAnalyticsController::class, 'index'])
-        ->middleware('role:admin')
-        ->name('dashboard-analytics-pages');
-
-    // Operator → /manage/analytics
-    Route::get('/manage/analytics', [DocumentAnalyticsController::class, 'index'])
-        ->middleware('role:operator')
-        ->name('operator-analytics-pages');
-});
-
-
-
-
-
-
-
-
-
 //select judul dokumen
 
 Route::get('/ajax/judul', [DocumentController::class, 'ajaxJudul'])->name('ajax.judul');
@@ -361,38 +338,24 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'role:operator,admin'])
     ->prefix('manage')
     ->group(function () {
-        Route::get('/dashboard/analytics', [Analytics::class, 'index'])->name('dashboard-analytics-pages');
+        Route::get('/dashboard/analytics', [DocumentAnalyticsController::class, 'index'])->name('dashboard-analytics-pages');
         Route::resource('status-dokumen', StatusDokumenController::class);
         Route::resource('/documents', DocumentController::class);
     });
-// ================== OPERATOR ROUTES ==================
+
 Route::get('/pages/account-settings-account', [AccountSettingsAccount::class, 'index'])
     ->name('pages-account-settings-account')
     ->middleware('auth');
-
 Route::post('/account/upload-avatar', [AccountSettingsAccount::class, 'uploadAvatar'])
     ->name('account.uploadAvatars')
     ->middleware('auth');
 Route::get('/account/upload-avatar', [AccountSettingsAccount::class, 'uploadAvatar'])
     ->name('account.uploadAvatar')
     ->middleware('auth');
-
 Route::post('/account/update', [AccountSettingsAccount::class, 'update'])->name('account.update');
-
-// Upload
-// Route::get('/upload', [App\Http\Controllers\Operator\UploadController::class, 'index'])->name('operator.upload');
-// Route::post('/upload', [App\Http\Controllers\Operator\UploadController::class, 'store'])->name('operator.upload.store');
-
 // search
 Route::get('/search', [DocumentController::class, 'search'])->name('search');
-
 // wizard example
 Route::get('/wizard/ex-checkout', [WizardCheckout::class, 'index'])->name('wizard-ex-checkout');
 Route::get('/wizard/ex-property-listing', [PropertyListing::class, 'index'])->name('wizard-ex-property-listing');
 Route::get('/wizard/ex-create-deal', [CreateDeal::class, 'index'])->name('wizard-ex-create-deal');
-
-// modal
-// Route yang tidak lengkap dihapus atau diperbaiki
-
-// Route untuk dashboard analytics
-Route::get('/dashboard-analytics', [DocumentAnalyticsController::class, 'index'])->name('dashboard.analytics');

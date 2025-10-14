@@ -69,8 +69,8 @@ use Illuminate\Support\Facades\Auth;
   <!--/ Gamification Card -->
 </div>
 
+@if(auth()->user()->role !== 'operator')
 <div class="row g-3 mt-2">
-
   {{-- Top small cards (4) --}}
   <div class="col-sm-6 col-lg-3">
     <div class="card card-border-shadow-primary h-100 rounded-3 shadow-sm" style="background:#f6f3ff;">
@@ -222,7 +222,7 @@ use Illuminate\Support\Facades\Auth;
     <button id="apply-filter" class="btn btn-primary">Terapkan</button>
   </div>
 </div>
-
+@endif
 {{-- Charts JS --}}
 <script>
   document.addEventListener('DOMContentLoaded', function () {
