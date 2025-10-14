@@ -19,10 +19,10 @@ class DocumentAnalyticsController extends Controller
             return redirect()->route('login');
         }
 
-        // 🧩 Jika role = operator → tampilkan halaman khusus operator
-        if ($user->role === 'operator') {
-            return view('content.manage.operator-analytics');
-        }
+        // // 🧩 Jika role = operator → tampilkan halaman khusus operator
+        // if ($user->role === 'operator') {
+        //     return view('content.manage.operator-analytics');
+        // }
 
         // 🧩 Hanya admin yang sampai ke sini
         $filter = $request->get('filter', 'all');
