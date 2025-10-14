@@ -331,6 +331,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/documents/verifikasi', [DocumentController::class, 'indexVerifikasiTabs'])->name('documents.verifikasi');
             Route::get('/documents/verifikasi/{id}', [DocumentController::class, 'showVerifikasi'])->name('documents.showVerifikasi');
             Route::put('/documents/{id}/update-status-verifikasi', [DocumentController::class, 'updateStatusVerifikasi'])->name('documents.updateStatusVerifikasi');
+            Route::get('/documents/expiring', [DocumentController::class, 'expiring'])->name('documents.expiring');
         });
 });
 // ================== MULTI ROUTES ==================
@@ -339,7 +340,6 @@ Route::middleware(['auth', 'role:operator,admin'])
     ->group(function () {
         Route::get('/dashboard/analytics', [Analytics::class, 'index'])->name('dashboard-analytics-pages');
         Route::resource('status-dokumen', StatusDokumenController::class);
-        Route::get('/documents/expiring', [DocumentController::class, 'expiring'])->name('documents.expiring');
         Route::resource('/documents', DocumentController::class);
     });
 // ================== OPERATOR ROUTES ==================
