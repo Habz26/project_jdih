@@ -19,11 +19,6 @@ class DocumentAnalyticsController extends Controller
             return redirect()->route('login');
         }
 
-        // // 🧩 Jika role = operator → tampilkan halaman khusus operator
-        // if ($user->role === 'operator') {
-        //     return view('content.manage.operator-analytics');
-        // }
-
         // 🧩 Hanya admin yang sampai ke sini
         $filter = $request->get('filter', 'all');
         $month = $request->get('month', date('m'));
@@ -33,8 +28,7 @@ class DocumentAnalyticsController extends Controller
 
         // Filter waktu berdasarkan bulan dan tahun
         if ($filter === 'month') {
-            $query->whereYear('visited_at', $year)
-                  ->whereMonth('visited_at', $month);
+            $query->whereYear('visited_at', $year)->whereMonth('visited_at', $month);
         } elseif ($filter === 'year') {
             $query->whereYear('visited_at', $year);
         }
@@ -46,47 +40,40 @@ class DocumentAnalyticsController extends Controller
 
         // Top 10 dokumen terpopuler
         $topDocuments = Document::select(
-                'documents.id',
-                'documents.judul',
-                DB::raw('COUNT(document_analytics.id) as total_visits')
-            )
-            ->leftJoin('document_analytics', 'documents.id', '=', 'document_analytics.document_id')
-            ->when($filter !== 'all', function ($q) use ($filter, $month, $year) {
-                if ($filter === 'month') {
-                    $q->whereYear('document_analytics.visited_at', $year)
-                      ->whereMonth('document_analytics.visited_at', $month);
-                } elseif ($filter === 'year') {
-                    $q->whereYear('document_analytics.visited_at', $year);
-                }
-            })
-            ->groupBy('documents.id', 'documents.judul')
-            ->orderByDesc('total_visits')
-            ->limit(10)
-            ->get();
+        'documents.id',
+        'documents.jenis_dokumen',
+        'documents.judul',
+        DB::raw('COUNT(document_analytics.id) as total_visits')
+    )
+    ->leftJoin('document_analytics', 'documents.id', '=', 'document_analytics.document_id')
+    ->where('status_verifikasi', 2)
+    ->groupBy('documents.id', 'documents.jenis_dokumen', 'documents.judul')
+    ->orderByDesc('total_visits')
+    ->limit(10)
+    ->get();
+
+        $jenisMap = [
+            1 => 'Peraturan Gubernur',
+            2 => 'Keputusan Gubernur',
+            3 => 'Peraturan Direktur',
+            4 => 'Keputusan Direktur',
+            5 => 'Perizinan',
+            6 => 'SOP',
+        ];
+
+        // Ganti angka jadi teks di hasil query
+        $topDocuments->transform(function ($doc) use ($jenisMap) {
+            $doc->jenis_dokumen = $jenisMap[$doc->jenis_dokumen] ?? 'Tidak Diketahui';
+            return $doc;
+        });
 
         // Data grafik kunjungan per hari (untuk Chart.js)
-        $visitsPerDay = $query->select(
-                DB::raw('DATE(visited_at) as date'),
-                DB::raw('COUNT(*) as total')
-            )
-            ->groupBy('date')
-            ->orderBy('date')
-            ->get();
+        $visitsPerDay = $query->select(DB::raw('DATE(visited_at) as date'), DB::raw('COUNT(*) as total'))->groupBy('date')->orderBy('date')->get();
 
         $visitsLabels = $visitsPerDay->pluck('date');
         $visitsData = $visitsPerDay->pluck('total');
 
         // View untuk admin
-        return view('content.dashboard.dashboards-analytics', compact(
-            'totalVisits',
-            'uniqueDocuments',
-            'uniqueUsers',
-            'topDocuments',
-            'filter',
-            'month',
-            'year',
-            'visitsLabels',
-            'visitsData'
-        ));
+        return view('content.dashboard.dashboards-analytics', compact('totalVisits', 'uniqueDocuments', 'uniqueUsers', 'topDocuments', 'filter', 'month', 'year', 'visitsLabels', 'visitsData'));
     }
 }
