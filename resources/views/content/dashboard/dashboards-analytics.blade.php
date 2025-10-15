@@ -70,6 +70,36 @@ use Illuminate\Support\Facades\Auth;
 </div>
 
 @if(auth()->user()->role !== 'operator')
+<div class="card shadow-sm border-0 mb-4 mt-4">
+  <div class="card-header bg-white border-bottom">
+    <h5 class="mb-0 text-primary">Pilih Periode</h5>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-3">
+        <label for="filter-month" class="form-label">Pilih Bulan</label>
+        <select id="filter-month" class="form-select">
+          @for ($i = 1; $i <= 12; $i++)
+            <option value="{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}" {{ $month == $i ? 'selected' : '' }}>
+              {{ DateTime::createFromFormat('!m', $i)->format('F') }}
+            </option>
+          @endfor
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label for="filter-year" class="form-label">Pilih Tahun</label>
+        <select id="filter-year" class="form-select">
+          @for ($i = date('Y'); $i >= 2000; $i--)
+            <option value="{{ $i }}" {{ $year == $i ? 'selected' : '' }}>{{ $i }}</option>
+          @endfor
+        </select>
+      </div>
+      <div class="col-md-3 align-self-end">
+        <button id="apply-filter" class="btn btn-primary">Terapkan</button>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="row g-3 mt-2">
   {{-- Top small cards (4) --}}
   <div class="col-sm-6 col-lg-3">
@@ -138,38 +168,20 @@ use Illuminate\Support\Facades\Auth;
         <h5 class="m-0 me-2 mb-1">📈 Statistik Kunjungan Dokumen</h5>
         <p class="card-subtitle mb-0 text-muted">Total kunjungan: {{ number_format($totalVisits) }}</p>
       </div>
-      <div class="btn-group">
-        <button type="button" class="btn btn-outline-primary btn-sm" id="current-month-year">
-          {{ DateTime::createFromFormat('!m', $month)->format('F') }} {{ $year }}
-        </button>
-        <button type="button" class="btn btn-outline-primary btn-sm dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-          <span class="visually-hidden">Toggle Dropdown</span>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end">
-          @for ($i = 1; $i <= 12; $i++)
-            <li>
-              <a class="dropdown-item" href="javascript:void(0);" onclick="updateMonth('{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}')">
-                {{ DateTime::createFromFormat('!m', $i)->format('F') }}
-              </a>
-            </li>
-          @endfor
-        </ul>
-      </div>
     </div>
     <div class="card-body">
       <canvas id="shipmentStatisticsChart" height="60"></canvas>
     </div>
   </div>
 </div>
-
 {{-- Dua card di bawah sejajar kiri-kanan --}}
 <div class="col-lg-6 col-md-12">
   <div class="card rounded-3 shadow-sm h-100">
     <div class="card-body">
-      <h6 class="fw-bold mb-3">Reasons for access (distribution)</h6>
+      <h6 class="fw-bold mb-3">Jenis Dokumen yang Paling Sering Dilihat</h6>
       <canvas id="donutChartCenter" height="220"></canvas>
       <div class="mt-3 small text-muted">
-        Legend: top dokumen akses
+        Legend: top dokumen akses berdasarkan jenis dokumen.
       </div>
     </div>
   </div>
@@ -181,11 +193,13 @@ use Illuminate\Support\Facades\Auth;
       <h6 class="fw-bold mb-2">(Top Dokumen)</h6>
       <p class="text-muted small mb-3">{{ $topDocuments->count() }} dokumen teratas</p>
       <div class="list-group list-group-flush">
-        @foreach($topDocuments->take(6) as $doc)
+        @foreach($topDocuments->take(10) as $doc)
         <div class="list-group-item d-flex justify-content-between align-items-start">
           <div class="me-2">
             <div class="small text-muted">DOC</div>
-            <div class="fw-semibold text-truncate" style="max-width:200px;">{{ $doc->judul }}</div>
+            <div class="fw-semibold text-truncate">
+  {{ \Illuminate\Support\Str::words($doc->judul, 6, '...') }}
+</div>
           </div>
           <div class="text-end">
             <div class="fw-bold">{{ $doc->total_visits }}</div>
@@ -198,37 +212,13 @@ use Illuminate\Support\Facades\Auth;
   </div>
 </div>
 </div>
-
-<div class="row mb-4">
-  <div class="col-md-3">
-    <label for="filter-month" class="form-label">Pilih Bulan</label>
-    <select id="filter-month" class="form-select">
-      @for ($i = 1; $i <= 12; $i++)
-        <option value="{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}" {{ $month == $i ? 'selected' : '' }}>
-          {{ DateTime::createFromFormat('!m', $i)->format('F') }}
-        </option>
-      @endfor
-    </select>
-  </div>
-  <div class="col-md-3">
-    <label for="filter-year" class="form-label">Pilih Tahun</label>
-    <select id="filter-year" class="form-select">
-      @for ($i = date('Y'); $i >= 2000; $i--)
-        <option value="{{ $i }}" {{ $year == $i ? 'selected' : '' }}>{{ $i }}</option>
-      @endfor
-    </select>
-  </div>
-  <div class="col-md-3 align-self-end">
-    <button id="apply-filter" class="btn btn-primary">Terapkan</button>
-  </div>
-</div>
 @endif
 {{-- Charts JS --}}
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const visitsLabels = @json($visitsLabels);
     const visitsData = @json($visitsData);
-    const topLabels = @json($topDocuments->pluck('judul'));
+    const topLabels = @json($topDocuments->pluck('jenis_dokumen'));
     const topData = @json($topDocuments->pluck('total_visits'));
 
     const maxVisits = visitsData.length ? Math.max(...visitsData) : 0;
