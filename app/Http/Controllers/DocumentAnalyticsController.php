@@ -39,18 +39,7 @@ class DocumentAnalyticsController extends Controller
         $uniqueUsers = $query->distinct('user_id')->count('user_id');
 
         // Top 10 dokumen terpopuler
-        $topDocuments = Document::select(
-        'documents.id',
-        'documents.jenis_dokumen',
-        'documents.judul',
-        DB::raw('COUNT(document_analytics.id) as total_visits')
-    )
-    ->leftJoin('document_analytics', 'documents.id', '=', 'document_analytics.document_id')
-    ->where('status_verifikasi', 2)
-    ->groupBy('documents.id', 'documents.jenis_dokumen', 'documents.judul')
-    ->orderByDesc('total_visits')
-    ->limit(10)
-    ->get();
+        $topDocuments = Document::select('documents.id', 'documents.jenis_dokumen', 'documents.judul', DB::raw('COUNT(document_analytics.id) as total_visits'))->leftJoin('document_analytics', 'documents.id', '=', 'document_analytics.document_id')->where('status_verifikasi', 2)->groupBy('documents.id', 'documents.jenis_dokumen', 'documents.judul')->orderByDesc('total_visits')->limit(10)->get();
 
         $jenisMap = [
             1 => 'Peraturan Gubernur',
