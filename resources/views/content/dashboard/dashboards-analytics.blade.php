@@ -22,7 +22,6 @@
     @vite(['resources/assets/js/dashboards-analytics.js'])
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Simpan URL awal saat user pertama kali masuk
         if (!sessionStorage.getItem('startUrl')) {
             sessionStorage.setItem('startUrl', window.location.href);
         }
@@ -38,7 +37,7 @@
                     <div class="col-md-6 order-2 order-md-1">
                         <div class="card-body">
                             <h4 class="card-title mb-4">
-                                Haii <span class="fw-bold">{{ auth()->user()->name }} </span>
+                                Haii <span class="fw-bold">{{ auth()->user()->name }}</span>
                                 <span style="font-family:Roboto; font:lighter;">[{{ Auth::user()->role }}]</span>
                             </h4>
                             <p class="mb-2">Selamat datang kembali di dashboard <i>Management!</i></p>
@@ -60,6 +59,7 @@
     </div>
 
     @if (auth()->user()->role !== 'operator')
+        {{-- Filter Periode --}}
         <div class="card shadow-sm border-0 mb-4 mt-4">
             <div class="card-header bg-white border-bottom">
                 <h5 class="mb-0 text-primary">Pilih Periode</h5>
@@ -92,83 +92,142 @@
                 </div>
             </div>
         </div>
+
+        {{-- Top small cards --}}
         <div class="row g-3 mt-2">
-            {{-- Top small cards (4) --}}
-            <div class="col-sm-6 col-lg-3">
-                <div class="card card-border-shadow-primary h-100 rounded-3 shadow-sm" style="background:#f6f3ff;">
-                    <div class="card-body d-flex align-items-center gap-3">
-                        <div class="avatar bg-white rounded-circle p-2 shadow-sm">
-                            <i class="bi-bar-chart-line-fill text-primary" style="font-size:20px"></i>
+            <div class="row g-3 mt-2">
+                <div class="col-md-3 col-6">
+                    <div class="card p-3 rounded-3 shadow-sm" style="background-color: #f6f3ff;">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-bar-chart-line-fill fs-3 text-primary"></i>
+                            <div class="ms-2">
+                                <p class="mb-1 small text-muted">Total Akses</p>
+                                <h5 class="mb-0 fw-bold">{{ $totalVisits }}</h5>
+                            </div>
                         </div>
-                        <div>
-                            <h5 class="mb-0 fw-bold">{{ number_format($totalVisits) }}</h5>
-                            <small class="text-muted">Total Kunjungan</small>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="card p-3 rounded-3 shadow-sm" style="background-color: #fff9ea;">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-file-earmark-text fs-3 text-warning"></i>
+                            <div class="ms-2">
+                                <p class="mb-1 small text-muted">Dokumen Unik</p>
+                                <h5 class="mb-0 fw-bold">{{ $uniqueDocuments }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="card p-3 rounded-3 shadow-sm" style="background-color: #f0fff6;">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-person-fill fs-3 text-success"></i>
+                            <div class="ms-2">
+                                <p class="mb-1 small text-muted">Pengguna Unik</p>
+                                <h5 class="mb-0 fw-bold">{{ $uniqueUsers }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="card p-3 rounded-3 shadow-sm" style="background-color: #eef9ff;">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-graph-up-arrow fs-3 text-info"></i>
+                            <div class="ms-2">
+                                <p class="mb-1 small text-muted">Rata-rata Akses</p>
+                                <h5 class="mb-0 fw-bold">
+                                    {{ $uniqueDocuments > 0 ? number_format($totalVisits / $uniqueDocuments, 2) : 0 }}</h5>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-sm-6 col-lg-3">
-                <div class="card card-border-shadow-info h-100 rounded-3 shadow-sm" style="background:#fff9ea;">
-                    <div class="card-body d-flex align-items-center gap-3">
-                        <div class="avatar bg-white rounded-circle p-2 shadow-sm">
-                          <i class="bi-file-earmark-text text-warning" style="font-size:20px"></i>
-                        </div>
-                        <div>
-                            <h5 class="mb-0 fw-bold">{{ number_format($uniqueDocuments) }}</h5>
-                            <small class="text-muted">Dokumen Unik</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        </div>
 
-            <div class="col-sm-6 col-lg-3">
-                <div class="card card-border-shadow-warning h-100 rounded-3 shadow-sm" style="background:#f0fff6;">
-                    <div class="card-body d-flex align-items-center gap-3">
-                        <div class="avatar bg-white rounded-circle p-2 shadow-sm">
-                            <i class="bi-person-fill text-success" style="font-size:20px"></i>
-                        </div>
-                        <div>
-                            <h5 class="mb-0 fw-bold">{{ number_format($uniqueUsers) }}</h5>
-                            <small class="text-muted">Pengguna Unik</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-6 col-lg-3">
-                <div class="card card-border-shadow-success h-100 rounded-3 shadow-sm" style="background:#eef9ff;">
-                    <div class="card-body d-flex align-items-center gap-3">
-                        <div class="avatar bg-white rounded-circle p-2 shadow-sm">
-                            <i class="bi-graph-up-arrow text-info" style="font-size:20px"></i>
-                        </div>
-                        <div>
-                            <h5 class="mb-0 fw-bold">
-                                {{ $uniqueDocuments > 0 ? number_format($totalVisits / $uniqueDocuments, 2) : 0 }}
-                            </h5>
-                            <small class="text-muted">Rata-rata Kunjungan</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Second row: Overview + Shipment-like statistics --}}
+        {{-- Statistik Kunjungan --}}
+        <div class="row g-3 mt-3">
             <div class="col-12">
                 <div class="card rounded-3 shadow-sm h-100">
-                    <div class="card-header d-flex align-items-center justify-content-between">
-                        <div class="card-title mb-0">
-                            <h5 class="m-0 me-2 mb-1">Statistik Kunjungan Dokumen</h5>
-                            <p class="card-subtitle mb-0 text-muted">Total kunjungan: {{ number_format($totalVisits) }}</p>
-                        </div>
+                    <div class="card-header">
+                        <h5 class="mb-0">Statistik Kunjungan Dokumen</h5>
+                        <small>Total kunjungan: {{ number_format($totalVisits) }}</small>
                     </div>
                     <div class="card-body">
                         <canvas id="shipmentStatisticsChart" height="60"></canvas>
                     </div>
                 </div>
             </div>
-            {{-- Dua card di bawah sejajar kiri-kanan --}}
+        </div>
+
+        {{-- Status Dokumen 6 kartu paten tanpa scroll --}}
+        <div class="card rounded-3 shadow-sm mb-3 mt-3">
+            <div class="card-body">
+                <h6 class="fw-bold mb-3">Status Dokumen</h6>
+
+                <div class="d-flex gap-3 justify-content-between">
+                    @php
+                        $statusDokumen = [
+                            [
+                                'label' => 'Terverifikasi',
+                                'value' => $dokumenTerverifikasi,
+                                'icon' => 'check-circle-fill',
+                                'bg' => '#f0fff6',
+                                'color' => 'success',
+                            ],
+                            [
+                                'label' => 'Belum Verifikasi',
+                                'value' => $dokumenBelumVerifikasi,
+                                'icon' => 'x-circle-fill',
+                                'bg' => '#fff4e6',
+                                'color' => 'warning',
+                            ],
+                            [
+                                'label' => 'Berlaku',
+                                'value' => $dokumenBerlaku,
+                                'icon' => 'check2-square',
+                                'bg' => '#e6f7ff',
+                                'color' => 'info',
+                            ],
+                            [
+                                'label' => 'Tidak Berlaku',
+                                'value' => $dokumenTidakBerlaku,
+                                'icon' => 'exclamation-circle-fill',
+                                'bg' => '#fff0f6',
+                                'color' => 'danger',
+                            ],
+                            [
+                                'label' => 'Berlaku Sebagian',
+                                'value' => $dokumenBerlakuSebagian,
+                                'icon' => 'info-circle-fill',
+                                'bg' => '#fffbe6',
+                                'color' => 'warning',
+                            ],
+                            [
+                                'label' => 'Total Dokumen',
+                                'value' => $totaldokumen,
+                                'icon' => 'folder-fill',
+                                'bg' => '#f9f0ff',
+                                'color' => 'primary',
+                            ],
+                        ];
+                    @endphp
+
+                    @foreach ($statusDokumen as $status)
+                        <div class="card p-3 rounded-3 shadow-sm text-center flex-shrink-0"
+                            style="background-color: {{ $status['bg'] }}; width: calc((100% - 5*12px)/6);">
+                            <i class="bi bi-{{ $status['icon'] }} fs-3 text-{{ $status['color'] }}"></i>
+                            <p class="mb-1 small text-muted mt-2">{{ $status['label'] }}</p>
+                            <h5 class="mb-0 fw-bold">{{ $status['value'] }}</h5>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+        {{-- Charts + Top Dokumen --}}
+        <div class="row g-3 mt-3">
             <div class="col-lg-6 col-md-12">
-                <div class="card rounded-3 shadow-sm h-100">
+                <div class="card rounded-3 shadow-sm mb-3">
                     <div class="card-body">
                         <h6 class="fw-bold mb-3">Jenis Dokumen yang Paling Sering Dilihat</h6>
                         <canvas id="donutChartCenter" height="220"></canvas>
@@ -190,8 +249,7 @@
                                     <div class="me-2">
                                         <div class="small text-muted">DOC</div>
                                         <div class="fw-semibold text-truncate">
-                                            {{ \Illuminate\Support\Str::words($doc->judul, 6, '...') }}
-                                        </div>
+                                            {{ \Illuminate\Support\Str::words($doc->judul, 6, '...') }}</div>
                                     </div>
                                     <div class="text-end">
                                         <div class="fw-bold">{{ $doc->total_visits }}</div>
@@ -205,6 +263,7 @@
             </div>
         </div>
     @endif
+
     {{-- Charts JS --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -212,7 +271,6 @@
             const visitsData = @json($visitsData);
             const topLabels = @json($topDocuments->pluck('jenis_dokumen'));
             const topData = @json($topDocuments->pluck('total_visits'));
-
             const maxVisits = visitsData.length ? Math.max(...visitsData) : 0;
 
             // Shipment chart
@@ -225,9 +283,9 @@
                             type: 'bar',
                             label: 'Visits',
                             data: visitsData,
-                            backgroundColor: 'rgba(255, 193, 7, 0.9)',
+                            backgroundColor: 'rgba(255, 193, 7,0.9)',
                             borderRadius: 4,
-                            yAxisID: 'y',
+                            yAxisID: 'y'
                         },
                         {
                             type: 'line',
@@ -274,9 +332,8 @@
                     labels: topLabels,
                     datasets: [{
                         data: topData,
-                        backgroundColor: [
-                            '#7b3ff3', '#ffd666', '#52c41a', '#40a9ff', '#fa8c16', '#eb2f96',
-                            '#13c2c2', '#2f54eb', '#fa541c', '#73d13d'
+                        backgroundColor: ['#7b3ff3', '#ffd666', '#52c41a', '#40a9ff', '#fa8c16',
+                            '#eb2f96', '#13c2c2', '#2f54eb', '#fa541c', '#73d13d'
                         ]
                     }]
                 },
@@ -294,51 +351,24 @@
                 }
             });
 
+            // Set current month/year di filter (opsional)
             const currentDate = new Date();
             const currentMonth = currentDate.toLocaleString('default', {
                 month: 'long'
-            }); // Nama bulan
-            const currentYear = currentDate.getFullYear(); // Tahun
-
-            // Set tombol bulan dan tahun saat ini
-            const monthButton = document.querySelector('.btn-outline-primary.btn-sm');
-            if (monthButton) {
-                monthButton.textContent = `${currentMonth} ${currentYear}`;
-            }
-
-            // Dropdown bulan
-            const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
-            dropdownItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    const selectedMonth = this.textContent;
-                    if (monthButton) {
-                        monthButton.textContent = `${selectedMonth} ${currentYear}`;
-                    }
-                });
             });
+            const currentYear = currentDate.getFullYear();
+            const monthButton = document.querySelector('.btn-outline-primary.btn-sm');
+            if (monthButton) monthButton.textContent = `${currentMonth} ${currentYear}`;
         });
 
         document.getElementById('apply-filter').addEventListener('click', function() {
             const month = document.getElementById('filter-month').value;
             const year = document.getElementById('filter-year').value;
             const url = new URL(window.location.href);
-
             url.searchParams.set('month', month);
             url.searchParams.set('year', year);
             url.searchParams.set('filter', 'month');
-
             window.location.href = url;
         });
-
-        function updateMonth(selectedMonth) {
-            const year = document.getElementById('filter-year').value; // Ambil tahun dari dropdown
-            const url = new URL(window.location.href);
-
-            url.searchParams.set('month', selectedMonth);
-            url.searchParams.set('year', year);
-            url.searchParams.set('filter', 'month');
-
-            window.location.href = url;
-        }
     </script>
 @endsection

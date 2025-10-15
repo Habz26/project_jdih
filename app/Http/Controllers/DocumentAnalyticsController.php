@@ -37,9 +37,26 @@ class DocumentAnalyticsController extends Controller
         $totalVisits = $query->count();
         $uniqueDocuments = $query->distinct('document_id')->count('document_id');
         $uniqueUsers = $query->distinct('user_id')->count('user_id');
+        $dokumenTerverifikasi = Document::where('status_verifikasi', 2)->count();
+        $dokumenBelumVerifikasi = Document::where('status_verifikasi', '!=', 2)->count();
+        $dokumenBerlaku = Document::where('status', 2)->count();
+        $dokumenTidakBerlaku = Document::where('status', 0)->count();
+        $dokumenBerlakuSebagian = Document::where('status', 1)->count();
+        $totaldokumen = Document::count();
 
         // Top 10 dokumen terpopuler
-        $topDocuments = Document::select('documents.id', 'documents.jenis_dokumen', 'documents.judul', DB::raw('COUNT(document_analytics.id) as total_visits'))->leftJoin('document_analytics', 'documents.id', '=', 'document_analytics.document_id')->where('status_verifikasi', 2)->groupBy('documents.id', 'documents.jenis_dokumen', 'documents.judul')->orderByDesc('total_visits')->limit(10)->get();
+        $topDocuments = Document::select(
+                'documents.id', 
+                'documents.jenis_dokumen', 
+                'documents.judul', 
+                DB::raw('COUNT(document_analytics.id) as total_visits')
+            )
+            ->leftJoin('document_analytics', 'documents.id', '=', 'document_analytics.document_id')
+            ->where('status_verifikasi', 2)
+            ->groupBy('documents.id', 'documents.jenis_dokumen', 'documents.judul')
+            ->orderByDesc('total_visits')
+            ->limit(10)
+            ->get();
 
         $jenisMap = [
             1 => 'Peraturan Gubernur',
@@ -56,13 +73,64 @@ class DocumentAnalyticsController extends Controller
             return $doc;
         });
 
-        // Data grafik kunjungan per hari (untuk Chart.js)
-        $visitsPerDay = $query->select(DB::raw('DATE(visited_at) as date'), DB::raw('COUNT(*) as total'))->groupBy('date')->orderBy('date')->get();
+        // 🔹 Data grafik kunjungan
+        if ($filter === 'month') {
+            // Chart harian lengkap tiap tanggal
+            $dates = collect();
+            $start = Carbon::create($year, $month, 1);
+            $end = $start->copy()->endOfMonth();
 
-        $visitsLabels = $visitsPerDay->pluck('date');
-        $visitsData = $visitsPerDay->pluck('total');
+            while ($start->lte($end)) {
+                $dates->push($start->toDateString());
+                $start->addDay();
+            }
+
+            $visitsPerDay = $dates->map(function ($date) use ($query) {
+                $count = (clone $query)->whereDate('visited_at', $date)->count();
+                return ['date' => $date, 'total' => $count];
+            });
+
+            $visitsLabels = $visitsPerDay->pluck('date');
+            $visitsData = $visitsPerDay->pluck('total');
+
+        } elseif ($filter === 'year') {
+            // Chart bulanan
+            $months = collect(range(1, 12));
+            $visitsPerDay = $months->map(function ($m) use ($query, $year) {
+                $count = (clone $query)->whereYear('visited_at', $year)->whereMonth('visited_at', $m)->count();
+                return ['month' => Carbon::create($year, $m, 1)->format('F'), 'total' => $count];
+            });
+
+            $visitsLabels = $visitsPerDay->pluck('month');
+            $visitsData = $visitsPerDay->pluck('total');
+        } else {
+            // Semua data
+            $visitsPerDay = $query->select(DB::raw('DATE(visited_at) as date'), DB::raw('COUNT(*) as total'))
+                ->groupBy('date')
+                ->orderBy('date')
+                ->get();
+
+            $visitsLabels = $visitsPerDay->pluck('date');
+            $visitsData = $visitsPerDay->pluck('total');
+        }
 
         // View untuk admin
-        return view('content.dashboard.dashboards-analytics', compact('totalVisits', 'uniqueDocuments', 'uniqueUsers', 'topDocuments', 'filter', 'month', 'year', 'visitsLabels', 'visitsData'));
+        return view('content.dashboard.dashboards-analytics', compact(
+            'totalVisits', 
+            'uniqueDocuments', 
+            'uniqueUsers',
+            'dokumenTerverifikasi', 
+            'dokumenBelumVerifikasi',
+            'dokumenBerlaku', 
+            'dokumenTidakBerlaku',
+            'dokumenBerlakuSebagian',
+            'totaldokumen',
+            'topDocuments', 
+            'filter', 
+            'month', 
+            'year', 
+            'visitsLabels', 
+            'visitsData'
+        ));
     }
 }
