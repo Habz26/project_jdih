@@ -75,7 +75,7 @@
                                                             class="btn btn-sm btn-primary rounded-pill px-3">
                                                             Lihat
                                                         </a>
-                                                        <a href="{{ asset('storage/dokumen/' . $dokumen->file) }}"
+                                                        <a href="{{ asset('storage/' . $dokumen->pdf_file) }}"
                                                             class="btn btn-sm btn-info rounded-pill px-3" target="_blank"
                                                             download>
                                                             Unduh

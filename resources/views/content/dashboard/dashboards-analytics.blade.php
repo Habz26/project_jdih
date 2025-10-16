@@ -160,70 +160,59 @@
             </div>
         </div>
 
-        {{-- Status Dokumen 6 kartu paten tanpa scroll --}}
-        <div class="card rounded-3 shadow-sm mb-3 mt-3">
-            <div class="card-body">
-                <h6 class="fw-bold mb-3">Status Dokumen</h6>
+       <div class="card rounded-3 shadow-sm mb-3 mt-3">
+  <div class="card-body">
+    <h6 class="fw-bold mb-3">Status Dokumen</h6>
 
-                <div class="d-flex gap-3 justify-content-between">
-                    @php
-                        $statusDokumen = [
-                            [
-                                'label' => 'Terverifikasi',
-                                'value' => $dokumenTerverifikasi,
-                                'icon' => 'check-circle-fill',
-                                'bg' => '#f0fff6',
-                                'color' => 'success',
-                            ],
-                            [
-                                'label' => 'Belum Verifikasi',
-                                'value' => $dokumenBelumVerifikasi,
-                                'icon' => 'x-circle-fill',
-                                'bg' => '#fff4e6',
-                                'color' => 'warning',
-                            ],
-                            [
-                                'label' => 'Berlaku',
-                                'value' => $dokumenBerlaku,
-                                'icon' => 'check2-square',
-                                'bg' => '#e6f7ff',
-                                'color' => 'info',
-                            ],
-                            [
-                                'label' => 'Tidak Berlaku',
-                                'value' => $dokumenTidakBerlaku,
-                                'icon' => 'exclamation-circle-fill',
-                                'bg' => '#fff0f6',
-                                'color' => 'danger',
-                            ],
-                            [
-                                'label' => 'Berlaku Sebagian',
-                                'value' => $dokumenBerlakuSebagian,
-                                'icon' => 'info-circle-fill',
-                                'bg' => '#fffbe6',
-                                'color' => 'warning',
-                            ],
-                            [
-                                'label' => 'Total Dokumen',
-                                'value' => $totaldokumen,
-                                'icon' => 'folder-fill',
-                                'bg' => '#f9f0ff',
-                                'color' => 'primary',
-                            ],
-                        ];
-                    @endphp
+    <div class="row">
+      {{-- Kolom Kiri: 3 Kartu --}}
+      <div class="col-md-6 d-flex gap-3">
+        @php
+          $statusDokumen = [
+              [
+                  'label' => 'Terverifikasi',
+                  'value' => $dokumenTerverifikasi,
+                  'icon' => 'check-circle-fill',
+                  'bg' => '#f0fff6',
+                  'color' => 'success',
+              ],
+              [
+                  'label' => 'Belum Verifikasi',
+                  'value' => $dokumenBelumVerifikasi,
+                  'icon' => 'x-circle-fill',
+                  'bg' => '#fff4e6',
+                  'color' => 'warning',
+              ],
+              [
+                  'label' => 'Total Dokumen',
+                  'value' => $totaldokumen,
+                  'icon' => 'folder-fill',
+                  'bg' => '#f9f0ff',
+                  'color' => 'primary',
+              ],
+          ];
+        @endphp
 
-                    @foreach ($statusDokumen as $status)
-                        <div class="card p-3 rounded-3 shadow-sm text-center flex-shrink-0"
-                            style="background-color: {{ $status['bg'] }}; width: calc((100% - 5*12px)/6);">
-                            <i class="bi bi-{{ $status['icon'] }} fs-3 text-{{ $status['color'] }}"></i>
-                            <p class="mb-1 small text-muted mt-2">{{ $status['label'] }}</p>
-                            <h5 class="mb-0 fw-bold">{{ $status['value'] }}</h5>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        </div>
+        @foreach ($statusDokumen as $status)
+          <div class="card p-3 rounded-3 shadow-sm text-center flex-fill"
+              style="background-color: {{ $status['bg'] }};">
+              <div class="d-flex flex-column justify-content-center align-items-center text-center" style="height: 100%;">
+          <i class="bi bi-{{ $status['icon'] }} fs-3 text-{{ $status['color'] }}"></i>
+          <p class="mb-1 small text-muted mt-2">{{ $status['label'] }}</p>
+          <h5 class="mb-0 fw-bold">{{ $status['value'] }}</h5>
+      </div>
+
+          </div>
+        @endforeach
+      </div>
+
+      {{-- Kolom Kanan: Chart --}}
+      <div class="col-md-6">
+        <canvas id="statusChart" height="180"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
         {{-- Charts + Top Dokumen --}}
         <div class="row g-3 mt-3">
             <div class="col-lg-6 col-md-12">
@@ -281,7 +270,7 @@
                     labels: visitsLabels,
                     datasets: [{
                             type: 'bar',
-                            label: 'Visits',
+                            label: 'Jumlah Akses',
                             data: visitsData,
                             backgroundColor: 'rgba(255, 193, 7,0.9)',
                             borderRadius: 4,
@@ -289,7 +278,7 @@
                         },
                         {
                             type: 'line',
-                            label: 'Trend',
+                            label: 'Kunjungan Website per Hari',
                             data: visitsData,
                             borderColor: '#7266f6',
                             backgroundColor: 'rgba(114,102,246,0.06)',
@@ -323,6 +312,38 @@
                     }
                 }
             });
+
+            const ctxStatus = document.getElementById('statusChart').getContext('2d');
+  new Chart(ctxStatus, {
+    type: 'bar',
+    data: {
+      labels: ['Tidak Berlaku', 'Berlaku', 'Berlaku Sebagian'],
+      datasets: [{
+        label: 'Jumlah Dokumen',
+        data: [{{ $dokumenTidakBerlaku }}, {{ $dokumenBerlaku }}, {{ $dokumenBerlakuSebagian }}],
+        backgroundColor: ['#f87171', '#34d399', '#facc15'],
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => `${ctx.dataset.label}: ${ctx.formattedValue}`
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: { display: true, text: 'Jumlah' }
+        }
+      }
+    }
+  });
+
 
             // Donut chart
             const ctxDonut = document.getElementById('donutChartCenter').getContext('2d');
