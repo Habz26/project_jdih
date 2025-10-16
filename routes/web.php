@@ -319,6 +319,7 @@ Route::post('/logout', [AuthController::class, 'logout'])
     ->name('auth.logout')
     ->middleware('auth');
 
+// ================== PUBLIC ROUTE ==================
 Route::get('/documents/{id}', [DocumentController::class, 'show'])->name('documents.show');
 
 // ================== ADMIN ROUTES ==================
@@ -327,20 +328,22 @@ Route::middleware('auth')->group(function () {
         ->prefix('admin')
         ->group(function () {
             Route::get('/laravel/user-management', [UserManagement::class, 'UserManagement'])->name('laravel-example-user-management');
-            Route::resource('/user-list', UserManagement::class);
             Route::get('/documents/verifikasi', [DocumentController::class, 'indexVerifikasiTabs'])->name('documents.verifikasi');
             Route::get('/documents/verifikasi/{id}', [DocumentController::class, 'showVerifikasi'])->name('documents.showVerifikasi');
             Route::put('/documents/{id}/update-status-verifikasi', [DocumentController::class, 'updateStatusVerifikasi'])->name('documents.updateStatusVerifikasi');
             Route::get('/documents/expiring', [DocumentController::class, 'expiring'])->name('documents.expiring');
         });
 });
+
 // ================== MULTI ROUTES ==================
 Route::middleware(['auth', 'role:operator,admin'])
     ->prefix('manage')
     ->group(function () {
         Route::get('/dashboard/analytics', [DocumentAnalyticsController::class, 'index'])->name('dashboard-analytics-pages');
         Route::resource('status-dokumen', StatusDokumenController::class);
-        Route::resource('/documents', DocumentController::class);
+        
+        // Hati-hati: resource ini jangan override documents.show
+        Route::resource('/documents', DocumentController::class)->except(['show']);
     });
 
 Route::get('/pages/account-settings-account', [AccountSettingsAccount::class, 'index'])

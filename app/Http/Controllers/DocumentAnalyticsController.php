@@ -45,18 +45,7 @@ class DocumentAnalyticsController extends Controller
         $totaldokumen = Document::count();
 
         // Top 10 dokumen terpopuler
-        $topDocuments = Document::select(
-                'documents.id', 
-                'documents.jenis_dokumen', 
-                'documents.judul', 
-                DB::raw('COUNT(document_analytics.id) as total_visits')
-            )
-            ->leftJoin('document_analytics', 'documents.id', '=', 'document_analytics.document_id')
-            ->where('status_verifikasi', 2)
-            ->groupBy('documents.id', 'documents.jenis_dokumen', 'documents.judul')
-            ->orderByDesc('total_visits')
-            ->limit(10)
-            ->get();
+        $topDocuments = Document::select('documents.id', 'documents.jenis_dokumen', 'documents.judul', DB::raw('COUNT(document_analytics.id) as total_visits'))->leftJoin('document_analytics', 'documents.id', '=', 'document_analytics.document_id')->where('status_verifikasi', 2)->groupBy('documents.id', 'documents.jenis_dokumen', 'documents.judul')->orderByDesc('total_visits')->limit(10)->get();
 
         $jenisMap = [
             1 => 'Peraturan Gubernur',
@@ -75,24 +64,11 @@ class DocumentAnalyticsController extends Controller
 
         // 🔹 Data grafik kunjungan
         if ($filter === 'month') {
-            // Chart harian lengkap tiap tanggal
-            $dates = collect();
-            $start = Carbon::create($year, $month, 1);
-            $end = $start->copy()->endOfMonth();
-
-            while ($start->lte($end)) {
-                $dates->push($start->toDateString());
-                $start->addDay();
-            }
-
-            $visitsPerDay = $dates->map(function ($date) use ($query) {
-                $count = (clone $query)->whereDate('visited_at', $date)->count();
-                return ['date' => $date, 'total' => $count];
-            });
+            // Ambil data kunjungan per tanggal yang benar-benar ada
+            $visitsPerDay = $query->whereYear('visited_at', $year)->whereMonth('visited_at', $month)->select(DB::raw('DATE(visited_at) as date'), DB::raw('COUNT(*) as total'))->groupBy('date')->orderBy('date')->get();
 
             $visitsLabels = $visitsPerDay->pluck('date');
             $visitsData = $visitsPerDay->pluck('total');
-
         } elseif ($filter === 'year') {
             // Chart bulanan
             $months = collect(range(1, 12));
@@ -105,32 +81,13 @@ class DocumentAnalyticsController extends Controller
             $visitsData = $visitsPerDay->pluck('total');
         } else {
             // Semua data
-            $visitsPerDay = $query->select(DB::raw('DATE(visited_at) as date'), DB::raw('COUNT(*) as total'))
-                ->groupBy('date')
-                ->orderBy('date')
-                ->get();
+            $visitsPerDay = $query->select(DB::raw('DATE(visited_at) as date'), DB::raw('COUNT(*) as total'))->groupBy('date')->orderBy('date')->get();
 
             $visitsLabels = $visitsPerDay->pluck('date');
             $visitsData = $visitsPerDay->pluck('total');
         }
 
         // View untuk admin
-        return view('content.dashboard.dashboards-analytics', compact(
-            'totalVisits', 
-            'uniqueDocuments', 
-            'uniqueUsers',
-            'dokumenTerverifikasi', 
-            'dokumenBelumVerifikasi',
-            'dokumenBerlaku', 
-            'dokumenTidakBerlaku',
-            'dokumenBerlakuSebagian',
-            'totaldokumen',
-            'topDocuments', 
-            'filter', 
-            'month', 
-            'year', 
-            'visitsLabels', 
-            'visitsData'
-        ));
+        return view('content.dashboard.dashboards-analytics', compact('totalVisits', 'uniqueDocuments', 'uniqueUsers', 'dokumenTerverifikasi', 'dokumenBelumVerifikasi', 'dokumenBerlaku', 'dokumenTidakBerlaku', 'dokumenBerlakuSebagian', 'totaldokumen', 'topDocuments', 'filter', 'month', 'year', 'visitsLabels', 'visitsData'));
     }
 }
