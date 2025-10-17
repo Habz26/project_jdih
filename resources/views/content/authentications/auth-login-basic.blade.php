@@ -77,6 +77,7 @@
                                     <div style="color:red">{{ $message }}</div>
                                 @enderror
                             </div>
+                            
 
                             <!-- Remember Me & Forgot Password -->
                             {{-- <div class="mb-5 d-flex justify-content-between mt-5">
