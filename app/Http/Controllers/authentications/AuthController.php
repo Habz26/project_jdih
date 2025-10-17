@@ -10,13 +10,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Anhskohbo\NoCaptcha\Facades\NoCaptcha;
 
-$request->validate([
-    'nip' => 'required|string',
-    'password' => 'required|string',
-    'g-recaptcha-response' => 'required|captcha',
-]);
-
-
 class AuthController extends Controller
 {
     // 🟢 REGISTER USER BARU
