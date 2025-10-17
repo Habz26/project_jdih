@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 
 class AuthController extends Controller
 {
@@ -38,22 +39,37 @@ class AuthController extends Controller
     // 🟡 LOGIN USER
     public function login(Request $request)
 {
-    // Validasi input
+    // 1️⃣ Validasi input biasa (nip, password, captcha wajib diisi)
     $request->validate([
         'nip' => 'required|string',
         'password' => 'required|string',
-        'g-recaptcha-response' => 'required|captcha', // <-- validasi reCAPTCHA
+        'g-recaptcha-response' => 'required', // cukup required, verifikasi manual
     ]);
 
+    // 2️⃣ Verifikasi reCAPTCHA ke Google
+    $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+        'secret' => env('RECAPTCHA_SECRET_KEY'),
+        'response' => $request->input('g-recaptcha-response'),
+        'remoteip' => $request->ip(),
+    ]);
+
+    $body = $response->json();
+
+    if (!isset($body['success']) || $body['success'] !== true) {
+        return redirect()->back()->withErrors(['captcha' => 'Captcha tidak valid.']);
+    }
+
+    // 3️⃣ Validasi kredensial login
     $credentials = $request->only('nip', 'password');
 
-    if (auth()->attempt($credentials)) {
+    if (Auth::attempt($credentials)) {
         $request->session()->regenerate();
-        $user = auth()->user();
+        $user = Auth::user();
+
         if ($user->role === 'admin' || $user->role === 'operator') {
             return redirect()->route('dashboard-analytics-pages');
         } else {
-            auth()->logout();
+            Auth::logout();
             return redirect()->back()->withErrors(['role' => 'Role tidak dikenali.']);
         }
     }
