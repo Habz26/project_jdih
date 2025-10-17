@@ -47,11 +47,13 @@
                         <a href="{{ asset('storage/' . $doc->pdf_file) }}" class="btn btn-success btn-sm me-1"
                             download><i class="bi bi-download"></i></a>
                         <form action="{{ route('documents.destroy', $doc->id) }}" method="POST" class="d-inline"
-                            onsubmit="return confirm('Yakin mau hapus dokumen ini?')">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
-                        </form>
+      onsubmit="return confirm('Yakin mau hapus dokumen ini?')">
+    @csrf
+    @method('DELETE')
+    <input type="hidden" name="return_url" value="{{ url()->current() }}">
+    <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
+</form>
+
                     </td>
                 </tr>
             @empty

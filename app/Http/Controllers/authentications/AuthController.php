@@ -18,7 +18,8 @@ class AuthController extends Controller
             'email' => 'required|string|email|unique:users',
             'password' => 'required|string|min:8|confirmed',
             'role' => 'required|in:operator,admin',
-            'nip' => 'required|string|max:20|unique:users', // validasi NIP (ubah ke nullable jika opsional)
+            'nip' => 'required|string|max:20|unique:users',
+            'g-recaptcha-response' => 'required|captcha'
         ]);
 
         $user = User::create([
@@ -35,30 +36,31 @@ class AuthController extends Controller
     }
 
     // 🟡 LOGIN USER
-     public function login(Request $request)
-    {
-        $credentials = $request->only('nip', 'password');
+    public function login(Request $request)
+{
+    // Validasi input
+    $request->validate([
+        'nip' => 'required|string',
+        'password' => 'required|string',
+        'g-recaptcha-response' => 'required|captcha', // <-- validasi reCAPTCHA
+    ]);
 
-        if (auth()->attempt($credentials)) {
-            $request->session()->regenerate();
-            $user = auth()->user();
-            if ($user->role === 'admin') {
-                return redirect()->route('dashboard-analytics-pages');
-            } elseif ($user->role === 'operator') {
-                return redirect()->route('dashboard-analytics-pages');
-            } else {
-                auth()->logout();
-                return redirect()
-                    ->back()
-                    ->withErrors(['role' => 'Role tidak dikenali.']);
-            }
+    $credentials = $request->only('nip', 'password');
+
+    if (auth()->attempt($credentials)) {
+        $request->session()->regenerate();
+        $user = auth()->user();
+        if ($user->role === 'admin' || $user->role === 'operator') {
+            return redirect()->route('dashboard-analytics-pages');
+        } else {
+            auth()->logout();
+            return redirect()->back()->withErrors(['role' => 'Role tidak dikenali.']);
         }
-
-        return redirect()
-            ->back()
-            ->withErrors(['nip' => 'NIP atau password salah.']);
-
     }
+
+    return redirect()->back()->withErrors(['nip' => 'NIP atau password salah.']);
+}
+
 
     // 🔴 LOGOUT USER
     public function logout(Request $request)

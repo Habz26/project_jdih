@@ -243,51 +243,57 @@ class DocumentController extends Controller
     }
 
     public function updateStatusVerifikasi(Request $request, $id)
-    {
-        $request->validate([
-            'status_verifikasi' => 'required|in:0,1,2,3',
-            'catatan_admin' => 'nullable|string|max:1000',
-        ]);
+{
+    $request->validate([
+        'status_verifikasi' => 'required|in:0,1,2,3',
+        'catatan_admin' => 'nullable|string|max:1000',
+    ]);
 
+    $document = Document::findOrFail($id);
+
+    $document->status_verifikasi = $request->status_verifikasi;
+    $document->catatan_admin = $request->catatan_admin;
+
+    // 🕒 Simpan tanggal verifikasi setiap kali ada aksi
+    $document->tanggal_verifikasi = now();
+
+    $document->save();
+
+    $messages = [
+        0 => 'Verifikasi dibatalkan ❌',
+        1 => 'Status dikembalikan ke belum diverifikasi ⏳',
+        2 => 'Dokumen berhasil diverifikasi ✅',
+        3 => 'Dokumen membutuhkan perbaikan ⚠️',
+    ];
+
+    return redirect()
+        ->route('documents.verifikasi')
+        ->with('success', $messages[$request->status_verifikasi]);
+}
+
+
+    public function destroy(Request $request, $id)
+{
+    try {
         $document = Document::findOrFail($id);
-        $document->status_verifikasi = $request->status_verifikasi;
-        $document->catatan_admin = $request->catatan_admin;
-        $document->save();
 
-        $messages = [
-            0 => 'Verifikasi dibatalkan.',
-            1 => 'Belum diverifikasi.',
-            2 => 'Dokumen berhasil diverifikasi ✅',
-            3 => 'Dokumen membutuhkan perbaikan ⚠️',
-        ];
-
-        if ($request->status_verifikasi == 0) {
-            return redirect()->route('documents.verifikasi')->with('success', $messages[0]);
+        if ($document->pdf_file && Storage::disk('public')->exists($document->pdf_file)) {
+            Storage::disk('public')->delete($document->pdf_file);
         }
 
-        return redirect()
-            ->route('documents.verifikasi', $id)
-            ->with('success', $messages[$request->status_verifikasi]);
+        $document->delete();
+
+        // Ambil return_url, kalau nggak ada default ke index
+        $redirectUrl = $request->input('return_url', route('documents.index'));
+
+        return redirect($redirectUrl)->with('success', 'Dokumen berhasil dihapus!');
+    } catch (\Exception $e) {
+        $redirectUrl = $request->input('return_url', route('documents.index'));
+        return redirect($redirectUrl)
+            ->with('error', 'Gagal menghapus dokumen: ' . $e->getMessage());
     }
+}
 
-    public function destroy($id)
-    {
-        try {
-            $document = Document::findOrFail($id);
-
-            if ($document->pdf_file && Storage::disk('public')->exists($document->pdf_file)) {
-                Storage::disk('public')->delete($document->pdf_file);
-            }
-
-            $document->delete();
-
-            return redirect()->route('documents.index')->with('success', 'Dokumen berhasil dihapus!');
-        } catch (\Exception $e) {
-            return redirect()
-                ->route('documents.index')
-                ->with('error', 'Gagal menghapus dokumen: ' . $e->getMessage());
-        }
-    }
 
     // ========================
     // BAGIAN KATEGORI

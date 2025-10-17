@@ -31,6 +31,7 @@ $customizerHidden = 'customizer-hide';
 @vite([
 'resources/assets/js/pages-auth.js'
 ])
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 @endsection
 
 @section('content')
@@ -140,6 +141,13 @@ $customizerHidden = 'customizer-hide';
                     <div class="invalid-feedback d-block">{{ $message }}</div>
                 @enderror
             </div>
+
+            <div class="mb-3">
+                                <div class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}"></div>
+                                @error('g-recaptcha-response')
+                                    <span class="text-danger small">{{ $message }}</span>
+                                @enderror
+                            </div>
 
             <!-- Submit -->
             <button type="submit" class="btn btn-primary d-grid w-100 mb-5">Daftar</button>
