@@ -37,36 +37,22 @@ class AuthController extends Controller
     }
 
     // 🟡 LOGIN USER
-    public function login(Request $request)
+   public function login(Request $request)
 {
-    // 1️⃣ Validasi input biasa (nip, password, captcha wajib diisi)
+    // Validasi input + captcha
     $request->validate([
         'nip' => 'required|string',
         'password' => 'required|string',
-        'g-recaptcha-response' => 'required', // cukup required, verifikasi manual
+        'captcha' => 'required|captcha',
     ]);
 
-    // 2️⃣ Verifikasi reCAPTCHA ke Google
-    $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
-        'secret' => env('RECAPTCHA_SECRET_KEY'),
-        'response' => $request->input('g-recaptcha-response'),
-        'remoteip' => $request->ip(),
-    ]);
-
-    $body = $response->json();
-
-    if (!isset($body['success']) || $body['success'] !== true) {
-        return redirect()->back()->withErrors(['captcha' => 'Captcha tidak valid.']);
-    }
-
-    // 3️⃣ Validasi kredensial login
     $credentials = $request->only('nip', 'password');
 
     if (Auth::attempt($credentials)) {
         $request->session()->regenerate();
         $user = Auth::user();
 
-        if ($user->role === 'admin' || $user->role === 'operator') {
+        if (in_array($user->role, ['admin', 'operator'])) {
             return redirect()->route('dashboard-analytics-pages');
         } else {
             Auth::logout();

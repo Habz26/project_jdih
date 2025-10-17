@@ -129,6 +129,8 @@ return [
     ],
 
     'Captcha' => Anhskohbo\NoCaptcha\Facades\NoCaptcha::class,
+                 Mews\Captcha\CaptchaServiceProvider::class,
+
 
 
 ];
