@@ -69,10 +69,12 @@
                                 </div>
                             </div>
 
-                            <div class="mb-3">
-                                <div class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}"></div>
-                                @error('g-recaptcha-response')
-                                    <span class="text-danger small">{{ $message }}</span>
+                            <div class="mb-5">
+                                <img src="{{ captcha_src() }}" alt="CAPTCHA">
+                                <input type="text" name="captcha" placeholder="Ketik huruf di atas"
+                                    class="form-control mt-3" >
+                                @error('captcha')
+                                    <div style="color:red">{{ $message }}</div>
                                 @enderror
                             </div>
                             
@@ -117,5 +119,5 @@
     </div>
 
 
-    
+
 @endsection
