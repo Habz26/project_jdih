@@ -126,11 +126,7 @@ return [
     'aliases' => [
         // Other aliases...
         'Helper' => App\Helpers\Helpers::class,
+        'NoCaptcha' => Anhskohbo\NoCaptcha\Facades\NoCaptcha::class,
     ],
-
-    'Captcha' => Anhskohbo\NoCaptcha\Facades\NoCaptcha::class,
-                 Mews\Captcha\CaptchaServiceProvider::class,
-
-
 
 ];
