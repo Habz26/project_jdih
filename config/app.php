@@ -128,4 +128,7 @@ return [
         'Helper' => App\Helpers\Helpers::class,
     ],
 
+    'Captcha' => Anhskohbo\NoCaptcha\Facades\NoCaptcha::class,
+
+
 ];
