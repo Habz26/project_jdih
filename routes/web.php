@@ -311,6 +311,11 @@ Route::get('/auth/two-steps-cover', [TwoStepsCover::class, 'index'])->name('auth
 Route::get('/auth/register-basic', [AuthController::class, 'index'])->name('auth-register-basic');
 Route::post('/auth/register-basic', [AuthController::class, 'register'])->name('auth.register-basic');
 
+Route::get('captcha', function () {
+    return captcha_img();
+})->name('captcha');
+
+
 // Login
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('auth.login');

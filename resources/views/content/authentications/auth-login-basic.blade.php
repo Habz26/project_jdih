@@ -21,7 +21,15 @@
 
 @section('page-script')
     @vite(['resources/assets/js/pages-auth.js'])
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script>
+        document.getElementById('refresh-captcha').addEventListener('click', function(){
+        fetch("{{ route('captcha') }}")
+        .then(response => response.text())
+        .then(data => {
+            document.querySelector('img[alt="captcha"]').src = data;
+        });
+    });
+    </script>
 @endsection
 
 @section('content')
@@ -69,9 +77,17 @@
                                 </div>
                             </div>
 
+                            <!-- CAPTCHA ketik -->
                             <div class="mb-5">
-                                <div class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}"></div>
-                                @error('g-recaptcha-response')
+                                <div class="form-floating form-floating-outline mb-3">
+                                    <input type="text" class="form-control" id="captcha" name="captcha"
+                                        placeholder="Ketik captcha" />
+                                    <label for="captcha">Captcha</label>
+                                </div>
+                                <img src="{{ captcha_src() }}" alt="captcha" class="mb-3">
+                                <button type="button" class="btn btn-sm btn-secondary"
+                                    id="refresh-captcha">Refresh</button>
+                                @error('captcha')
                                     <div style="color:red">{{ $message }}</div>
                                 @enderror
                             </div>
