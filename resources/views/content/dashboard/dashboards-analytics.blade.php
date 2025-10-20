@@ -150,11 +150,11 @@
             <div class="col-12">
                 <div class="card rounded-3 shadow-sm h-100">
                     <div class="card-header">
-                        <h5 class="mb-0">Statistik Kunjungan Dokumen</h5>
-                        <small>Total kunjungan: {{ number_format($totalVisits) }}</small>
+                        <h5 class="mb-0">Statistik Akses Dokumen</h5>
+                        <small>Total akses: {{ number_format($totalVisits) }}</small>
                     </div>
                     <div class="card-body">
-                        <canvas id="shipmentStatisticsChart" height="60"></canvas>
+                        <canvas id="shipmentStatisticsChart" height="350"></canvas>
                     </div>
                 </div>
             </div>
@@ -209,7 +209,7 @@
 
                     {{-- Kolom Kanan: Chart --}}
                     <div class="col-md-6">
-                        <canvas id="statusChart" height="180"></canvas>
+                        <canvas id="statusChart" height="200"></canvas>
                     </div>
                 </div>
             </div>
@@ -219,10 +219,10 @@
             <div class="col-lg-6 col-md-12">
                 <div class="card rounded-3 shadow-sm mb-3">
                     <div class="card-body">
-                        <h6 class="fw-bold mb-3">Jenis Dokumen yang Paling Sering Dilihat</h6>
+                        <h6 class="fw-bold mb-3">Jenis Kategori Dokumen yang Paling Sering Dilihat</h6>
                         <canvas id="donutChartCenter" height="220"></canvas>
                         <div class="mt-3 small text-muted">
-                            Legend: top dokumen akses berdasarkan jenis dokumen.
+                            Legend: top jenis kategori dokumen akses berdasarkan jenis dokumen.
                         </div>
                     </div>
                 </div>
@@ -257,160 +257,145 @@
     {{-- Charts JS --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // ----------------- Data -----------------
             const visitsLabels = @json($visitsLabels);
             const visitsData = @json($visitsData);
-            const topLabels = @json($topDocuments->pluck('jenis_dokumen'));
-            const topData = @json($topDocuments->pluck('total_visits'));
             const maxVisits = visitsData.length ? Math.max(...visitsData) : 0;
 
-            // Shipment chart
-            const ctxShipment = document.getElementById('shipmentStatisticsChart').getContext('2d');
-            new Chart(ctxShipment, {
-                type: 'bar',
-                data: {
-                    labels: visitsLabels,
-                    datasets: [{
-                            type: 'bar',
-                            label: 'Jumlah Akses',
-                            data: visitsData,
-                            backgroundColor: 'rgba(255, 193, 7,0.9)',
-                            borderRadius: 4,
-                            yAxisID: 'y'
-                        },
-                        {
-                            type: 'line',
-                            label: 'Kunjungan Website per Hari',
-                            data: visitsData,
-                            borderColor: '#7266f6',
-                            backgroundColor: 'rgba(114,102,246,0.06)',
-                            tension: 0.35,
-                            pointBackgroundColor: '#fff',
-                            pointBorderColor: '#7266f6',
-                            yAxisID: 'y'
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                stepSize: Math.max(1, Math.ceil(maxVisits / 5))
-                            }
-                        },
-                        x: {
-                            ticks: {
-                                maxRotation: 0,
-                                minRotation: 0
-                            }
-                        }
-                    }
-                }
-            });
+            const statusLabels = ['Tidak Berlaku', 'Berlaku', 'Berlaku Sebagian'];
+            const statusData = [{{ $dokumenTidakBerlaku }}, {{ $dokumenBerlaku }}, {{ $dokumenBerlakuSebagian }}];
 
-            const ctxStatus = document.getElementById('statusChart').getContext('2d');
-            new Chart(ctxStatus, {
-                type: 'bar',
-                data: {
-                    labels: ['Tidak Berlaku', 'Berlaku', 'Berlaku Sebagian'],
-                    datasets: [{
-                        label: 'Jumlah Dokumen',
-                        data: [{{ $dokumenTidakBerlaku }}, {{ $dokumenBerlaku }},
-                            {{ $dokumenBerlakuSebagian }}
-                        ],
-                        backgroundColor: ['#f87171', '#34d399', '#facc15'],
-                        borderRadius: 6
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: ctx => `${ctx.dataset.label}: ${ctx.formattedValue}`
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Jumlah'
-                            }
-                        }
-                    }
-                }
-            });
+            const donutLabels = @json($donutLabels);
+            const donutData = @json($donutData);
 
-
-            // Donut chart
-            const ctxDonut = document.getElementById('donutChartCenter').getContext('2d');
-
-const donutLabels = @json($donutLabels);
-const donutData = @json($donutData);
-
-new Chart(ctxDonut, {
-    type: 'doughnut',
+           // ----------------- Shipment Chart (Bar + Line) -----------------
+const ctxShipment = document.getElementById('shipmentStatisticsChart').getContext('2d');
+new Chart(ctxShipment, {
+    type: 'bar',
     data: {
-        labels: donutLabels,
-        datasets: [{
-            data: donutData,
-            backgroundColor: [
-                '#7b3ff3',
-                '#ffd666',
-                '#52c41a',
-                '#40a9ff',
-                '#fa8c16',
-                '#13c2c2'
-            ],
-            borderWidth: 2,
-            borderColor: '#fff',
-        }]
+        labels: visitsLabels,
+        datasets: [
+            {
+                label: 'Jumlah Akses',
+                data: visitsData,
+                backgroundColor: 'rgba(114,102,246,0.6)',
+                borderColor: '#7266f6',
+                borderWidth: 1,
+                borderRadius: 6,
+                barPercentage: 0.4,
+                categoryPercentage: 0.5,
+                yAxisID: 'y',
+            },
+            {
+                type: 'line',
+                label: 'Akses per Hari',
+                data: visitsData,
+                borderColor: '#ffb020',
+                backgroundColor: 'rgba(255,176,32,0.15)',
+                borderWidth: 2,
+                pointBackgroundColor: '#fff',
+                pointBorderColor: '#ffb020',
+                tension: 0.3,
+                yAxisID: 'y',
+            }
+        ]
     },
     options: {
         responsive: true,
-        cutout: '70%',
+        maintainAspectRatio: false,
+        layout: { padding: 10 },
         plugins: {
-            legend: {
-                position: 'bottom',
-                labels: {
-                    boxWidth: 12,
-                    color: '#333',
-                }
+            legend: { display: true, labels: { usePointStyle: true, padding: 15 } },
+            tooltip: { backgroundColor: '#333', titleColor: '#fff', bodyColor: '#fff', cornerRadius: 6 }
+        },
+        scales: {
+            x: {
+                grid: { display: false },
+                ticks: { maxRotation: 0, minRotation: 0, font: { size: 12 } }
+            },
+            y: {
+                beginAtZero: true,
+                grid: { color: '#f1f1f1' },
+                ticks: {
+                    stepSize: Math.ceil(Math.max(...visitsData) / 5) || 1,
+                    font: { size: 12 }
+                },
+                title: { display: true, text: 'Jumlah Akses', font: { weight: 'bold' } }
             }
         }
     }
 });
 
 
-            // Set current month/year di filter (opsional)
-            const currentDate = new Date();
-            const currentMonth = currentDate.toLocaleString('default', {
-                month: 'long'
-            });
-            const currentYear = currentDate.getFullYear();
-            const monthButton = document.querySelector('.btn-outline-primary.btn-sm');
-            if (monthButton) monthButton.textContent = `${currentMonth} ${currentYear}`;
-        });
 
-        document.getElementById('apply-filter').addEventListener('click', function() {
-            const month = document.getElementById('filter-month').value;
-            const year = document.getElementById('filter-year').value;
-            const url = new URL(window.location.href);
-            url.searchParams.set('month', month);
-            url.searchParams.set('year', year);
-            url.searchParams.set('filter', 'month');
-            window.location.href = url;
+            // ----------------- Status Chart -----------------
+            const ctxStatus = document.getElementById('statusChart').getContext('2d');
+            new Chart(ctxStatus, {
+                type: 'bar',
+                data: {
+                    labels: statusLabels,
+                    datasets: [{
+                        label: 'Jumlah Dokumen',
+                        data: statusData,
+                        backgroundColor: ['#f87171', '#34d399', '#facc15'],
+                        borderColor: ['#dc2626', '#059669', '#ca8a04'],
+                        borderWidth: 1.5,
+                        borderRadius: 10,
+                        barPercentage: 0.6,
+                        categoryPercentage: 0.7
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { backgroundColor: '#333', titleColor: '#fff', bodyColor: '#fff', cornerRadius: 8, callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.formattedValue}` } }
+                    },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { font: { size: 13, weight: '600' } } },
+                        y: { beginAtZero: true, grid: { color: '#f1f1f1' }, ticks: { stepSize: 1, font: { size: 12 } }, title: { display: true, text: 'Jumlah Dokumen', font: { weight: 'bold' } } }
+                    }
+                }
+            });
+
+            // ----------------- Donut Chart -----------------
+            const ctxDonut = document.getElementById('donutChartCenter').getContext('2d');
+            new Chart(ctxDonut, {
+                type: 'doughnut',
+                data: {
+                    labels: donutLabels,
+                    datasets: [{
+                        data: donutData,
+                        backgroundColor: ['#7b3ff3','#ffd666','#52c41a','#40a9ff','#fa8c16','#13c2c2'],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    cutout: '70%',
+                    plugins: {
+                        legend: { position: 'bottom', labels: { boxWidth: 12, color: '#333' } }
+                    }
+                }
+            });
+
+            // ----------------- Filter Bulan/Tahun -----------------
+            document.getElementById('apply-filter').addEventListener('click', function() {
+                const month = document.getElementById('filter-month').value;
+                const year = document.getElementById('filter-year').value;
+                const url = new URL(window.location.href);
+                url.searchParams.set('month', month);
+                url.searchParams.set('year', year);
+                url.searchParams.set('filter', 'month');
+                window.location.href = url;
+            });
+
+            // ----------------- Session Start URL -----------------
+            if (!sessionStorage.getItem('startUrl')) {
+                sessionStorage.setItem('startUrl', window.location.href);
+            }
         });
     </script>
 @endsection
