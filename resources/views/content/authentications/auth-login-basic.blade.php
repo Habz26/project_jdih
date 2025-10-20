@@ -70,13 +70,12 @@
                             </div>
 
                             <div class="mb-5">
-                                <img src="{{ captcha_src() }}" alt="CAPTCHA">
-                                <input type="text" name="captcha" placeholder="Ketik huruf di atas"
-                                    class="form-control mt-3" >
-                                @error('captcha')
-                                    <div style="color:red">{{ $message }}</div>
-                                @enderror
-                            </div>
+    <div class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}"></div>
+    @error('g-recaptcha-response')
+        <div style="color:red">{{ $message }}</div>
+    @enderror
+</div>
+
                             
 
                             <!-- Remember Me & Forgot Password -->

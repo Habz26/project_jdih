@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
+use Anhskohbo\NoCaptcha\Facades\NoCaptcha;
 
 class AuthController extends Controller
 {
@@ -41,10 +42,11 @@ class AuthController extends Controller
 {
     // Validasi input + captcha
     $request->validate([
-        'nip' => 'required|string',
-        'password' => 'required|string',
-        'captcha' => 'required|captcha',
-    ]);
+    'nip' => 'required|string',
+    'password' => 'required|string',
+    'g-recaptcha-response' => 'required|captcha',
+]);
+
 
     $credentials = $request->only('nip', 'password');
 
