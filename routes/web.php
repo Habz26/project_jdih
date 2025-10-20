@@ -318,7 +318,10 @@ Route::get('captcha', function () {
 
 // Login
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
+Route::post('/login', [AuthController::class, 'login'])
+    ->middleware('throttle:5,1')
+    ->name('auth.login');
+
 // Logout
 Route::post('/logout', [AuthController::class, 'logout'])
     ->name('auth.logout')

@@ -8,49 +8,39 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use App\Models\User;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
 
 class AuthController extends Controller
 {
     // 🟢 REGISTER USER BARU
-    public function register(Request $request)
-    {
-        // Validasi form biasa
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|in:operator,admin',
-            'nip' => 'required|string|max:20|unique:users',
-        ]);
+    // 🟢 REGISTER USER BARU
+public function register(Request $request)
+{
+    // Validasi form biasa + captcha Mews
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|unique:users',
+        'password' => 'required|string|min:8|confirmed',
+        'role' => 'required|in:operator,admin',
+        'nip' => 'required|string|max:20|unique:users',
+        'captcha' => 'required|captcha' // <-- Mews captcha validasi
+    ]);
 
-        // ✅ Verifikasi reCAPTCHA manual biar pasti jelas error-nya
-        $token = $request->input('g-recaptcha-response');
-        $verify = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
-            'secret'   => config('captcha.secret'),
-            'response' => $token,
-            'remoteip' => $request->ip(),
-        ])->json();
+    // ✅ Buat user baru
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'nip' => $request->nip,
+        'password' => Hash::make($request->password),
+        'role' => $request->role ?? 'operator',
+    ]);
 
-        if (!($verify['success'] ?? false)) {
-            return back()->withErrors([
-                'g-recaptcha-response' => 'Verifikasi reCAPTCHA gagal, coba lagi ya.',
-            ])->withInput();
-        }
+    Auth::login($user);
 
-        // ✅ Buat user baru
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'nip' => $request->nip,
-            'password' => Hash::make($request->password),
-            'role' => $request->role ?? 'operator',
-        ]);
+    return redirect()->route('dashboard-analytics-pages')
+        ->with('success', 'Register sukses, selamat datang!');
+}
 
-        Auth::login($user);
-
-        return redirect()->route('dashboard-analytics-pages')
-            ->with('success', 'Register sukses, selamat datang!');
-    }
 
     // 🟡 LOGIN USER
     public function login(Request $request)
