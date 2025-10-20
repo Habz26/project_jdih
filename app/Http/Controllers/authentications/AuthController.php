@@ -44,7 +44,10 @@ class AuthController extends Controller
     $request->validate([
     'nip' => 'required|string',
     'password' => 'required|string',
-    'g-recaptcha-response' => 'required|captcha',
+    'g-recaptcha-response' => ['required', 'captcha'],
+], [
+    'g-recaptcha-response.required' => 'Mohon centang reCAPTCHA terlebih dahulu.',
+    'g-recaptcha-response.captcha' => 'Verifikasi reCAPTCHA gagal, coba lagi ya.',
 ]);
 
 
