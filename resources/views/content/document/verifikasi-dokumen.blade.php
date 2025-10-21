@@ -76,40 +76,63 @@
             <div class="col-md-4">
                 <h5>Informasi Dokumen</h5>
                 <ul class="list-group">
-                    @foreach ([
-            'Tipe Dokumen' => $document->tipe_dokumen,
-            'Bidang Hukum' => $document->bidang_hukum,
-            'Jenis Hukum' => $document->jenis_hukum,
-            'Jenis Dokumen' => $document->jenisDokumenRef->deskripsi ?? '-',
-            'Tahun' => $document->tahun,
-            'Judul' => $document->judul,
-            'Tempat Penetapan' => $document->tempat_penetapan,
-            'Tanggal Penetapan' => $document->tanggal_penetapan ? \Carbon\Carbon::parse($document->tanggal_penetapan)->format('d-m-Y') : '-',
-            'Tanggal Pengundangan' => $document->tanggal_pengundangan ? \Carbon\Carbon::parse($document->tanggal_pengundangan)->format('d-m-Y') : '-',
-            'Periode Berlaku' => $document->jenis_dokumen == 5 ? $document->periode_berlaku . ' Tahun' : null,
-            'Sumber' => $document->sumber,
-            'Subjek' => $document->subjek,
-            'Bahasa' => $document->bahasa,
-            'Lokasi' => $document->lokasi,
-            'Urusan Pemerintahan' => $document->urusan_pemerintahan,
-            'Penandatanganan' => $document->penandatanganan,
-            'Pemrakarsa' => $document->pemrakarsa,
-            'Status' => $document->statusDokumenRef->deskripsi ?? '-',
-            'Keterangan' => $document->keterangan_dokumen,
-        ] as $label => $value)
-                        <li class="list-group-item"><strong>{{ $label }}:</strong> {{ $value ?? '-' }}</li>
-                    @endforeach
-                    <li class="list-group-item"><strong>Keterangan Dokumen:</strong>
-                        @if ($document->keteranganDoc)
-                            <a href="{{ asset('storage/' . $document->keteranganDoc->pdf_file) }}"
-                                target="_blank">{{ $document->keteranganDoc->judul }}</a>
-                        @else
-                            <span class="text-muted">-</span>
+                    @php
+                        $fields = [
+                            'Tipe Dokumen' => $tipeDokumenMap[$document->tipe_dokumen] ?? null,
+                            'Jenis Dokumen' => $jenisDokumenMap[$document->jenis_dokumen] ?? null,
+                            'Bidang Hukum' => $bidangHukumMap[$document->bidang_hukum] ?? null,
+                            'Jenis Hukum' => $jenisHukumMap[$document->jenis_hukum] ?? null,
+                            'Tahun' => $document->tahun ?? null,
+                            'Judul' => $document->judul ?? null,
+                            'Tempat Penetapan' => $document->tempat_penetapan ?? null,
+                            'Tanggal Penetapan' => $document->tanggal_penetapan
+                                ? \Carbon\Carbon::parse($document->tanggal_penetapan)->format('d-m-Y')
+                                : null,
+                            'Tanggal Pengundangan' => $document->tanggal_pengundangan
+                                ? \Carbon\Carbon::parse($document->tanggal_pengundangan)->format('d-m-Y')
+                                : null,
+                            'Periode Berlaku' =>
+                                $document->jenis_dokumen == 5 ? $document->periode_berlaku . ' Tahun' : null,
+                            'Sumber' => $document->sumber ?? null,
+                            'Subjek' => $document->subjek ?? null,
+                            'Bahasa' => $document->bahasa ?? null,
+                            'Lokasi' => $document->lokasi ?? null,
+                            'Urusan Pemerintahan' => $document->urusan_pemerintahan ?? null,
+                            'Penandatanganan' => $document->penandatanganan ?? null,
+                            'Pemrakarsa' => $document->pemrakarsa ?? null,
+                            'Status' => $statusDokumenMap[$document->status] ?? null,
+                            'Keterangan' => $document->keterangan_dokumen ?? null,
+                            'Dokumen Perubahan' => $document->keteranganDoc ?? null,
+                            'Tanggal Perubahan' => $document->tanggal_perubahan
+                                ? \Carbon\Carbon::parse($document->tanggal_perubahan)->format('d-m-Y')
+                                : null,
+                        ];
+                    @endphp
+                    @foreach ($fields as $label => $value)
+                        @php
+                            // Khusus Dokumen Perubahan, cek file-nya juga
+                            $showItem = false;
+                            if ($label === 'Dokumen Perubahan') {
+                                $showItem = $value && $value->pdf_file;
+                            } else {
+                                $showItem = $value; // field lain tetap cek value
+                            }
+                        @endphp
+
+                        @if ($showItem)
+                            <li class="list-group-item">
+                                <strong>{{ $label }}:</strong>
+                                @if ($label === 'Dokumen Perubahan')
+                                    <a href="{{ asset('storage/' . $value->pdf_file) }}" target="_blank">
+                                        {{ $value->judul }}
+                                    </a>
+                                @else
+                                    {{ $value }}
+                                @endif
+                            </li>
                         @endif
-                    </li>
-                    <li class="list-group-item"><strong>Tanggal Perubahan:</strong>
-                        {{ $document->tanggal_perubahan ? \Carbon\Carbon::parse($document->tanggal_perubahan)->format('d-m-Y') : '-' }}
-                    </li>
+                    @endforeach
+
                 </ul>
             </div>
         </div>

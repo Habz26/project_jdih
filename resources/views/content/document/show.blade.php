@@ -30,10 +30,8 @@
                                 <button id="zoom-in" class="btn btn-info btn-sm">Zoom +</button>
                                 <button id="zoom-out" class="btn btn-info btn-sm">Zoom -</button>
                                 <a href="{{ $filePath }}" class="btn btn-success btn-sm" download>Unduh</a>
-                                <!-- Tombol Kembali -->
-                                <button onclick="window.history.back()" class="btn btn-outline-info btn-sm">
-                                    ⬅ Kembali
-                                </button>
+                                <button onclick="window.history.back()" class="btn btn-outline-info btn-sm">⬅
+                                    Kembali</button>
                             </div>
                         </div>
 
@@ -62,51 +60,68 @@
             <div class="col-md-4">
                 <h5>Informasi Dokumen</h5>
                 <ul class="list-group">
-                    <li class="list-group-item"><strong>Tipe Dokumen:</strong> {{ $document->tipe_dokumen }}</li>
-                    <li class="list-group-item"><strong>Bidang Hukum:</strong> {{ $document->bidang_hukum }}</li>
-                    <li class="list-group-item"><strong>Jenis Hukum:</strong> {{ $document->jenis_hukum }}</li>
-                    <li class="list-group-item"><strong>Jenis Dokumen:</strong> {{ $document->jenisDokumenRef->deskripsi }}
-                    </li>
-                    <li class="list-group-item"><strong>Tahun:</strong> {{ $document->tahun }}</li>
-                    <li class="list-group-item"><strong>Judul:</strong> {{ $document->judul }}</li>
-                    <li class="list-group-item"><strong>Tempat Penetapan:</strong> {{ $document->tempat_penetapan }}</li>
-                    <li class="list-group-item"><strong>Tanggal Penetapan:</strong>
-                        {{ $document->tanggal_penetapan ? \Carbon\Carbon::parse($document->tanggal_penetapan)->format('d-m-Y') : '-' }}
-                    </li>
-                    <li class="list-group-item"><strong>Tanggal
-                            Pengundangan:</strong>{{ $document->tanggal_pengundangan ? \Carbon\Carbon::parse($document->tanggal_pengundangan)->format('d-m-Y') : '-' }}
-                    </li>
-                    @if ($document->jenis_dokumen == 5)
-                        <li class="list-group-item"><strong>Periode Berlaku:</strong> {{ $document->periode_berlaku }}
-                            Tahun</li>
-                    @endif
-                    <li class="list-group-item"><strong>Sumber:</strong> {{ $document->sumber }}</li>
-                    <li class="list-group-item"><strong>Subjek:</strong> {{ $document->subjek }}</li>
-                    <li class="list-group-item"><strong>Bahasa:</strong> {{ $document->bahasa }}</li>
-                    <li class="list-group-item"><strong>Lokasi:</strong> {{ $document->lokasi }}</li>
-                    <li class="list-group-item"><strong>Urusan Pemerintahan:</strong> {{ $document->urusan_pemerintahan }}
-                    </li>
-                    <li class="list-group-item"><strong>Penandatanganan:</strong> {{ $document->penandatanganan }}</li>
-                    <li class="list-group-item"><strong>Pemrakarsa:</strong> {{ $document->pemrakarsa }}</li>
-                    <li class="list-group-item"><strong>Status:</strong> {{ $document->statusDokumenRef->deskripsi }}</li>
-                    <li class="list-group-item"><strong>Keterangan:</strong> {{ $document->keterangan_dokumen ?? '-' }}
-                    </li>
-                    <li class="list-group-item"><strong>Dokumen Perubahan:</strong>
-                        @if ($document->keteranganDoc)
-                            <a href="{{ asset('storage/' . $document->keteranganDoc->pdf_file) }}" target="_blank">
-                                {{ $document->keteranganDoc->judul }}
-                            </a>
-                        @else
-                            <span class="text-muted">-</span>
+                    @php
+                        $fields = [
+                            'Tipe Dokumen' => $tipeDokumenMap[$document->tipe_dokumen] ?? null,
+                            'Jenis Dokumen' => $jenisDokumenMap[$document->jenis_dokumen] ?? null,
+                            'Bidang Hukum' => $bidangHukumMap[$document->bidang_hukum] ?? null,
+                            'Jenis Hukum' => $jenisHukumMap[$document->jenis_hukum] ?? null,
+                            'Tahun' => $document->tahun ?? null,
+                            'Judul' => $document->judul ?? null,
+                            'Tempat Penetapan' => $document->tempat_penetapan ?? null,
+                            'Tanggal Penetapan' => $document->tanggal_penetapan
+                                ? \Carbon\Carbon::parse($document->tanggal_penetapan)->format('d-m-Y')
+                                : null,
+                            'Tanggal Pengundangan' => $document->tanggal_pengundangan
+                                ? \Carbon\Carbon::parse($document->tanggal_pengundangan)->format('d-m-Y')
+                                : null,
+                            'Periode Berlaku' =>
+                                $document->jenis_dokumen == 5 ? $document->periode_berlaku . ' Tahun' : null,
+                            'Sumber' => $document->sumber ?? null,
+                            'Subjek' => $document->subjek ?? null,
+                            'Bahasa' => $document->bahasa ?? null,
+                            'Lokasi' => $document->lokasi ?? null,
+                            'Urusan Pemerintahan' => $document->urusan_pemerintahan ?? null,
+                            'Penandatanganan' => $document->penandatanganan ?? null,
+                            'Pemrakarsa' => $document->pemrakarsa ?? null,
+                            'Status' => $statusDokumenMap[$document->status] ?? null,
+                            'Keterangan' => $document->keterangan_dokumen ?? null,
+                            'Dokumen Perubahan' => $document->keteranganDoc ?? null,
+                            'Tanggal Perubahan' => $document->tanggal_perubahan
+                                ? \Carbon\Carbon::parse($document->tanggal_perubahan)->format('d-m-Y')
+                                : null,
+                        ];
+                    @endphp
+                    @foreach ($fields as $label => $value)
+                        @php
+                            // Khusus Dokumen Perubahan, cek file-nya juga
+                            $showItem = false;
+                            if ($label === 'Dokumen Perubahan') {
+                                $showItem = $value && $value->pdf_file;
+                            } else {
+                                $showItem = $value; // field lain tetap cek value
+                            }
+                        @endphp
+
+                        @if ($showItem)
+                            <li class="list-group-item">
+                                <strong>{{ $label }}:</strong>
+                                @if ($label === 'Dokumen Perubahan')
+                                    <a href="{{ asset('storage/' . $value->pdf_file) }}" target="_blank">
+                                        {{ $value->judul }}
+                                    </a>
+                                @else
+                                    {{ $value }}
+                                @endif
+                            </li>
                         @endif
-                    </li>
-                    <li class="list-group-item"><strong>Tanggal
-                            Perubahan:</strong>{{ $document->tanggal_perubahan ? \Carbon\Carbon::parse($document->tanggal_perubahan)->format('d-m-Y') : '-' }}
-                    </li>
+                    @endforeach
+
                 </ul>
             </div>
         </div>
     </div>
+
     @if ($isPdf)
         <!-- PDF.js -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
@@ -123,10 +138,8 @@
                 ctx = canvas.getContext('2d'),
                 container = document.getElementById('pdf-container');
 
-            // Render page
             const renderPage = num => {
                 pageIsRendering = true;
-
                 pdfDoc.getPage(num).then(page => {
                     const viewport = page.getViewport({
                         scale: scale
@@ -138,31 +151,21 @@
                         canvasContext: ctx,
                         viewport
                     };
-
                     page.render(renderCtx).promise.then(() => {
                         pageIsRendering = false;
-
                         if (pageNumIsPending !== null) {
                             renderPage(pageNumIsPending);
                             pageNumIsPending = null;
                         }
                     });
 
-                    // Update page counters
                     document.getElementById('page-num').value = num;
                     document.getElementById('page-count').textContent = pdfDoc.numPages;
                 });
             };
 
-            const queueRenderPage = num => {
-                if (pageIsRendering) {
-                    pageNumIsPending = num;
-                } else {
-                    renderPage(num);
-                }
-            };
+            const queueRenderPage = num => pageIsRendering ? pageNumIsPending = num : renderPage(num);
 
-            // Event tombol navigasi
             document.getElementById('prev-page').addEventListener('click', () => {
                 if (pageNum <= 1) return;
                 pageNum--;
@@ -183,20 +186,16 @@
                 }
             });
 
-            // Zoom control
             document.getElementById('zoom-in').addEventListener('click', () => {
                 scale += 0.2;
                 queueRenderPage(pageNum);
             });
 
             document.getElementById('zoom-out').addEventListener('click', () => {
-                if (scale > 0.4) { // jangan terlalu kecil
-                    scale -= 0.2;
-                    queueRenderPage(pageNum);
-                }
+                if (scale > 0.4) scale -= 0.2;
+                queueRenderPage(pageNum);
             });
 
-            // Load PDF
             pdfjsLib.getDocument(url).promise.then(pdfDoc_ => {
                 pdfDoc = pdfDoc_;
                 renderPage(pageNum);

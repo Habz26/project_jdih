@@ -101,41 +101,61 @@
                         <input type="file" name="pdf_file" id="pdf_file" class="form-control" accept=".pdf" required>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="tipe_dokumen">Tipe Dokumen</label>
-                        <select name="tipe_dokumen" id="tipe_dokumen" class="form-control">
-                            <option value="Peraturan Perundang-Undangan">Peraturan Perundang-Undangan</option>
-                            <option value="Lainnya">Lainnya</option>
-                        </select>
-                    </div>
+                    @if ($jenisReferensi && $tipeDokumen->count() > 0)
+                        <div class="mb-3">
+                            <label for="tipe_dokumen">{{ $jenisReferensi->deskripsi }}</label>
+                            <select name="tipe_dokumen" id="tipe_dokumen" class="form-control">
+                                @foreach ($tipeDokumen as $tipe)
+                                    <option value="{{ $tipe->id }}"
+                                        {{ old('tipe_dokumen') == $tipe->id ? 'selected' : '' }}>
+                                        {{ $tipe->deskripsi }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    @endif
 
-                    <div class="mb-3">
-                        <label for="bidang_hukum">Bidang Hukum</label>
-                        <select name="bidang_hukum" id="bidang_hukum" class="form-control">
-                            <option value="Pidana">Pidana</option>
-                            <option value="Perdata">Perdata</option>
-                        </select>
-                    </div>
+                    @if ($jenisReferensi1 && $bidangHukum->count() > 0)
+                        <div class="mb-3">
+                            <label for="bidang_hukum">{{ $jenisReferensi1->deskripsi }}</label>
+                            <select name="bidang_hukum" id="bidang_hukum" class="form-control">
+                                @foreach ($bidangHukum as $bidang)
+                                    <option value="{{ $bidang->id }}"
+                                        {{ old('bidang_hukum') == $bidang->id ? 'selected' : '' }}>
+                                        {{ $bidang->deskripsi }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    @endif
 
-                    <div class="mb-3">
-                        <label for="jenis_hukum">Jenis Hukum</label>
-                        <select name="jenis_hukum" id="jenis_hukum" class="form-control">
-                            <option value="Undang-Undang">Undang-Undang</option>
-                            <option value="Peraturan-Pemerintah">Peraturan-Pemerintah</option>
-                        </select>
-                    </div>
+                    @if ($jenisReferensi2 && $jenisHukum->count() > 0)
+                        <div class="mb-3">
+                            <label for="jenis_hukum">{{ $jenisReferensi2->deskripsi }}</label>
+                            <select name="jenis_hukum" id="jenis_hukum" class="form-control">
+                                @foreach ($jenisHukum as $jenhum)
+                                    <option value="{{ $jenhum->id }}"
+                                        {{ old('jenis_hukum') == $jenhum->id ? 'selected' : '' }}>
+                                        {{ $jenhum->deskripsi }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    @endif
 
-                    <div class="mb-3">
-                        <label for="jenis_dokumen">Jenis Dokumen</label>
-                        <select name="jenis_dokumen" id="jenis_dokumen" class="form-control">
-                            <option value="1">Peraturan Gubernur</option>
-                            <option value="2">Keputusan Gubernur</option>
-                            <option value="3">Peraturan Direktur</option>
-                            <option value="4">Keputusan Direktur</option>
-                            <option value="5">Perizinan</option>
-                            <option value="6">SOP</option>
-                        </select>
-                    </div>
+                    @if ($jenisReferensi3 && $jenisDokumen->count() > 0)
+                        <div class="mb-3">
+                            <label for="jenis_dokumen">{{ $jenisReferensi3->deskripsi }}</label>
+                            <select name="jenis_dokumen" id="jenis_dokumen" class="form-control">
+                                @foreach ($jenisDokumen as $jendok)
+                                    <option value="{{ $jendok->id }}"
+                                        {{ old('jenis_dokumen') == $jendok->id ? 'selected' : '' }}>
+                                        {{ $jendok->deskripsi }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    @endif
 
                     <div class="mb-3">
                         <label for="singkatan">Singkatan</label>
@@ -160,8 +180,8 @@
 
                     <div class="mb-3">
                         <label for="judul">Judul</label>
-                        <input type="text" name="judul" id="judul" class="form-control" value="{{ old('judul') }}"
-                            required>
+                        <input type="text" name="judul" id="judul" class="form-control"
+                            value="{{ old('judul') }}" required>
                     </div>
 
                     <div class="mb-3">
@@ -239,17 +259,19 @@
                             value="{{ old('pemrakarsa') }}">
                     </div>
 
-                    <div class="mb-3">
-                        <label for="status">Status</label>
-                        <select name="status" id="status" class="form-control">
-                            <option value="2" {{ old('status', $document->status ?? '') == '2' ? 'selected' : '' }}>
-                                Berlaku</option>
-                            <option value="0" {{ old('status', $document->status ?? '') == '0' ? 'selected' : '' }}>
-                                Tidak Berlaku</option>
-                            <option value="1" {{ old('status', $document->status ?? '') == '1' ? 'selected' : '' }}>
-                                Berlaku Sebagian</option>
-                        </select>
-                    </div>
+                    @if ($jenisReferensi4 && $statusDokumen->count() > 0)
+                        <div class="mb-3">
+                            <label for="status">{{ $jenisReferensi4->deskripsi }}</label>
+                            <select name="status" id="status" class="form-control">
+                                @foreach ($statusDokumen as $status)
+                                    <option value="{{ $status->id }}"
+                                        {{ old('status') == $status->id ? 'selected' : '' }}>
+                                        {{ $status->deskripsi }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    @endif
 
                     <div class="keterangan-status-wrapper mb-3">
                         <label for="keterangan_dokumen">Keterangan Status</label>

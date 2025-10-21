@@ -9,37 +9,35 @@ class ReferensiSeeder extends Seeder
 {
     public function run()
     {
-        DB::table('referensi')->insert([
+        DB::table('jenis_referensi')->insert([
             [
-                'jenis'     => 3,
-                'id'        => 0,
-                'deskripsi' => 'Batal',
-                'ref_id'    => '0',
-                'teks'      => 'status verifikasi',
-                'status'    => 1,
-            ],
-            [
-                'jenis'     => 3,
                 'id'        => 1,
-                'deskripsi' => 'belum diverifikasi',
-                'ref_id'    => '1',
-                'teks'      => 'status verifikasi',
+                'deskripsi' => 'Jenis Dokumen',
                 'status'    => 1,
             ],
             [
-                'jenis'     => 3,
+                'id'        => 2,
+                'deskripsi' => 'Status Dokumen',
+                'status'    => 1,
+            ],
+            [
                 'id'        => 3,
-                'deskripsi' => 'terverifikasi',
-                'ref_id'    => '3',
-                'teks'      => 'status verifikasi',
+                'deskripsi' => 'Status Verifikasi',
                 'status'    => 1,
             ],
             [
-                'jenis'     => 3,
                 'id'        => 4,
-                'deskripsi' => 'butuh perbaikan',
-                'ref_id'    => '4',
-                'teks'      => 'status verifikasi',
+                'deskripsi' => 'Tipe Dokumen',
+                'status'    => 1,
+            ],
+            [
+                'id'        => 5,
+                'deskripsi' => 'Bidang Hukum',
+                'status'    => 1,
+            ],
+            [
+                'id'        => 6,
+                'deskripsi' => 'Jenis Hukum',
                 'status'    => 1,
             ],
             

@@ -21,8 +21,11 @@
                             {{ \Illuminate\Support\Str::limit($doc->judul, 255) }}
                         </a>
                     </td>
-                    <td class="text-center"><span class="badge bg-light text-dark">{{ $doc->tipe_dokumen ?? '-' }}</span>
-                    </td>
+                    <td class="text-center">
+    <span class="badge bg-light text-dark">
+        {{ $tipeDokumenMap[$doc->tipe_dokumen] ?? $doc->tipe_dokumen }}
+    </span>
+</td>
                     <td class="text-center">{{ $doc->tahun ?? '-' }}</td>
                     <td class="text-center">
                         <span class="badge d-inline-flex align-items-center justify-content-center"
