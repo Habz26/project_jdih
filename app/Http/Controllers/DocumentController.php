@@ -203,7 +203,18 @@ class DocumentController extends Controller
     public function showVerifikasi($id)
     {
         $document = Document::with(['jenisDokumenRef', 'statusDokumenRef', 'keteranganDoc'])->findOrFail($id);
-        return view('content.document.verifikasi-dokumen', compact('document'));
+        // Mapping referensi
+    $tipeDokumenMap = DB::table('referensi')->where('jenis', 4)->where('status', 1)->pluck('deskripsi', 'id');
+    $jenisDokumenMap = DB::table('referensi')->where('jenis', 1)->where('status', 1)->pluck('deskripsi', 'id');
+    $bidangHukumMap = DB::table('referensi')->where('jenis', 5)->where('status', 1)->pluck('deskripsi', 'id'); // misal 5 = bidang hukum
+    $jenisHukumMap = DB::table('referensi')->where('jenis', 6)->where('status', 1)->pluck('deskripsi', 'id'); // misal 6 = jenis hukum
+    $statusDokumenMap = DB::table('referensi')->where('jenis', 2)->where('status', 1)->pluck('deskripsi', 'id'); // status dokumen
+
+        return view('content.document.verifikasi-dokumen', compact('document','tipeDokumenMap',
+        'jenisDokumenMap',
+        'bidangHukumMap',
+        'jenisHukumMap',
+        'statusDokumenMap'));
     }
 
     public function edit($id)

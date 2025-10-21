@@ -93,29 +93,29 @@
                         ];
                     @endphp
                     @foreach ($fields as $label => $value)
-    @php
-        // Khusus Dokumen Perubahan, cek file-nya juga
-        $showItem = false;
-        if($label === 'Dokumen Perubahan'){
-            $showItem = $value && $value->pdf_file;
-        } else {
-            $showItem = $value; // field lain tetap cek value
-        }
-    @endphp
+                        @php
+                            // Khusus Dokumen Perubahan, cek file-nya juga
+                            $showItem = false;
+                            if ($label === 'Dokumen Perubahan') {
+                                $showItem = $value && $value->pdf_file;
+                            } else {
+                                $showItem = $value; // field lain tetap cek value
+                            }
+                        @endphp
 
-    @if ($showItem)
-        <li class="list-group-item">
-            <strong>{{ $label }}:</strong>
-            @if ($label === 'Dokumen Perubahan')
-                <a href="{{ asset('storage/' . $value->pdf_file) }}" target="_blank">
-                    {{ $value->judul }}
-                </a>
-            @else
-                {{ $value }}
-            @endif
-        </li>
-    @endif
-@endforeach
+                        @if ($showItem)
+                            <li class="list-group-item">
+                                <strong>{{ $label }}:</strong>
+                                @if ($label === 'Dokumen Perubahan')
+                                    <a href="{{ asset('storage/' . $value->pdf_file) }}" target="_blank">
+                                        {{ $value->judul }}
+                                    </a>
+                                @else
+                                    {{ $value }}
+                                @endif
+                            </li>
+                        @endif
+                    @endforeach
 
                 </ul>
             </div>
