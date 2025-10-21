@@ -37,6 +37,13 @@
 @endsection
 
 @section('content')
+    @php
+    $tipeDokumenMap = \Illuminate\Support\Facades\DB::table('referensi')
+        ->where('jenis', 4) // 4 = Tipe Dokumen
+        ->where('status', 1)
+        ->pluck('deskripsi', 'id'); // ['id' => 'Deskripsi']
+@endphp
+
     <div class="container py-4">
         <div class="card">
             <div class="card-header bg-white d-flex align-items-center">
