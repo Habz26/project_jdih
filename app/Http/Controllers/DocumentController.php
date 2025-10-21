@@ -97,7 +97,59 @@ class DocumentController extends Controller
     public function create()
     {
         $documents = Document::all();
-        return view('content.document.create', compact('documents'));
+
+        // Ambil jenis referensi untuk label dropdown
+        $jenisReferensi = DB::table('jenis_referensi')
+            ->where('id', 4) // id 4 = 'Tipe Dokumen'
+            ->where('status', 1) // cuma yang aktif
+            ->first();
+
+        // Kalau jenis referensi aktif, ambil data referensinya
+        $tipeDokumen = collect(); // default kosong
+        if ($jenisReferensi) {
+            $tipeDokumen = DB::table('referensi')->where('jenis', $jenisReferensi->id)->where('status', 1)->get();
+        }
+
+        $jenisReferensi1 = DB::table('jenis_referensi')
+            ->where('id', 5) // id 4 = 'Bidang Hukum'
+            ->where('status', 1) // cuma yang aktif
+            ->first();
+
+        $bidangHukum = collect(); // default kosong
+        if ($jenisReferensi1) {
+            $bidangHukum = DB::table('referensi')->where('jenis', $jenisReferensi1->id)->where('status', 1)->get();
+        }
+
+        $jenisReferensi2 = DB::table('jenis_referensi')
+            ->where('id', 6) // id 4 = 'Tipe Dokumen'
+            ->where('status', 1) // cuma yang aktif
+            ->first();
+
+        $jenisHukum = collect(); // default kosong
+        if ($jenisReferensi2) {
+            $jenisHukum = DB::table('referensi')->where('jenis', $jenisReferensi2->id)->where('status', 1)->get();
+        }
+
+        $jenisReferensi3 = DB::table('jenis_referensi')
+            ->where('id', 1) // id 4 = 'Tipe Dokumen'
+            ->where('status', 1) // cuma yang aktif
+            ->first();
+
+        $jenisDokumen = collect(); // default kosong
+        if ($jenisReferensi3) {
+            $jenisDokumen = DB::table('referensi')->where('jenis', $jenisReferensi3->id)->where('status', 1)->get();
+        }
+
+        $jenisReferensi4 = DB::table('jenis_referensi')
+            ->where('id', 2) // id 4 = 'Tipe Dokumen'
+            ->where('status', 1) // cuma yang aktif
+            ->first();
+
+        $statusDokumen = collect(); // default kosong
+        if ($jenisReferensi4) {
+            $statusDokumen = DB::table('referensi')->where('jenis', $jenisReferensi4->id)->where('status', 1)->get();
+        }
+        return view('content.document.create', compact('documents', 'jenisReferensi', 'tipeDokumen', 'jenisReferensi1', 'bidangHukum', 'jenisReferensi2', 'jenisHukum', 'jenisReferensi3', 'jenisDokumen', 'jenisReferensi4', 'statusDokumen'));
     }
 
     public function store(Request $request)
@@ -115,25 +167,38 @@ class DocumentController extends Controller
     }
 
     public function show($id)
-    {
-        $document = Document::with('jenisDokumenRef')->findOrFail($id);
+{
+    $document = Document::with('jenisDokumenRef')->findOrFail($id);
 
-        // =====================================
-        // ✅ Simpan ke tabel document_analytics
-        // =====================================
-        DocumentAnalytics::create([
-            'document_id' => $document->id,
-            'user_id' => auth()->id(),
-            'ip' => request()->ip(),
-            'user_agent' => request()->header('User-Agent'),
-            'visited_at' => now(),
-        ]);
+    // Mapping referensi
+    $tipeDokumenMap = DB::table('referensi')->where('jenis', 4)->where('status', 1)->pluck('deskripsi', 'id');
+    $jenisDokumenMap = DB::table('referensi')->where('jenis', 1)->where('status', 1)->pluck('deskripsi', 'id');
+    $bidangHukumMap = DB::table('referensi')->where('jenis', 5)->where('status', 1)->pluck('deskripsi', 'id'); // misal 5 = bidang hukum
+    $jenisHukumMap = DB::table('referensi')->where('jenis', 6)->where('status', 1)->pluck('deskripsi', 'id'); // misal 6 = jenis hukum
+    $statusDokumenMap = DB::table('referensi')->where('jenis', 2)->where('status', 1)->pluck('deskripsi', 'id'); // status dokumen
 
-        // Tambah view count di tabel documents
-        $document->increment('views');
+    // Simpan analytics
+    DocumentAnalytics::create([
+        'document_id' => $document->id,
+        'user_id' => auth()->id(),
+        'ip' => request()->ip(),
+        'user_agent' => request()->header('User-Agent'),
+        'visited_at' => now(),
+    ]);
 
-        return view('content.document.show', compact('document'));
-    }
+    // Tambah view count
+    $document->increment('views');
+
+    return view('content.document.show', compact(
+        'document',
+        'tipeDokumenMap',
+        'jenisDokumenMap',
+        'bidangHukumMap',
+        'jenisHukumMap',
+        'statusDokumenMap'
+    ));
+}
+
 
     public function showVerifikasi($id)
     {
@@ -142,12 +207,91 @@ class DocumentController extends Controller
     }
 
     public function edit($id)
-    {
-        $document = Document::findOrFail($id);
-        $documents = Document::all();
+{
+    $document = Document::findOrFail($id); // ambil dokumen yang diedit
+    $documents = Document::all(); // untuk dropdown rujukan
 
-        return view('content.document.edit', compact('document', 'documents'));
+    // Tipe Dokumen
+    $jenisReferensi = DB::table('jenis_referensi')
+        ->where('id', 4)
+        ->where('status', 1)
+        ->first();
+
+    $tipeDokumen = collect();
+    if ($jenisReferensi) {
+        $tipeDokumen = DB::table('referensi')
+            ->where('jenis', $jenisReferensi->id)
+            ->where('status', 1)
+            ->get();
     }
+
+    // Bidang Hukum
+    $jenisReferensi1 = DB::table('jenis_referensi')
+        ->where('id', 5)
+        ->where('status', 1)
+        ->first();
+
+    $bidangHukum = collect();
+    if ($jenisReferensi1) {
+        $bidangHukum = DB::table('referensi')
+            ->where('jenis', $jenisReferensi1->id)
+            ->where('status', 1)
+            ->get();
+    }
+
+    // Jenis Hukum
+    $jenisReferensi2 = DB::table('jenis_referensi')
+        ->where('id', 6)
+        ->where('status', 1)
+        ->first();
+
+    $jenisHukum = collect();
+    if ($jenisReferensi2) {
+        $jenisHukum = DB::table('referensi')
+            ->where('jenis', $jenisReferensi2->id)
+            ->where('status', 1)
+            ->get();
+    }
+
+    // Jenis Dokumen
+    $jenisReferensi3 = DB::table('jenis_referensi')
+        ->where('id', 1)
+        ->where('status', 1)
+        ->first();
+
+    $jenisDokumen = collect();
+    if ($jenisReferensi3) {
+        $jenisDokumen = DB::table('referensi')
+            ->where('jenis', $jenisReferensi3->id)
+            ->where('status', 1)
+            ->get();
+    }
+
+    // Status Dokumen
+    $jenisReferensi4 = DB::table('jenis_referensi')
+        ->where('id', 2)
+        ->where('status', 1)
+        ->first();
+
+    $statusDokumen = collect();
+    if ($jenisReferensi4) {
+        $statusDokumen = DB::table('referensi')
+            ->where('jenis', $jenisReferensi4->id)
+            ->where('status', 1)
+            ->get();
+    }
+
+    return view('content.document.edit', compact(
+        'document',
+        'documents',
+        'jenisReferensi', 'tipeDokumen',
+        'jenisReferensi1', 'bidangHukum',
+        'jenisReferensi2', 'jenisHukum',
+        'jenisReferensi3', 'jenisDokumen',
+        'jenisReferensi4', 'statusDokumen'
+    ));
+}
+
 
     public function update(Request $request, $id)
     {
@@ -243,57 +387,54 @@ class DocumentController extends Controller
     }
 
     public function updateStatusVerifikasi(Request $request, $id)
-{
-    $request->validate([
-        'status_verifikasi' => 'required|in:0,1,2,3',
-        'catatan_admin' => 'nullable|string|max:1000',
-    ]);
+    {
+        $request->validate([
+            'status_verifikasi' => 'required|in:0,1,2,3',
+            'catatan_admin' => 'nullable|string|max:1000',
+        ]);
 
-    $document = Document::findOrFail($id);
-
-    $document->status_verifikasi = $request->status_verifikasi;
-    $document->catatan_admin = $request->catatan_admin;
-
-    // 🕒 Simpan tanggal verifikasi setiap kali ada aksi
-    $document->tanggal_verifikasi = now();
-
-    $document->save();
-
-    $messages = [
-        0 => 'Verifikasi dibatalkan ❌',
-        1 => 'Status dikembalikan ke belum diverifikasi ⏳',
-        2 => 'Dokumen berhasil diverifikasi ✅',
-        3 => 'Dokumen membutuhkan perbaikan ⚠️',
-    ];
-
-    return redirect()
-        ->route('documents.verifikasi')
-        ->with('success', $messages[$request->status_verifikasi]);
-}
-
-
-    public function destroy(Request $request, $id)
-{
-    try {
         $document = Document::findOrFail($id);
 
-        if ($document->pdf_file && Storage::disk('public')->exists($document->pdf_file)) {
-            Storage::disk('public')->delete($document->pdf_file);
-        }
+        $document->status_verifikasi = $request->status_verifikasi;
+        $document->catatan_admin = $request->catatan_admin;
 
-        $document->delete();
+        // 🕒 Simpan tanggal verifikasi setiap kali ada aksi
+        $document->tanggal_verifikasi = now();
 
-        // Ambil return_url, kalau nggak ada default ke index
-        $redirectUrl = $request->input('return_url', route('documents.index'));
+        $document->save();
 
-        return redirect($redirectUrl)->with('success', 'Dokumen berhasil dihapus!');
-    } catch (\Exception $e) {
-        $redirectUrl = $request->input('return_url', route('documents.index'));
-        return redirect($redirectUrl)
-            ->with('error', 'Gagal menghapus dokumen: ' . $e->getMessage());
+        $messages = [
+            0 => 'Verifikasi dibatalkan ❌',
+            1 => 'Status dikembalikan ke belum diverifikasi ⏳',
+            2 => 'Dokumen berhasil diverifikasi ✅',
+            3 => 'Dokumen membutuhkan perbaikan ⚠️',
+        ];
+
+        return redirect()
+            ->route('documents.verifikasi')
+            ->with('success', $messages[$request->status_verifikasi]);
     }
-}
 
+    public function destroy(Request $request, $id)
+    {
+        try {
+            $document = Document::findOrFail($id);
+
+            if ($document->pdf_file && Storage::disk('public')->exists($document->pdf_file)) {
+                Storage::disk('public')->delete($document->pdf_file);
+            }
+
+            $document->delete();
+
+            // Ambil return_url, kalau nggak ada default ke index
+            $redirectUrl = $request->input('return_url', route('documents.index'));
+
+            return redirect($redirectUrl)->with('success', 'Dokumen berhasil dihapus!');
+        } catch (\Exception $e) {
+            $redirectUrl = $request->input('return_url', route('documents.index'));
+            return redirect($redirectUrl)->with('error', 'Gagal menghapus dokumen: ' . $e->getMessage());
+        }
+    }
 
     // ========================
     // BAGIAN KATEGORI
@@ -302,25 +443,17 @@ class DocumentController extends Controller
     private function getCategories()
     {
         return [
-            'categories' => Document::select(DB::raw("'Keputusan Direktur' as kategori"), DB::raw('count(*) as total'))
-                ->where('jenis_dokumen', 4)
-                ->where('status_verifikasi', 2)
-                ->get(),
+            'categories' => Document::select(DB::raw("'Keputusan Direktur' as kategori"), DB::raw('count(*) as total'))->where('jenis_dokumen', 4)->where('status_verifikasi', 2)->get(),
 
-            'categoriesPeraturanGubernur' => Document::select(DB::raw("'Peraturan Gubernur' as kategori"), DB::raw('count(*) as total'))
-                ->where('jenis_dokumen', 1)->where('status_verifikasi', 2)->get(),
+            'categoriesPeraturanGubernur' => Document::select(DB::raw("'Peraturan Gubernur' as kategori"), DB::raw('count(*) as total'))->where('jenis_dokumen', 1)->where('status_verifikasi', 2)->get(),
 
-            'categoriesKeputusanGubernur' => Document::select(DB::raw("'Keputusan Gubernur' as kategori"), DB::raw('count(*) as total'))
-                ->where('jenis_dokumen', 2)->where('status_verifikasi', 2)->get(),
+            'categoriesKeputusanGubernur' => Document::select(DB::raw("'Keputusan Gubernur' as kategori"), DB::raw('count(*) as total'))->where('jenis_dokumen', 2)->where('status_verifikasi', 2)->get(),
 
-            'categoriesPeraturanDirektur' => Document::select(DB::raw("'Peraturan Direktur' as kategori"), DB::raw('count(*) as total'))
-                ->where('jenis_dokumen', 3)->where('status_verifikasi', 2)->get(),
+            'categoriesPeraturanDirektur' => Document::select(DB::raw("'Peraturan Direktur' as kategori"), DB::raw('count(*) as total'))->where('jenis_dokumen', 3)->where('status_verifikasi', 2)->get(),
 
-            'categoriesPerizinan' => Document::select(DB::raw("'Perizinan' as kategori"), DB::raw('count(*) as total'))
-                ->where('jenis_dokumen', 5)->where('status_verifikasi', 2)->get(),
+            'categoriesPerizinan' => Document::select(DB::raw("'Perizinan' as kategori"), DB::raw('count(*) as total'))->where('jenis_dokumen', 5)->where('status_verifikasi', 2)->get(),
 
-            'categoriesSOP' => Document::select(DB::raw("'SOP' as kategori"), DB::raw('count(*) as total'))
-                ->where('jenis_dokumen', 6)->where('status_verifikasi', 2)->get(),
+            'categoriesSOP' => Document::select(DB::raw("'SOP' as kategori"), DB::raw('count(*) as total'))->where('jenis_dokumen', 6)->where('status_verifikasi', 2)->get(),
         ];
     }
 
@@ -382,13 +515,9 @@ class DocumentController extends Controller
             ->take(10)
             ->get(['judul', 'views', 'jenis_dokumen']);
 
-        $byType = Document::select('jenis_dokumen', DB::raw('SUM(views) as total_views'))
-            ->groupBy('jenis_dokumen')
-            ->orderByDesc('total_views')
-            ->get();
+        $byType = Document::select('jenis_dokumen', DB::raw('SUM(views) as total_views'))->groupBy('jenis_dokumen')->orderByDesc('total_views')->get();
 
         $totalVisits = Document::sum('views');
-
 
         return view('content.dashboard.dashboards-analytics', compact('popularDocuments', 'byType', 'totalVisits'));
     }

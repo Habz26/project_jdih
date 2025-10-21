@@ -37,6 +37,14 @@
 @endsection
 
 @section('content')
+    @php
+    $tipeDokumenMap = \Illuminate\Support\Facades\DB::table('referensi')
+        ->where('jenis', 4) // 4 = Tipe Dokumen
+        ->where('status', 1)
+        ->pluck('deskripsi', 'id'); // ['id' => 'Deskripsi']
+@endphp
+
+
     <div class="container py-4">
         <div class="card">
             <div class="card-header bg-white d-flex flex-column flex-md-row justify-content-between align-items-md-center">
@@ -77,8 +85,11 @@
                                         </a>
                                     </td>
                                     <td class="text-center">
-                                        <span class="badge bg-light text-dark">{{ $doc->tipe_dokumen }}</span>
-                                    </td>
+    <span class="badge bg-light text-dark">
+        {{ $tipeDokumenMap[$doc->tipe_dokumen] ?? $doc->tipe_dokumen }}
+    </span>
+</td>
+
                                     <td class="text-center">{{ $doc->tahun }}</td>
                                     <td class="text-center">
                                         <span class="badge d-inline-flex align-items-center justify-content-center"
