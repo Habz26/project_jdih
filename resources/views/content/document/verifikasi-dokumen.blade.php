@@ -77,8 +77,12 @@
                         'Tahun' => $document->tahun ?? null,
                         'Judul' => $document->judul ?? null,
                         'Tempat Penetapan' => $document->tempat_penetapan ?? null,
-                        'Tanggal Penetapan' => $document->tanggal_penetapan ? \Carbon\Carbon::parse($document->tanggal_penetapan)->format('d-m-Y') : null,
-                        'Tanggal Pengundangan' => $document->tanggal_pengundangan ? \Carbon\Carbon::parse($document->tanggal_pengundangan)->format('d-m-Y') : null,
+                        'Tanggal Penetapan' => $document->tanggal_penetapan
+                            ? \Carbon\Carbon::parse($document->tanggal_penetapan)->format('d-m-Y')
+                            : null,
+                        'Tanggal Pengundangan' => $document->tanggal_pengundangan
+                            ? \Carbon\Carbon::parse($document->tanggal_pengundangan)->format('d-m-Y')
+                            : null,
                         'Periode Berlaku' => $document->jenis_dokumen == 5 ? $document->periode_berlaku . ' Tahun' : null,
                         'Sumber' => $document->sumber ?? null,
                         'Subjek' => $document->subjek ?? null,
@@ -90,21 +94,27 @@
                         'Status' => $statusDokumenMap[$document->status] ?? null,
                         'Keterangan Dokumen' => $document->keterangan_dokumen ?? null,
                         'Dokumen Perubahan' => $document->keteranganDoc ?? null,
-                        'Tanggal Perubahan' => $document->tanggal_perubahan ? \Carbon\Carbon::parse($document->tanggal_perubahan)->format('d-m-Y') : null,
+                        'Tanggal Perubahan' => $document->tanggal_perubahan
+                            ? \Carbon\Carbon::parse($document->tanggal_perubahan)->format('d-m-Y')
+                            : null,
                     ];
                 @endphp
 
                 @foreach ($fields as $label => $value)
                     @php
                         $showItem = false;
-                        if ($label === 'Dokumen Perubahan') {
+                        if($label === 'Dokumen Perubahan'){
                             $showItem = $value && $value->pdf_file;
-                        } else {
-                            $showItem = !is_null($value) && $value !== '';
+                        } elseif(is_numeric($value) || $value instanceof \Illuminate\Support\Carbon){
+                            $showItem = true;
+                        } elseif(is_string($value) && trim($value) !== ''){
+                            $showItem = true;
+                        } elseif(is_object($value) && property_exists($value,'judul')){
+                            $showItem = true;
                         }
                     @endphp
 
-                    @if($showItem)
+                    @if ($showItem)
                         <li class="list-group-item">
                             <strong>{{ $label }}:</strong>
                             @if ($label === 'Dokumen Perubahan')
@@ -120,7 +130,7 @@
     </div>
 </div>
 
-@if($isPdf && $filePath)
+@if ($isPdf && $filePath)
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
 <script>
     const url = "{{ $filePath }}";
