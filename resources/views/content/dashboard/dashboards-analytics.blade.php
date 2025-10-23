@@ -263,68 +263,100 @@
             const maxVisits = visitsData.length ? Math.max(...visitsData) : 0;
 
             const statusLabels = ['Tidak Berlaku', 'Berlaku', 'Berlaku Sebagian'];
-            const statusData = [{{ $dokumenTidakBerlaku }}, {{ $dokumenBerlaku }}, {{ $dokumenBerlakuSebagian }}];
+            const statusData = [{{ $dokumenTidakBerlaku }}, {{ $dokumenBerlaku }},
+            {{ $dokumenBerlakuSebagian }}];
 
             const donutLabels = @json($donutLabels);
             const donutData = @json($donutData);
 
-           // ----------------- Shipment Chart (Bar + Line) -----------------
-const ctxShipment = document.getElementById('shipmentStatisticsChart').getContext('2d');
-new Chart(ctxShipment, {
-    type: 'bar',
-    data: {
-        labels: visitsLabels,
-        datasets: [
-            {
-                label: 'Jumlah Akses',
-                data: visitsData,
-                backgroundColor: 'rgba(114,102,246,0.6)',
-                borderColor: '#7266f6',
-                borderWidth: 1,
-                borderRadius: 6,
-                barPercentage: 0.4,
-                categoryPercentage: 0.5,
-                yAxisID: 'y',
-            },
-            {
-                type: 'line',
-                label: 'Akses per Hari',
-                data: visitsData,
-                borderColor: '#ffb020',
-                backgroundColor: 'rgba(255,176,32,0.15)',
-                borderWidth: 2,
-                pointBackgroundColor: '#fff',
-                pointBorderColor: '#ffb020',
-                tension: 0.3,
-                yAxisID: 'y',
-            }
-        ]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        layout: { padding: 10 },
-        plugins: {
-            legend: { display: true, labels: { usePointStyle: true, padding: 15 } },
-            tooltip: { backgroundColor: '#333', titleColor: '#fff', bodyColor: '#fff', cornerRadius: 6 }
-        },
-        scales: {
-            x: {
-                grid: { display: false },
-                ticks: { maxRotation: 0, minRotation: 0, font: { size: 12 } }
-            },
-            y: {
-                beginAtZero: true,
-                grid: { color: '#f1f1f1' },
-                ticks: {
-                    stepSize: Math.ceil(Math.max(...visitsData) / 5) || 1,
-                    font: { size: 12 }
+            // ----------------- Shipment Chart (Bar + Line) -----------------
+            const ctxShipment = document.getElementById('shipmentStatisticsChart').getContext('2d');
+            new Chart(ctxShipment, {
+                type: 'bar',
+                data: {
+                    labels: visitsLabels,
+                    datasets: [{
+                            label: 'Jumlah Akses',
+                            data: visitsData,
+                            backgroundColor: 'rgba(114,102,246,0.6)',
+                            borderColor: '#7266f6',
+                            borderWidth: 1,
+                            borderRadius: 6,
+                            barPercentage: 0.4,
+                            categoryPercentage: 0.5,
+                            yAxisID: 'y',
+                        },
+                        {
+                            type: 'line',
+                            label: 'Akses per Hari',
+                            data: visitsData,
+                            borderColor: '#ffb020',
+                            backgroundColor: 'rgba(255,176,32,0.15)',
+                            borderWidth: 2,
+                            pointBackgroundColor: '#fff',
+                            pointBorderColor: '#ffb020',
+                            tension: 0.3,
+                            yAxisID: 'y',
+                        }
+                    ]
                 },
-                title: { display: true, text: 'Jumlah Akses', font: { weight: 'bold' } }
-            }
-        }
-    }
-});
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: 10
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            labels: {
+                                usePointStyle: true,
+                                padding: 15
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: '#333',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            cornerRadius: 6
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                autoSkip: true,
+                                maxTicksLimit: 10, // 🔹 biar nggak rapet banget
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: '#f1f1f1'
+                            },
+                            ticks: {
+                                stepSize: Math.ceil(Math.max(...visitsData) / 5) || 1,
+                                font: {
+                                    size: 12
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Jumlah Akses',
+                                font: {
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    }
+                }
+
+            });
 
 
 
@@ -349,12 +381,50 @@ new Chart(ctxShipment, {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { display: false },
-                        tooltip: { backgroundColor: '#333', titleColor: '#fff', bodyColor: '#fff', cornerRadius: 8, callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.formattedValue}` } }
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: '#333',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            cornerRadius: 8,
+                            callbacks: {
+                                label: ctx => `${ctx.dataset.label}: ${ctx.formattedValue}`
+                            }
+                        }
                     },
                     scales: {
-                        x: { grid: { display: false }, ticks: { font: { size: 13, weight: '600' } } },
-                        y: { beginAtZero: true, grid: { color: '#f1f1f1' }, ticks: { stepSize: 1, font: { size: 12 } }, title: { display: true, text: 'Jumlah Dokumen', font: { weight: 'bold' } } }
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                font: {
+                                    size: 13,
+                                    weight: '600'
+                                }
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: '#f1f1f1'
+                            },
+                            ticks: {
+                                stepSize: 1,
+                                font: {
+                                    size: 12
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Jumlah Dokumen',
+                                font: {
+                                    weight: 'bold'
+                                }
+                            }
+                        }
                     }
                 }
             });
@@ -367,7 +437,9 @@ new Chart(ctxShipment, {
                     labels: donutLabels,
                     datasets: [{
                         data: donutData,
-                        backgroundColor: ['#7b3ff3','#ffd666','#52c41a','#40a9ff','#fa8c16','#13c2c2'],
+                        backgroundColor: ['#7b3ff3', '#ffd666', '#52c41a', '#40a9ff', '#fa8c16',
+                            '#13c2c2'
+                        ],
                         borderWidth: 2,
                         borderColor: '#fff'
                     }]
@@ -376,7 +448,13 @@ new Chart(ctxShipment, {
                     responsive: true,
                     cutout: '70%',
                     plugins: {
-                        legend: { position: 'bottom', labels: { boxWidth: 12, color: '#333' } }
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                boxWidth: 12,
+                                color: '#333'
+                            }
+                        }
                     }
                 }
             });
