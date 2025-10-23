@@ -106,7 +106,19 @@ class DocumentAnalyticsController extends Controller
 
             // Buat range tanggal lengkap dalam bulan tsb
             $startDate = Carbon::create($year, $month, 1);
+
+            // Tambahin dulu biar urut & aman
+            $currentYear = date('Y');
+            $currentMonth = date('m');
+            $today = Carbon::today();
+
+            // Default akhir bulan
             $endDate = $startDate->copy()->endOfMonth();
+
+            // Kalau bulan & tahun yang ditampilkan sama dengan sekarang → stop di hari ini
+            if ($year == $currentYear && $month == $currentMonth) {
+                $endDate = $today;
+            }
 
             $dates = [];
             $totals = [];
@@ -141,7 +153,14 @@ class DocumentAnalyticsController extends Controller
 
             // Buat range tanggal lengkap dalam bulan tsb
             $startDate = Carbon::create($currentYear, $currentMonth, 1);
+            // Kalau bulan/tahun saat ini → stop di hari ini, bukan akhir bulan
+            $today = Carbon::today();
             $endDate = $startDate->copy()->endOfMonth();
+
+            // Cek: kalau bulan & tahun yang ditampilkan sama dengan sekarang → stop di hari ini
+            if ($currentYear == $today->year && $currentMonth == $today->month) {
+                $endDate = $today;
+            }
 
             $dates = [];
             $totals = [];
