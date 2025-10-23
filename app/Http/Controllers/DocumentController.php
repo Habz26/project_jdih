@@ -45,24 +45,36 @@ class DocumentController extends Controller
     }
 
     public function index(Request $request)
-    {
-        $query = Document::query();
-        $query->where('status_verifikasi', 2);
+{
+    $query = Document::query();
+    $query->where('status_verifikasi', 2);
 
-        if ($request->has('search') && !empty($request->search)) {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('judul', 'like', "%{$search}%")
-                    ->orWhere('tipe_dokumen', 'like', "%{$search}%")
-                    ->orWhere('tahun', 'like', "%{$search}%")
-                    ->orWhere('status', 'like', "%{$search}%");
-            });
-        }
-
-        $documents = $query->latest()->get();
-
-        return view('content.document.index', compact('documents'));
+    if ($request->has('search') && !empty($request->search)) {
+        $search = $request->search;
+        $query->where(function ($q) use ($search) {
+            $q->where('judul', 'like', "%{$search}%")
+                ->orWhere('tipe_dokumen', 'like', "%{$search}%")
+                ->orWhere('tahun', 'like', "%{$search}%")
+                ->orWhere('status', 'like', "%{$search}%");
+        });
     }
+
+    $documents = $query->latest()->get();
+
+    // 🔹 Ambil data mapping tipe dokumen dari tabel referensi
+    $tipeDokumenMap = DB::table('referensi')
+        ->where('jenis', 4) // sesuai jenis_referensi untuk tipe dokumen
+        ->where('status', 1) // cuma yang aktif
+        ->pluck('deskripsi', 'id');
+
+    // 🔹 Tambahkan properti nama tipe dokumen
+    foreach ($documents as $doc) {
+        $doc->tipe_dokumen_nama = $tipeDokumenMap[$doc->tipe_dokumen] ?? '-';
+    }
+
+    return view('content.document.index', compact('documents'));
+}
+
 
     public function indexVerifikasiTabs(Request $request)
     {
@@ -76,23 +88,40 @@ class DocumentController extends Controller
     }
 
     public function search(Request $request)
-    {
-        $q = $request->input('q');
+{
+    $q = $request->input('q');
 
-        $results = Document::where('status_verifikasi', 2)
-            ->where(function ($query) use ($q) {
-                $query
-                    ->where('judul', 'like', "%{$q}%")
-                    ->orWhere('nomor', 'like', "%{$q}%")
-                    ->orWhere('tahun', 'like', "%{$q}%")
-                    ->orWhere('jenis_dokumen', 'like', "%{$q}%");
-            })
-            ->get();
+    // Ambil semua dokumen yang diverifikasi
+    $results = Document::where('status_verifikasi', 2)
+        ->where(function ($query) use ($q) {
+            $query
+                ->where('judul', 'like', "%{$q}%")
+                ->orWhere('nomor', 'like', "%{$q}%")
+                ->orWhere('tahun', 'like', "%{$q}%");
+        })
+        ->get();
 
-        $pageConfigs = ['layout' => 'blank'];
+    // Mapping jenis_dokumen ke nama deskriptif
+    $jenisDokumenMap = [
+        1 => 'Peraturan Gubernur',
+        2 => 'Keputusan Gubernur',
+        3 => 'Peraturan Direktur',
+        4 => 'Keputusan Direktur',
+        5 => 'Perizinan',
+        6 => 'SOP',
+    ];
 
-        return view('content.search.result', compact('q', 'results', 'pageConfigs'));
-    }
+    // Tambahkan kolom readable ke tiap hasil
+    $results->transform(function ($item) use ($jenisDokumenMap) {
+        $item->jenis_dokumen_nama = $jenisDokumenMap[$item->jenis_dokumen] ?? '-';
+        return $item;
+    });
+
+    $pageConfigs = ['layout' => 'blank'];
+
+    return view('content.search.result', compact('q', 'results', 'pageConfigs'));
+}
+
 
     public function create()
     {

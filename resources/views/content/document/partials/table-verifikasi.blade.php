@@ -22,10 +22,10 @@
                         </a>
                     </td>
                     <td class="text-center">
-    <span class="badge bg-light text-dark">
-        {{ $tipeDokumenMap[$doc->tipe_dokumen] ?? $doc->tipe_dokumen }}
-    </span>
-</td>
+                        <span class="badge bg-light text-dark" style="min-width:140px; display:inline-flex; align-items:center; justify-content:center; color:white; font-weight:500; border-radius:.395rem;">
+                            {{ $tipeDokumenMap[$doc->tipe_dokumen] ?? $doc->tipe_dokumen }}
+                        </span>
+                    </td>
                     <td class="text-center">{{ $doc->tahun ?? '-' }}</td>
                     <td class="text-center">
                         <span class="badge d-inline-flex align-items-center justify-content-center"
@@ -41,7 +41,8 @@
                             @endif
                         </span>
                     </td>
-                    <td style="max-width: 200px; white-space: normal; word-wrap: break-word;">{{ $doc->catatan_admin ?? '-' }}</td>
+                    <td style="max-width: 200px; white-space: normal; word-wrap: break-word;">
+                        {{ $doc->catatan_admin ?? '-' }}</td>
                     <td class="text-center">
                         <a href="{{ route('documents.showVerifikasi', $doc->id) }}" class="btn btn-info btn-sm me-1"><i
                                 class="bi bi-eye"></i></a>
@@ -50,12 +51,12 @@
                         <a href="{{ asset('storage/' . $doc->pdf_file) }}" class="btn btn-success btn-sm me-1"
                             download><i class="bi bi-download"></i></a>
                         <form action="{{ route('documents.destroy', $doc->id) }}" method="POST" class="d-inline"
-      onsubmit="return confirm('Yakin mau hapus dokumen ini?')">
-    @csrf
-    @method('DELETE')
-    <input type="hidden" name="return_url" value="{{ url()->current() }}">
-    <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
-</form>
+                            onsubmit="return confirm('Yakin mau hapus dokumen ini?')">
+                            @csrf
+                            @method('DELETE')
+                            <input type="hidden" name="return_url" value="{{ url()->current() }}">
+                            <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
+                        </form>
 
                     </td>
                 </tr>
