@@ -80,7 +80,7 @@
                                         </a>
                                     </td>
                                     <td class="text-center">
-                                        <span class="badge bg-light text-dark">{{ $doc->tipe_dokumen }}</span>
+                                        <span class="badge bg-light text-dark" style="min-width:140px; display:inline-flex; align-items:center; justify-content:center; color:white; font-weight:500; border-radius:.395rem;">{{ $doc->tipe_dokumen_nama }}</span>
                                     </td>
                                     <td class="text-center">{{ $doc->tahun }}</td>
                                     <td class="text-center">

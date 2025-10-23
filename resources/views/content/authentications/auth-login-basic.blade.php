@@ -79,12 +79,12 @@
 
                             <!-- CAPTCHA ketik -->
                             <div class="mb-5">
+                                <img src="{{ captcha_src() }}" alt="captcha" class="mb-3">
                                 <div class="form-floating form-floating-outline mb-3">
                                     <input type="text" class="form-control" id="captcha" name="captcha"
                                         placeholder="Ketik captcha" />
                                     <label for="captcha">Captcha</label>
                                 </div>
-                                <img src="{{ captcha_src() }}" alt="captcha" class="mb-3">
                                 <button type="button" class="btn btn-sm btn-secondary"
                                     id="refresh-captcha">Refresh</button>
                                 @error('captcha')

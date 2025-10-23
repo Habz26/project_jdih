@@ -52,7 +52,7 @@
                                 @foreach ($results as $dokumen)
                                     <tr>
                                         <td>
-                                            <strong>{{ $dokumen->jenis_dokumen }}</strong><br>
+                                            <strong>{{ $dokumen->jenis_dokumen_nama }}</strong><br>
                                             Nomor {{ $dokumen->nomor }} Tahun {{ $dokumen->tahun }}
                                         </td>
                                         <td>
