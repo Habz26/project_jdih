@@ -82,9 +82,10 @@
                                         </td>
                                         <td>
                                             <a href="{{ asset('storage/' . $dokumen->pdf_file) }}"
-                                                class="btn btn-sm btn-info rounded-pill px-3" target="_blank">
-                                                Unduh
-                                            </a>
+                                                            class="btn btn-sm btn-info rounded-pill px-3" target="_blank"
+                                                            download>
+                                                            Unduh
+                                                        </a>
                                         </td>
                                     </tr>
                                 @endforeach
