@@ -237,7 +237,7 @@
                             @foreach ($topDocuments->take(10) as $doc)
                                 <div class="list-group-item d-flex justify-content-between align-items-start">
                                     <div class="me-2">
-                                        <div class="small text-muted">DOC</div>
+                                        <div class="small text-muted">{{ $doc->jenis_dokumen }}</div>
                                         <div class="fw-semibold text-truncate">
                                             {{ \Illuminate\Support\Str::words($doc->judul, 6, '...') }}</div>
                                     </div>

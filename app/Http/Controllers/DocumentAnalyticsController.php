@@ -35,7 +35,7 @@ class DocumentAnalyticsController extends Controller
         // 📈 Statistik utama
         $totalVisits = $query->count();
         $uniqueDocuments = $query->distinct('document_id')->count('document_id');
-        $uniqueUsers = $query->distinct('user_id')->count('user_id');
+        $uniqueUsers = $query->distinct('ip')->count('ip');
         // Query dasar dokumen (sesuaikan periode)
         $docQuery = Document::query();
 
