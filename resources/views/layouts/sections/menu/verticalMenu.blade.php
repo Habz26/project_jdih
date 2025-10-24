@@ -14,7 +14,7 @@
         <div class="app-brand demo">
             <a href="{{ url('/') }}" class="app-brand-link gap-xl-0 gap-2">
                 <span class="app-brand-logo demo">@include('_partials.macros')</span>
-                <span class="app-brand-text demo menu-text fw-semibold ms-2">{{ config('variables.templateName') }}</span>
+                {{-- <span class="app-brand-text demo menu-text fw-semibold ms-2">{{ config('variables.templateName') }}</span> --}}
             </a>
             <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
                 <!-- SVG icon here -->

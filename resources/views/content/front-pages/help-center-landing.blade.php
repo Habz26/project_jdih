@@ -3,7 +3,7 @@
     $configData = Helper::appClasses();
 @endphp
 
-@section('title', 'Help Center Landing - Front Pages')
+@section('title', 'JDIH RSKK - PROVINSI JAWA BARAT')
 
 @section('page-style')
     @vite('resources/assets/vendor/scss/pages/front-page-help-center.scss')

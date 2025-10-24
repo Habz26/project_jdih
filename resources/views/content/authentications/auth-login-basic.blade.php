@@ -42,14 +42,13 @@
                     <div class="app-brand justify-content-center mt-5">
                         <a href="{{ url('/') }}" class="app-brand-link gap-2">
                             <span class="app-brand-logo demo">@include('_partials.macros')</span>
-                            <span
-                                class="app-brand-text demo text-heading fw-semibold">{{ config('variables.templateName') }}</span>
+                                {{-- class="app-brand-text demo text-heading fw-semibold">{{ config('variables.templateName') }}</span> --}}
                         </a>
                     </div>
                     <!-- /Logo -->
 
                     <div class="card-body mt-1">
-                        <h4 class="mb-1">Selamat Datang {{ config('variables.templateName') }}! 👋</h4>
+                        <h4 class="mb-1">Selamat Datang ! 👋</h4>
                         <p class="mb-5">Silakan masuk ke akun Anda</p>
 
                         <form id="formAuthentication" class="mb-5" action="{{ route('auth.login') }}" method="POST">

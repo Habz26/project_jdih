@@ -340,6 +340,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/documents/verifikasi/{id}', [DocumentController::class, 'showVerifikasi'])->name('documents.showVerifikasi');
             Route::put('/documents/{id}/update-status-verifikasi', [DocumentController::class, 'updateStatusVerifikasi'])->name('documents.updateStatusVerifikasi');
             Route::get('/documents/expiring', [DocumentController::class, 'expiring'])->name('documents.expiring');
+            Route::get('/dashboard/analytics/users', [DocumentAnalyticsController::class, 'indexDetailUser'])->name('dashboard.analytics.users');
+            Route::get('/dashboard/analytics/documents', [DocumentAnalyticsController::class, 'indexDetailDokumen'])->name('dashboard.analytics.documents');
         });
 });
 

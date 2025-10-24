@@ -1,6 +1,10 @@
 @extends('layouts.layoutMaster')
-
+@section('title', 'Index Status Dokumen')
+@section('vendor-style')
+    @vite(['resources/assets/vendor/libs/apex-charts/apex-charts.scss', 'resources/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.scss', 'resources/assets/vendor/libs/swiper/swiper.scss'])
+@endsection
 @section('page-style')
+    @vite(['resources/assets/vendor/scss/pages/cards-statistics.scss'])
     <style>
         .table thead {
             background-color: #f8f9fa;
@@ -34,6 +38,9 @@
             border: 1px solid #eaeaea;
         }
     </style>
+@endsection
+@section('vendor-script')
+    @vite(['resources/assets/vendor/libs/apex-charts/apexcharts.js', 'resources/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js', 'resources/assets/vendor/libs/swiper/swiper.js'])
 @endsection
 
 @section('content')
