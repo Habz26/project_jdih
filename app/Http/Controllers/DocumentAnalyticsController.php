@@ -39,18 +39,21 @@ class DocumentAnalyticsController extends Controller
         // Query dasar dokumen (sesuaikan periode)
         $docQuery = Document::query();
         // 📦 Data detail untuk modal
+        // Data detail untuk modal (ikut filter periode)
         $uniqueUserList = (clone $query)->select('ip', DB::raw('MAX(user_agent) as user_agent'), DB::raw('COUNT(*) as total_visits'))->groupBy('ip')->orderByDesc('total_visits')->limit(10)->get();
+
         $uniqueDocumentList = DB::table('documents')
             ->leftJoin('referensi', function ($join) {
-                $join->on('documents.jenis_dokumen', '=', 'referensi.id')->where('referensi.jenis', 1); // cuma jenis=1
+                $join->on('documents.jenis_dokumen', '=', 'referensi.id')->where('referensi.jenis', 1);
             })
             ->leftJoin('document_analytics', 'documents.id', '=', 'document_analytics.document_id')
-            ->select(
-                'documents.id',
-                'documents.judul',
-                'referensi.deskripsi as jenis_dokumen', // ambil deskripsi
-                DB::raw('COUNT(document_analytics.id) as total_visits'),
-            )
+            ->when($filter === 'month', function ($q) use ($month, $year) {
+                $q->whereYear('document_analytics.visited_at', $year)->whereMonth('document_analytics.visited_at', $month);
+            })
+            ->when($filter === 'year', function ($q) use ($year) {
+                $q->whereYear('document_analytics.visited_at', $year);
+            })
+            ->select('documents.id', 'documents.judul', 'referensi.deskripsi as jenis_dokumen', DB::raw('COUNT(document_analytics.id) as total_visits'))
             ->groupBy('documents.id', 'documents.judul', 'referensi.deskripsi')
             ->orderByDesc('total_visits')
             ->limit(10)
