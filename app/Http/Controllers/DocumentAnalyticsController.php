@@ -38,6 +38,23 @@ class DocumentAnalyticsController extends Controller
         $uniqueUsers = $query->distinct('ip')->count('ip');
         // Query dasar dokumen (sesuaikan periode)
         $docQuery = Document::query();
+        // 📦 Data detail untuk modal
+        $uniqueUserList = (clone $query)->select('ip', DB::raw('MAX(user_agent) as user_agent'), DB::raw('COUNT(*) as total_visits'))->groupBy('ip')->orderByDesc('total_visits')->limit(10)->get();
+        $uniqueDocumentList = DB::table('documents')
+            ->leftJoin('referensi', function ($join) {
+                $join->on('documents.jenis_dokumen', '=', 'referensi.id')->where('referensi.jenis', 1); // cuma jenis=1
+            })
+            ->leftJoin('document_analytics', 'documents.id', '=', 'document_analytics.document_id')
+            ->select(
+                'documents.id',
+                'documents.judul',
+                'referensi.deskripsi as jenis_dokumen', // ambil deskripsi
+                DB::raw('COUNT(document_analytics.id) as total_visits'),
+            )
+            ->groupBy('documents.id', 'documents.judul', 'referensi.deskripsi')
+            ->orderByDesc('total_visits')
+            ->limit(10)
+            ->get();
 
         // Filter periode untuk dokumen
         if ($filter === 'month') {
@@ -176,6 +193,28 @@ class DocumentAnalyticsController extends Controller
         }
 
         // 🎯 View
-        return view('content.dashboard.dashboards-analytics', compact('totalVisits', 'uniqueDocuments', 'uniqueUsers', 'dokumenTerverifikasi', 'dokumenBelumVerifikasi', 'dokumenBerlaku', 'dokumenTidakBerlaku', 'dokumenBerlakuSebagian', 'totaldokumen', 'topDocuments', 'filter', 'month', 'year', 'visitsLabels', 'visitsData', 'donutLabels', 'donutData'));
+        return view('content.dashboard.dashboards-analytics', compact('totalVisits', 'uniqueDocuments', 'uniqueUsers', 'dokumenTerverifikasi', 'dokumenBelumVerifikasi', 'dokumenBerlaku', 'dokumenTidakBerlaku', 'dokumenBerlakuSebagian', 'totaldokumen', 'topDocuments', 'filter', 'month', 'year', 'visitsLabels', 'visitsData', 'donutLabels', 'donutData', 'uniqueUserList', 'uniqueDocumentList'));
+    }
+    public function indexDetailUser()
+    {
+        $uniqueUserList = DocumentAnalytics::select('ip', DB::raw('MAX(user_agent) as user_agent'), DB::raw('COUNT(*) as total_visits'))->groupBy('ip')->orderByDesc('total_visits')->get();
+
+        return view('content.document.indexdetailuser', compact('uniqueUserList'));
+    }
+
+    // Detail Dokumen unik
+    public function indexDetailDokumen()
+    {
+        $uniqueDocumentList = DB::table('documents')
+            ->leftJoin('referensi', function ($join) {
+                $join->on('documents.jenis_dokumen', '=', 'referensi.id')->where('referensi.jenis', 1);
+            })
+            ->leftJoin('document_analytics', 'documents.id', '=', 'document_analytics.document_id')
+            ->select('documents.id', 'documents.judul', 'referensi.deskripsi as jenis_dokumen', DB::raw('COUNT(document_analytics.id) as total_visits'))
+            ->groupBy('documents.id', 'documents.judul', 'referensi.deskripsi')
+            ->orderByDesc('total_visits')
+            ->get();
+
+        return view('content.document.indexdetaildokumen', compact('uniqueDocumentList'));
     }
 }

@@ -80,7 +80,8 @@
                                         </a>
                                     </td>
                                     <td class="text-center">
-                                        <span class="badge bg-light text-dark" style="min-width:140px; display:inline-flex; align-items:center; justify-content:center; color:white; font-weight:500; border-radius:.395rem;">{{ $doc->tipe_dokumen_nama }}</span>
+                                        <span class="badge bg-light text-dark"
+                                            style="min-width:140px; display:inline-flex; align-items:center; justify-content:center; color:white; font-weight:500; border-radius:.395rem;">{{ $doc->tipe_dokumen_nama }}</span>
                                     </td>
                                     <td class="text-center">{{ $doc->tahun }}</td>
                                     <td class="text-center">
@@ -114,13 +115,13 @@
                                             class="btn btn-success btn-sm me-1" download title="Unduh">
                                             <i class="bi bi-download"></i>
                                         </a>
-                                        <form action="{{ route('documents.destroy', $doc->id) }}" method="POST" class="d-inline"
-      onsubmit="return confirm('Yakin mau hapus dokumen ini?')">
-    @csrf
-    @method('DELETE')
-    <input type="hidden" name="return_url" value="{{ url()->current() }}">
-    <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
-</form>
+                                        <form action="{{ route('documents.destroy', $doc->id) }}" method="POST"
+                                            class="d-inline" onsubmit="return confirm('Yakin mau hapus dokumen ini?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <input type="hidden" name="return_url" value="{{ url()->current() }}">
+                                            <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
+                                        </form>
 
                                     </td>
                                 </tr>
