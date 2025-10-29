@@ -60,8 +60,37 @@
                             @endforelse
                         </tbody>
                     </table>
-                    <div class="d-flex justify-content-end mt-3">
-                        {{ $uniqueUserList->links('pagination::bootstrap-5') }}
+                    <div class="d-flex mt-4 justify-content-end align-items-center gap-2">
+                        {{-- Prev --}}
+                        @if ($uniqueUserList->onFirstPage())
+                            <span class="btn btn-outline-secondary rounded-circle disabled"
+                                style="width:40px; height:40px; display:flex; align-items:center; justify-content:center;">&laquo;</span>
+                        @else
+                            <a href="{{ $uniqueUserList->previousPageUrl() }}"
+                                class="btn btn-outline-secondary rounded-circle"
+                                style="width:40px; height:40px; display:flex; align-items:center; justify-content:center;">&laquo;</a>
+                        @endif
+
+                        {{-- Page Input --}}
+                        <form method="GET" class="d-flex align-items-center" onsubmit="return goToPage(this)">
+                            <input type="number" name="page" min="1" max="{{ $uniqueUserList->lastPage() }}"
+                                value="{{ $uniqueUserList->currentPage() }}"
+                                class="form-control form-control-sm text-center" style="width: 60px;" placeholder="Page">
+                            {{-- tombol Go dihapus, Enter aja --}}
+                        </form>
+
+                        {{-- Next --}}
+                        @if ($uniqueUserList->hasMorePages())
+                            <a href="{{ $uniqueUserList->nextPageUrl() }}" class="btn btn-outline-secondary rounded-circle"
+                                style="width:40px; height:40px; display:flex; align-items:center; justify-content:center;">&raquo;</a>
+                        @else
+                            <span class="btn btn-outline-secondary rounded-circle disabled"
+                                style="width:40px; height:40px; display:flex; align-items:center; justify-content:center;">&raquo;</span>
+                        @endif
+
+                        {{-- Info --}}
+                        <span class="ms-2">Page {{ $uniqueUserList->currentPage() }} of
+                            {{ $uniqueUserList->lastPage() }}</span>
                     </div>
                 </div>
             </div>

@@ -71,7 +71,7 @@
                         @include('content.document.partials.table-verifikasi', [
                             'documents' => $pendingDocuments,
                             'tabId' => 'pending',
-                            'pageName' => 'pending_page'
+                            'pageName' => 'pending_page',
                         ])
                     </div>
 
@@ -80,7 +80,7 @@
                         @include('content.document.partials.table-verifikasi', [
                             'documents' => $allDocuments,
                             'tabId' => 'history',
-                            'pageName' => 'history_page'
+                            'pageName' => 'history_page',
                         ])
                     </div>
                 </div>
@@ -90,22 +90,22 @@
 @endsection
 
 @section('page-script')
-<script>
-document.addEventListener('click', function(e) {
-    if (e.target.closest('.pagination a')) {
-        e.preventDefault();
-        const link = e.target.closest('a').href;
-        const activeTab = document.querySelector('.tab-pane.active').id;
+    <script>
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.pagination a')) {
+                e.preventDefault();
+                const link = e.target.closest('a').href;
+                const activeTab = document.querySelector('.tab-pane.active').id;
 
-        fetch(link)
-            .then(res => res.text())
-            .then(html => {
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                const newContent = doc.getElementById(activeTab).innerHTML;
-                document.getElementById(activeTab).innerHTML = newContent;
-            });
-    }
-});
-</script>
+                fetch(link)
+                    .then(res => res.text())
+                    .then(html => {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        const newContent = doc.getElementById(activeTab).innerHTML;
+                        document.getElementById(activeTab).innerHTML = newContent;
+                    });
+            }
+        });
+    </script>
 @endsection
