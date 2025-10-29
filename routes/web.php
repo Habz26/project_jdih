@@ -314,22 +314,17 @@ Route::post('/auth/register-basic', [AuthController::class, 'register'])->name('
 Route::get('captcha', function () {
     return captcha_img();
 })->name('captcha');
-
-
 // Login
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])
     ->middleware('throttle:5,1')
     ->name('auth.login');
-
 // Logout
 Route::post('/logout', [AuthController::class, 'logout'])
     ->name('auth.logout')
     ->middleware('auth');
-
 // ================== PUBLIC ROUTE ==================
 Route::get('/documents/{id}', [DocumentController::class, 'show'])->name('documents.show');
-
 // ================== ADMIN ROUTES ==================
 Route::middleware('auth')->group(function () {
     Route::middleware('role:admin')
@@ -344,7 +339,6 @@ Route::middleware('auth')->group(function () {
             Route::get('/dashboard/analytics/documents', [DocumentAnalyticsController::class, 'indexDetailDokumen'])->name('dashboard.analytics.documents');
         });
 });
-
 // ================== MULTI ROUTES ==================
 Route::middleware(['auth', 'role:operator,admin'])
     ->prefix('manage')

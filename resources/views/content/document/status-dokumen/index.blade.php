@@ -139,6 +139,9 @@
                             @endforelse
                         </tbody>
                     </table>
+                    <div class="d-flex mt-4 justify-content-end">
+                        {{ $documents->withQueryString()->links('pagination::bootstrap-5') }}
+                    </div>
                 </div>
             </div>
         </div>

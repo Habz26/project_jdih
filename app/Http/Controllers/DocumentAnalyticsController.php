@@ -200,7 +200,7 @@ class DocumentAnalyticsController extends Controller
     }
     public function indexDetailUser()
     {
-        $uniqueUserList = DocumentAnalytics::select('ip', DB::raw('MAX(user_agent) as user_agent'), DB::raw('COUNT(*) as total_visits'))->groupBy('ip')->orderByDesc('total_visits')->get();
+        $uniqueUserList = DocumentAnalytics::select('ip', DB::raw('MAX(user_agent) as user_agent'), DB::raw('COUNT(*) as total_visits'))->groupBy('ip')->orderByDesc('total_visits')->paginate(10);
 
         return view('content.document.indexdetailuser', compact('uniqueUserList'));
     }
@@ -216,7 +216,7 @@ class DocumentAnalyticsController extends Controller
             ->select('documents.id', 'documents.judul', 'referensi.deskripsi as jenis_dokumen', DB::raw('COUNT(document_analytics.id) as total_visits'))
             ->groupBy('documents.id', 'documents.judul', 'referensi.deskripsi')
             ->orderByDesc('total_visits')
-            ->get();
+            ->paginate(10); // <-- pakai paginate
 
         return view('content.document.indexdetaildokumen', compact('uniqueDocumentList'));
     }
