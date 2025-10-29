@@ -45,83 +45,83 @@ class DocumentController extends Controller
     }
 
     public function index(Request $request)
-{
-    $query = Document::query();
-    $query->where('status_verifikasi', 2);
+    {
+        $query = Document::query();
+        $query->where('status_verifikasi', 2);
 
-    if ($request->has('search') && !empty($request->search)) {
-        $search = $request->search;
-        $query->where(function ($q) use ($search) {
-            $q->where('judul', 'like', "%{$search}%")
-                ->orWhere('tipe_dokumen', 'like', "%{$search}%")
-                ->orWhere('tahun', 'like', "%{$search}%")
-                ->orWhere('status', 'like', "%{$search}%");
-        });
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('judul', 'like', "%{$search}%")
+                    ->orWhere('tipe_dokumen', 'like', "%{$search}%")
+                    ->orWhere('tahun', 'like', "%{$search}%")
+                    ->orWhere('status', 'like', "%{$search}%");
+            });
+        }
+        $documents = $query->latest()->paginate(10);
+
+        // 🔹 Ambil data mapping tipe dokumen dari tabel referensi
+        $tipeDokumenMap = DB::table('referensi')
+            ->where('jenis', 4) // sesuai jenis_referensi untuk tipe dokumen
+            ->where('status', 1) // cuma yang aktif
+            ->pluck('deskripsi', 'id');
+
+        // 🔹 Tambahkan properti nama tipe dokumen
+        foreach ($documents as $doc) {
+            $doc->tipe_dokumen_nama = $tipeDokumenMap[$doc->tipe_dokumen] ?? '-';
+        }
+
+        return view('content.document.index', compact('documents'));
     }
-
-    $documents = $query->latest()->get();
-
-    // 🔹 Ambil data mapping tipe dokumen dari tabel referensi
-    $tipeDokumenMap = DB::table('referensi')
-        ->where('jenis', 4) // sesuai jenis_referensi untuk tipe dokumen
-        ->where('status', 1) // cuma yang aktif
-        ->pluck('deskripsi', 'id');
-
-    // 🔹 Tambahkan properti nama tipe dokumen
-    foreach ($documents as $doc) {
-        $doc->tipe_dokumen_nama = $tipeDokumenMap[$doc->tipe_dokumen] ?? '-';
-    }
-
-    return view('content.document.index', compact('documents'));
-}
-
 
     public function indexVerifikasiTabs(Request $request)
-    {
-        $pendingDocuments = Document::where('status_verifikasi', 1)
-            ->latest()
-            ->get(['*'], 'pending_page');
-
-        $allDocuments = Document::latest()->get(['*'], 'history_page');
-
-        return view('content.document.index-verifikasi', compact('pendingDocuments', 'allDocuments'));
-    }
-
-    public function search(Request $request)
 {
-    $q = $request->input('q');
+    $pendingDocuments = Document::where('status_verifikasi', 1)
+        ->latest()
+        ->paginate(10, ['*'], 'pending_page');
 
-    // Ambil semua dokumen yang diverifikasi
-    $results = Document::where('status_verifikasi', 2)
-        ->where(function ($query) use ($q) {
-            $query
-                ->where('judul', 'like', "%{$q}%")
-                ->orWhere('nomor', 'like', "%{$q}%")
-                ->orWhere('tahun', 'like', "%{$q}%");
-        })
-        ->get();
+    $allDocuments = Document::latest()
+        ->paginate(10, ['*'], 'history_page');
 
-    // Mapping jenis_dokumen ke nama deskriptif
-    $jenisDokumenMap = [
-        1 => 'Peraturan Gubernur',
-        2 => 'Keputusan Gubernur',
-        3 => 'Peraturan Direktur',
-        4 => 'Keputusan Direktur',
-        5 => 'Perizinan',
-        6 => 'SOP',
-    ];
-
-    // Tambahkan kolom readable ke tiap hasil
-    $results->transform(function ($item) use ($jenisDokumenMap) {
-        $item->jenis_dokumen_nama = $jenisDokumenMap[$item->jenis_dokumen] ?? '-';
-        return $item;
-    });
-
-    $pageConfigs = ['layout' => 'blank'];
-
-    return view('content.search.result', compact('q', 'results', 'pageConfigs'));
+    return view('content.document.index-verifikasi', compact('pendingDocuments', 'allDocuments'));
 }
 
+
+    public function search(Request $request)
+    {
+        $q = $request->input('q');
+
+        // Ambil semua dokumen yang diverifikasi
+        $results = Document::where('status_verifikasi', 2)
+            ->where(function ($query) use ($q) {
+                $query
+                    ->where('judul', 'like', "%{$q}%")
+                    ->orWhere('nomor', 'like', "%{$q}%")
+                    ->orWhere('tahun', 'like', "%{$q}%");
+            })
+            ->paginate(10)
+            ->appends(['q' => $q]);
+
+        // Mapping jenis_dokumen ke nama deskriptif
+        $jenisDokumenMap = [
+            1 => 'Peraturan Gubernur',
+            2 => 'Keputusan Gubernur',
+            3 => 'Peraturan Direktur',
+            4 => 'Keputusan Direktur',
+            5 => 'Perizinan',
+            6 => 'SOP',
+        ];
+
+        // Tambahkan kolom readable ke tiap hasil
+        $results->transform(function ($item) use ($jenisDokumenMap) {
+            $item->jenis_dokumen_nama = $jenisDokumenMap[$item->jenis_dokumen] ?? '-';
+            return $item;
+        });
+
+        $pageConfigs = ['layout' => 'blank'];
+
+        return view('content.search.result', compact('q', 'results', 'pageConfigs'));
+    }
 
     public function create()
     {
@@ -196,142 +196,91 @@ class DocumentController extends Controller
     }
 
     public function show($id)
-{
-    $document = Document::with('jenisDokumenRef')->findOrFail($id);
+    {
+        $document = Document::with('jenisDokumenRef')->findOrFail($id);
 
-    // Mapping referensi
-    $tipeDokumenMap = DB::table('referensi')->where('jenis', 4)->where('status', 1)->pluck('deskripsi', 'id');
-    $jenisDokumenMap = DB::table('referensi')->where('jenis', 1)->where('status', 1)->pluck('deskripsi', 'id');
-    $bidangHukumMap = DB::table('referensi')->where('jenis', 5)->where('status', 1)->pluck('deskripsi', 'id'); // misal 5 = bidang hukum
-    $jenisHukumMap = DB::table('referensi')->where('jenis', 6)->where('status', 1)->pluck('deskripsi', 'id'); // misal 6 = jenis hukum
-    $statusDokumenMap = DB::table('referensi')->where('jenis', 2)->where('status', 1)->pluck('deskripsi', 'id'); // status dokumen
+        // Mapping referensi
+        $tipeDokumenMap = DB::table('referensi')->where('jenis', 4)->where('status', 1)->pluck('deskripsi', 'id');
+        $jenisDokumenMap = DB::table('referensi')->where('jenis', 1)->where('status', 1)->pluck('deskripsi', 'id');
+        $bidangHukumMap = DB::table('referensi')->where('jenis', 5)->where('status', 1)->pluck('deskripsi', 'id'); // misal 5 = bidang hukum
+        $jenisHukumMap = DB::table('referensi')->where('jenis', 6)->where('status', 1)->pluck('deskripsi', 'id'); // misal 6 = jenis hukum
+        $statusDokumenMap = DB::table('referensi')->where('jenis', 2)->where('status', 1)->pluck('deskripsi', 'id'); // status dokumen
 
-    // Simpan analytics
-    DocumentAnalytics::create([
-        'document_id' => $document->id,
-        'user_id' => auth()->id(),
-        'ip' => request()->ip(),
-        'user_agent' => request()->header('User-Agent'),
-        'visited_at' => now(),
-    ]);
+        // Simpan analytics
+        DocumentAnalytics::create([
+            'document_id' => $document->id,
+            'user_id' => auth()->id(),
+            'ip' => request()->ip(),
+            'user_agent' => request()->header('User-Agent'),
+            'visited_at' => now(),
+        ]);
 
-    // Tambah view count
-    $document->increment('views');
+        // Tambah view count
+        $document->increment('views');
 
-    return view('content.document.show', compact(
-        'document',
-        'tipeDokumenMap',
-        'jenisDokumenMap',
-        'bidangHukumMap',
-        'jenisHukumMap',
-        'statusDokumenMap'
-    ));
-}
-
+        return view('content.document.show', compact('document', 'tipeDokumenMap', 'jenisDokumenMap', 'bidangHukumMap', 'jenisHukumMap', 'statusDokumenMap'));
+    }
 
     public function showVerifikasi($id)
     {
         $document = Document::with(['jenisDokumenRef', 'statusDokumenRef', 'keteranganDoc'])->findOrFail($id);
         // Mapping referensi
-    $tipeDokumenMap = DB::table('referensi')->where('jenis', 4)->where('status', 1)->pluck('deskripsi', 'id');
-    $jenisDokumenMap = DB::table('referensi')->where('jenis', 1)->where('status', 1)->pluck('deskripsi', 'id');
-    $bidangHukumMap = DB::table('referensi')->where('jenis', 5)->where('status', 1)->pluck('deskripsi', 'id'); // misal 5 = bidang hukum
-    $jenisHukumMap = DB::table('referensi')->where('jenis', 6)->where('status', 1)->pluck('deskripsi', 'id'); // misal 6 = jenis hukum
-    $statusDokumenMap = DB::table('referensi')->where('jenis', 2)->where('status', 1)->pluck('deskripsi', 'id'); // status dokumen
+        $tipeDokumenMap = DB::table('referensi')->where('jenis', 4)->where('status', 1)->pluck('deskripsi', 'id');
+        $jenisDokumenMap = DB::table('referensi')->where('jenis', 1)->where('status', 1)->pluck('deskripsi', 'id');
+        $bidangHukumMap = DB::table('referensi')->where('jenis', 5)->where('status', 1)->pluck('deskripsi', 'id'); // misal 5 = bidang hukum
+        $jenisHukumMap = DB::table('referensi')->where('jenis', 6)->where('status', 1)->pluck('deskripsi', 'id'); // misal 6 = jenis hukum
+        $statusDokumenMap = DB::table('referensi')->where('jenis', 2)->where('status', 1)->pluck('deskripsi', 'id'); // status dokumen
 
-        return view('content.document.verifikasi-dokumen', compact('document','tipeDokumenMap',
-        'jenisDokumenMap',
-        'bidangHukumMap',
-        'jenisHukumMap',
-        'statusDokumenMap'));
+        return view('content.document.verifikasi-dokumen', compact('document', 'tipeDokumenMap', 'jenisDokumenMap', 'bidangHukumMap', 'jenisHukumMap', 'statusDokumenMap'));
     }
 
     public function edit($id)
-{
-    $document = Document::findOrFail($id); // ambil dokumen yang diedit
-    $documents = Document::all(); // untuk dropdown rujukan
+    {
+        $document = Document::findOrFail($id); // ambil dokumen yang diedit
+        $documents = Document::all(); // untuk dropdown rujukan
 
-    // Tipe Dokumen
-    $jenisReferensi = DB::table('jenis_referensi')
-        ->where('id', 4)
-        ->where('status', 1)
-        ->first();
+        // Tipe Dokumen
+        $jenisReferensi = DB::table('jenis_referensi')->where('id', 4)->where('status', 1)->first();
 
-    $tipeDokumen = collect();
-    if ($jenisReferensi) {
-        $tipeDokumen = DB::table('referensi')
-            ->where('jenis', $jenisReferensi->id)
-            ->where('status', 1)
-            ->get();
+        $tipeDokumen = collect();
+        if ($jenisReferensi) {
+            $tipeDokumen = DB::table('referensi')->where('jenis', $jenisReferensi->id)->where('status', 1)->get();
+        }
+
+        // Bidang Hukum
+        $jenisReferensi1 = DB::table('jenis_referensi')->where('id', 5)->where('status', 1)->first();
+
+        $bidangHukum = collect();
+        if ($jenisReferensi1) {
+            $bidangHukum = DB::table('referensi')->where('jenis', $jenisReferensi1->id)->where('status', 1)->get();
+        }
+
+        // Jenis Hukum
+        $jenisReferensi2 = DB::table('jenis_referensi')->where('id', 6)->where('status', 1)->first();
+
+        $jenisHukum = collect();
+        if ($jenisReferensi2) {
+            $jenisHukum = DB::table('referensi')->where('jenis', $jenisReferensi2->id)->where('status', 1)->get();
+        }
+
+        // Jenis Dokumen
+        $jenisReferensi3 = DB::table('jenis_referensi')->where('id', 1)->where('status', 1)->first();
+
+        $jenisDokumen = collect();
+        if ($jenisReferensi3) {
+            $jenisDokumen = DB::table('referensi')->where('jenis', $jenisReferensi3->id)->where('status', 1)->get();
+        }
+
+        // Status Dokumen
+        $jenisReferensi4 = DB::table('jenis_referensi')->where('id', 2)->where('status', 1)->first();
+
+        $statusDokumen = collect();
+        if ($jenisReferensi4) {
+            $statusDokumen = DB::table('referensi')->where('jenis', $jenisReferensi4->id)->where('status', 1)->get();
+        }
+
+        return view('content.document.edit', compact('document', 'documents', 'jenisReferensi', 'tipeDokumen', 'jenisReferensi1', 'bidangHukum', 'jenisReferensi2', 'jenisHukum', 'jenisReferensi3', 'jenisDokumen', 'jenisReferensi4', 'statusDokumen'));
     }
-
-    // Bidang Hukum
-    $jenisReferensi1 = DB::table('jenis_referensi')
-        ->where('id', 5)
-        ->where('status', 1)
-        ->first();
-
-    $bidangHukum = collect();
-    if ($jenisReferensi1) {
-        $bidangHukum = DB::table('referensi')
-            ->where('jenis', $jenisReferensi1->id)
-            ->where('status', 1)
-            ->get();
-    }
-
-    // Jenis Hukum
-    $jenisReferensi2 = DB::table('jenis_referensi')
-        ->where('id', 6)
-        ->where('status', 1)
-        ->first();
-
-    $jenisHukum = collect();
-    if ($jenisReferensi2) {
-        $jenisHukum = DB::table('referensi')
-            ->where('jenis', $jenisReferensi2->id)
-            ->where('status', 1)
-            ->get();
-    }
-
-    // Jenis Dokumen
-    $jenisReferensi3 = DB::table('jenis_referensi')
-        ->where('id', 1)
-        ->where('status', 1)
-        ->first();
-
-    $jenisDokumen = collect();
-    if ($jenisReferensi3) {
-        $jenisDokumen = DB::table('referensi')
-            ->where('jenis', $jenisReferensi3->id)
-            ->where('status', 1)
-            ->get();
-    }
-
-    // Status Dokumen
-    $jenisReferensi4 = DB::table('jenis_referensi')
-        ->where('id', 2)
-        ->where('status', 1)
-        ->first();
-
-    $statusDokumen = collect();
-    if ($jenisReferensi4) {
-        $statusDokumen = DB::table('referensi')
-            ->where('jenis', $jenisReferensi4->id)
-            ->where('status', 1)
-            ->get();
-    }
-
-    return view('content.document.edit', compact(
-        'document',
-        'documents',
-        'jenisReferensi', 'tipeDokumen',
-        'jenisReferensi1', 'bidangHukum',
-        'jenisReferensi2', 'jenisHukum',
-        'jenisReferensi3', 'jenisDokumen',
-        'jenisReferensi4', 'statusDokumen'
-    ));
-}
-
 
     public function update(Request $request, $id)
     {

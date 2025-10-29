@@ -42,7 +42,7 @@ class StatusDokumenController extends Controller
     // ✅ Detail dokumen
     public function show(Document $document)
     {
-        return view('content.document.status-dokumen.show', compact('document'));
+        // return view('content.document.status-dokumen.show', compact('document'));
     }
 
     // ✅ Form edit

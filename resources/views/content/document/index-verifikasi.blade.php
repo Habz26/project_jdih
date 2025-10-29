@@ -38,11 +38,11 @@
 
 @section('content')
     @php
-    $tipeDokumenMap = \Illuminate\Support\Facades\DB::table('referensi')
-        ->where('jenis', 4) // 4 = Tipe Dokumen
-        ->where('status', 1)
-        ->pluck('deskripsi', 'id'); // ['id' => 'Deskripsi']
-@endphp
+        $tipeDokumenMap = \Illuminate\Support\Facades\DB::table('referensi')
+            ->where('jenis', 4)
+            ->where('status', 1)
+            ->pluck('deskripsi', 'id');
+    @endphp
 
     <div class="container py-4">
         <div class="card">
@@ -64,13 +64,14 @@
                 </ul>
             </div>
 
-
             <div class="card-body">
                 <div class="tab-content" id="verifikasiTabsContent">
                     {{-- TAB 1: Pending --}}
                     <div class="tab-pane fade show active" id="pending" role="tabpanel" aria-labelledby="pending-tab">
                         @include('content.document.partials.table-verifikasi', [
                             'documents' => $pendingDocuments,
+                            'tabId' => 'pending',
+                            'pageName' => 'pending_page'
                         ])
                     </div>
 
@@ -78,10 +79,33 @@
                     <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">
                         @include('content.document.partials.table-verifikasi', [
                             'documents' => $allDocuments,
+                            'tabId' => 'history',
+                            'pageName' => 'history_page'
                         ])
                     </div>
                 </div>
             </div>
         </div>
     </div>
+@endsection
+
+@section('page-script')
+<script>
+document.addEventListener('click', function(e) {
+    if (e.target.closest('.pagination a')) {
+        e.preventDefault();
+        const link = e.target.closest('a').href;
+        const activeTab = document.querySelector('.tab-pane.active').id;
+
+        fetch(link)
+            .then(res => res.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const newContent = doc.getElementById(activeTab).innerHTML;
+                document.getElementById(activeTab).innerHTML = newContent;
+            });
+    }
+});
+</script>
 @endsection
