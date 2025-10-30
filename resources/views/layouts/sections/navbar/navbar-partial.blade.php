@@ -41,28 +41,35 @@
                 </a>
             </li>
             @auth
-    @if (Auth::user()->role === 'admin')
-        <li class="nav-item me-3 position-relative">
-            <a href="{{ route('documents.expiring') }}" class="nav-link position-relative">
-                <i class="bi bi-bell fs-6"></i>
-                @php
-                    $countExpiring = \App\Models\Document::where('jenis_dokumen', 5)
-                        ->where('status_verifikasi', 2)
-                        ->where('tanggal_penetapan', '>=', now()->subMonths(6))
-                        ->count();
-                @endphp
-                @if ($countExpiring > 0)
-                    <span
-                        class="badge rounded-pill bg-danger"
-                        style="position: absolute; top: 0; right: 0; font-size: 0.65rem; padding: 0.25em 0.4em; transform: translate(0%, -0%);">
-                        {{ $countExpiring }}
-                        <span class="visually-hidden">documents expiring</span>
-                    </span>
+                @if (Auth::user()->role === 'admin')
+                    <li class="nav-item me-3 position-relative">
+                        <a href="{{ route('documents.expiring') }}" class="nav-link position-relative">
+                            <i class="bi bi-bell fs-6"></i>
+                            @php
+                                $countExpiring = \App\Models\Document::where('jenis_dokumen', 5)
+                                    ->where('status_verifikasi', 2)
+                                    // Cek dokumen belum expired
+                                    ->whereRaw('DATE_ADD(tanggal_penetapan, INTERVAL periode_berlaku YEAR) >= ?', [
+                                        now(),
+                                    ])
+                                    // Opsional: cuma yang mendekati expired 6 bulan terakhir
+                                    ->whereRaw('DATE_ADD(tanggal_penetapan, INTERVAL periode_berlaku YEAR) <= ?', [
+                                        now()->addMonths(6),
+                                    ])
+                                    ->count();
+                            @endphp
+
+                            @if ($countExpiring > 0)
+                                <span class="badge rounded-pill bg-danger"
+                                    style="position: absolute; top: 0; right: 0; font-size: 0.65rem; padding: 0.25em 0.4em; transform: translate(0%, -0%);">
+                                    {{ $countExpiring }}
+                                    <span class="visually-hidden">documents expiring</span>
+                                </span>
+                            @endif
+                        </a>
+                    </li>
                 @endif
-            </a>
-        </li>
-    @endif
-@endauth
+            @endauth
 
 
 
