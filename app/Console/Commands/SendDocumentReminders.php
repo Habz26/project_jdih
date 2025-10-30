@@ -46,7 +46,7 @@ class SendDocumentReminders extends Command
                     $monthsText = 'akan expired bulan ini';
                 }
 
-                Mail::to('habznomercy25@gmail.com')->send(new DocumentReminderMail($document, $monthsText));
+                Mail::to('rsudkesjaprovjabar@gmail.com')->send(new DocumentReminderMail($document, $monthsText, $expiredAt));
                 $this->info("Pengingat dikirimkan untuk dokumen : '{$document->judul}' ({$monthsText})");
             } else {
                 $this->info("Belum waktunya reminder untuk dokumen: '{$document->judul}' (ReminderAt: {$reminderAt->toDateString()})");

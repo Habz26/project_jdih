@@ -51,7 +51,7 @@
 
 <body>
     <div class="container">
-        <p>Kepada Yth.,</p>
+        <p>Kepada Yth.</p>
         <p>
             Tim Administrasi Dokumen<br>
             RSUD Kesehatan Kerja Provinsi Jawa Barat
@@ -60,8 +60,9 @@
         <p>Sehubungan dengan dokumen berikut:</p>
 
         <div class="document-info">
-            <p><strong>{{ $document->judul }}</strong></p>
+            <p><strong>Nama Dokumen: {{ $document->judul }}</strong></p>
             <p>Tanggal Penetapan: {{ \Carbon\Carbon::parse($document->tanggal_penetapan)->locale('id')->isoFormat('D MMMM Y') }}</p>
+            <p>Tanggal Expired: {{ \Carbon\Carbon::parse($expiredAt)->locale('id')->isoFormat('D MMMM Y') }}</p>
         </div>
 
         @if (str_contains($monthsText, 'expired'))
@@ -73,9 +74,9 @@
         <div class="footer">
             <p>Terima kasih atas perhatian dan kerja samanya.</p>
             <p>Hormat kami,<br>
-                JDIH RSKK</p>
+            Administrator JDIH RSKK</p>
         </div>
-    </div>
-</body>
+        </div>
+    </body>
 
-</html>
+    </html>
