@@ -12,11 +12,13 @@ class DocumentReminderMail extends Mailable
 
     public $document;
     public $monthsText;
+    public $expiredAt;
 
-    public function __construct($document, $monthsText)
+    public function __construct($document, $monthsText, $expiredAt)
     {
         $this->document = $document;
         $this->monthsText = $monthsText;
+        $this->expiredAt = $expiredAt;
     }
 
     public function build()

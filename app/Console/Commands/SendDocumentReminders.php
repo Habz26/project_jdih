@@ -18,26 +18,26 @@ class SendDocumentReminders extends Command
         $today = Carbon::now('Asia/Jakarta');
 
         // Ambil dokumen Perizinan yang diverifikasi
-        $documents = Document::where('jenis_dokumen', 5)->where('status_verifikasi', 2)->get();
+        $documents = Document::where('jenis_dokumen', 5)
+            ->where('status_verifikasi', 2)
+            ->get();
 
         foreach ($documents as $document) {
-            // Pastikan ada periode_berlaku
             if (!$document->periode_berlaku) {
                 continue;
             }
-            // Hitung tanggal expired dokumen
-            $expiredAt = Carbon::parse($document->tanggal_penetapan)->addYears($document->periode_berlaku);
 
-            // Hitung tanggal reminder: 6 bulan sebelum expired
+            $expiredAt = Carbon::parse($document->tanggal_penetapan)
+                ->addYears($document->periode_berlaku);
+
             $reminderAt = $expiredAt->copy()->subMonths(6);
 
-            // Cek apakah reminder harus dikirim hari ini
-            if ($today->isSameDay($reminderAt)) {
-                // Hitung sisa bulan sampai expired
+            // 🔹 Kirim reminder jika hari ini sudah sama atau lewat tanggal reminder, tapi dokumen belum expired
+            if ($today->greaterThanOrEqualTo($reminderAt) && $today->lessThan($expiredAt)) {
+                
                 $monthsLeft = $today->diffInMonths($expiredAt, false);
                 $monthsLeft = (int) round($monthsLeft);
 
-                // Buat teks human-readable
                 if ($monthsLeft < 0) {
                     $monthsText = 'sudah expired ' . abs($monthsLeft) . ' bulan yang lalu';
                 } elseif ($monthsLeft > 0) {
@@ -46,8 +46,10 @@ class SendDocumentReminders extends Command
                     $monthsText = 'akan expired bulan ini';
                 }
 
-                Mail::to('test@example.com')->send(new DocumentReminderMail($document, $monthsText));
-                $this->info("Reminder sent for '{$document->judul}' ({$monthsText})");
+                Mail::to('rsudkesjaprovjabar@gmail.com')->send(new DocumentReminderMail($document, $monthsText, $expiredAt));
+                $this->info("Pengingat dikirimkan untuk dokumen : '{$document->judul}' ({$monthsText})");
+            } else {
+                $this->info("Belum waktunya reminder untuk dokumen: '{$document->judul}' (ReminderAt: {$reminderAt->toDateString()})");
             }
         }
 
